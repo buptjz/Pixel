@@ -16,17 +16,27 @@ static const double SHAPE_CONTEXT_COMPARE_THRES = 1.0;
  */
 
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_list){
+
     vector<SuperImagePatch *> result;
-    
-//    for (ImagePatch *tmp_p : patch_list){
-//        for (SuperImagePatch *tmp_sp : result) {
-//            double score = tmp_p->patchCompareWith(*tmp_sp, "shape_context");
-//            if(score <= SHAPE_CONTEXT_COMPARE_THRES){
-//
-//            }
-//        }
-//    }
-//    ImagePatch *tmp = patch_list;
+    for (ImagePatch *tmp_p : patch_list){
+        for (SuperImagePatch *tmp_sp : result) {
+            double score = tmp_p->patchCompareWith(tmp_sp, "shape_context");
+            //has similar 'SP', insert
+            if(score <= SHAPE_CONTEXT_COMPARE_THRES){
+                tmp_sp->getPatchvector().push_back(tmp_sp);
+                break;
+            }
+        }
+        // no similar 'SP', generate a new one
+        Mat *_bsip = new Mat();
+        Mat *_osip = new Mat();
+        tmp_p->getBinaryImagePatch()->copyTo(*_bsip);
+        tmp_p->getOriginalImagePatch()->copyTo(*_osip);
+        SuperImagePatch *new_sip = new SuperImagePatch(NULL,_bsip,_osip);
+        vector<Patch*> patch_vec = new_sip->getPatchvector();
+        patch_vec.push_back(tmp_p);
+        result.push_back(new_sip);
+    }
 	return result;
 }
 
