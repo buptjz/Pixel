@@ -33,6 +33,11 @@ public:
 		this->setBinaryImagePatch(bip);
 		this->setOriginalImagePatch(oip);
 	}
+	~ImagePatch()
+	{
+		delete getBinaryImagePatch();
+		delete getOriginalImagePatch();
+	}
 	void setImpagePatchId(string id){ imagePatchId = id; }
 	void setOriginalImage(OriginalImage *poi) { originalImage = poi; }
 	void setPosition(Rect ps) { position = ps;  }
@@ -58,7 +63,7 @@ public:
 
 
 private:
-	string imagePatchId;//小图元id，要唯一，用“OriginalImageId_imagePath_编号”组成
+	string imagePatchId;//小图元id，要唯一，用“OriginalImageId_"imagePatch"_编号”组成
 	OriginalImage* originalImage;//小图元所属的图像
 	Rect position;//小图元在图像中的位置（左上角点坐标，右下角点坐标）
 	//Mat *binaryImagePatch;//小图元二值化表示
