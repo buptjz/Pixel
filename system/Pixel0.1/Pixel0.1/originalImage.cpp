@@ -4,6 +4,14 @@
 会首先调用数据库的连接，向数据库中写入
 图像名（originalImageId）、图像路径(path)
 */
+
+/**/
+static const Mat & prePareImage(Mat &);
+/* 输入连通图， 区域数，返回小图元的位置信息
+CvRect 创造语句:
+CvRect *rects = new CvRect[count]*/
+static vector<Rect *> getMetaInfos(const Mat &, vector<Rect *>, int);
+
 OriginalImage::OriginalImage(const string & path, const string & originalImageId)
 {
 	this->originalImageId = originalImageId;
@@ -42,7 +50,7 @@ Rect * OriginalImage::getMetaInfos(const Mat & img, Rect * rects, int count) con
 	{
 		for (j = 0; j < width; ++j)
 		{
-			index = img.at<int>(i,j);
+			index = img.at<int>(i, j);
 			if (index == 0)
 				continue;
 			else if (regionIsMarked[index - 1])
@@ -90,10 +98,11 @@ vector<ImagePatch*> OriginalImage::segmentImage() const
 	//
 
 	//
-	Rect * rects = new Rect[count];
+	vector<Rect *> rects;
 	rects = getMetaInfos(preImg, rects, count);
 	//
-	return result;
+	for
+		return result;
 }
 
 const Mat & OriginalImage::prePareImage(Mat & img) const
