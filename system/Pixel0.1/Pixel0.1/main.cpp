@@ -4,14 +4,16 @@
 #include "originalImage.h"
 #include<string>
 #include<highgui.h>
+#include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
 
 #include<io.h>
 using namespace std;
 using namespace cv;
 
-list<SuperImagePatch*> removeDuplicateImagePatchs(list<ImagePatch*>&);
-list<SuperImagePatch*> removeDuplicateSuperImagePatchs(list<SuperImagePatch*>&);
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
+vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
+bool creatTables();
 int main(int agrc, char **agrv){
 
 	/*//基本测试用例
@@ -33,7 +35,7 @@ int main(int agrc, char **agrv){
 	cvDestroyWindow("图像显示");//销毁窗口资源
 	*/
 
-	list<SuperImagePatch*> allSuperImagePatchs;
+	vector<SuperImagePatch*> allSuperImagePatchs;
 	string imageName;//定义图像文件的名称 
 	string path;//图像文件路径
 	string fileName = "TestImage";//放原图片的文件夹名
@@ -52,18 +54,18 @@ int main(int agrc, char **agrv){
 		//构造OriginalImage类的对象ori
 		string originalImageId = fileName + "_" + imageName;
 		OriginalImage *ori = new OriginalImage(path, originalImageId);
-		IplImage *pImage = cvLoadImage(path.c_str(), -1);
-		ori->setImage(pImage);
+		Mat pImage = imread(path.c_str(), -1);
+		ori->setImage(&pImage);
 
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
-		list<ImagePatch*> patchs = ori->segmentImage();
+		vector<ImagePatch*> patchs = ori->segmentImage();
 		ori->saveOriginalImage();
 
 		//patchs中所有小图元进行一次去重，返回去重后的SuperImagePatch类的对象集合
-		list<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
+		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
 		//=========================================================
 		//将所有经过一次去重的超图元存储起来，等待进行下一次去重
-		list<SuperImagePatch*>::iterator  itor = sip.begin();
+		vector<SuperImagePatch*>::iterator  itor = sip.begin();
 		while (itor != sip.end())
 		{
 			allSuperImagePatchs.push_back(*itor++);
@@ -75,10 +77,10 @@ int main(int agrc, char **agrv){
 
 
 	//对进行一次去重后的超图元再次去重，返回最终的SuperImagePatch类的对象集合
-	list<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs);
+	vector<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs);
 
 	//将超图元存入数据库并更新子图元表
-	list<SuperImagePatch*>::iterator  itor = fsip.begin();
+	vector<SuperImagePatch*>::iterator  itor = fsip.begin();
 	while (itor != fsip.end())
 	{	
 		//这里需要把超图元都存入数据库中并更新子图元表中的superImagePatchId

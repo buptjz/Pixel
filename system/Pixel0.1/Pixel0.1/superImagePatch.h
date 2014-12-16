@@ -8,12 +8,12 @@
 #include<cv.h>
 #include<highgui.h>
 #include<map>
-#include<list>
+#include<vector>
 using namespace cv;
 using namespace std;
 
 
-class SuperImagePatch :Patch
+class SuperImagePatch :public Patch
 {
 public:
 	SuperImagePatch(){}
@@ -24,33 +24,34 @@ public:
 	SuperImagePatch(string id, Mat *bsip, Mat *osip)
 	{
 		superImagePatchId = id;
-		binarySuperImagePatch = bsip;
-		originalSuperImagePatch = osip;
+		setBinaryImagePatch(bsip);
+		setOriginalImagePatch(osip);
 	}
 
 
 	void setSuperImagePatchId(string sip) { superImagePatchId = sip; }
-	void setFeatures(list<map<string, vector<double>>> f){ features = f; }
-	void setBinarySuperImagePatch(Mat *bsip) { binarySuperImagePatch = bsip; };
-	void setOriginalSuperImagePatch(Mat *osip) { originalSuperImagePatch = osip; }
-	void setPatchList(list<Patch*> pl) { patchList = pl; }
+	//void setFeatures(vector<map<string, vector<double>>> f){ features = f; }
+	//void setBinarySuperImagePatch(Mat *bsip) { binarySuperImagePatch = bsip; };
+	//void setOriginalSuperImagePatch(Mat *osip) { originalSuperImagePatch = osip; }
+	void setPatchList(vector<Patch*> pl) { patchList = pl; }
 
 	string getSuperImagePatchId() const { return superImagePatchId; }
-	list<map<string, vector<double>>> getFeatures() { return features; }
-	Mat* getBinarySuperImagePatch() { return binarySuperImagePatch; }
-	Mat* getOriginalSuperImagePatch() { return originalSuperImagePatch; }
-	list<Patch*> getPatchList() { return patchList; }
-
+	vector<map<string, vector<double>>> getFeatures() { return features; }
+	//Mat* getBinarySuperImagePatch() { return binarySuperImagePatch; }
+	//Mat* getOriginalSuperImagePatch() { return originalSuperImagePatch; }
+	vector<Patch*> getPatchvector() { return patchList; }
+	/*
 	//两个超图元进行比较，返回表示相似度的一个数(重写方法）
 	double patchCompareWith(Patch *pSuperImagePatch, string featureType);
+	*/
 	//将超图元存入数据库中(重写方法）
 	void savePatch();
 private:
 	string superImagePatchId;//超图元id，要唯一，用“OriginalImageId_“superImagePatch”_编号”组成
-	list<map<string, vector<double>>> features;//存储图元的各种特征
-	Mat *binarySuperImagePatch;//超图元二值化表示
-	Mat *originalSuperImagePatch;//超图元在原图像中的表示
-	list<Patch*> patchList;//超图元所对应的子图元列表；
+	vector<map<string, vector<double>>> features;//存储图元的各种特征
+	//Mat *binarySuperImagePatch;//超图元二值化表示
+	//Mat *originalSuperImagePatch;//超图元在原图像中的表示
+	vector<Patch*> patchList;//超图元所对应的子图元列表；
 };
 
 #endif
