@@ -19,8 +19,10 @@ static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 1.0;
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
 
     vector<SuperImagePatch *> result;
-    for (ImagePatch *one_patch : patch_vec){
-        for (SuperImagePatch *tmp_sp : result) {
+    for (int i = 0 ; i < patch_vec.size(); i++) {
+        ImagePatch *one_patch = patch_vec[i];
+        for (int j = 0; j < result.size(); j++) {
+            SuperImagePatch *tmp_sp = result[j];
             double score = one_patch->patchCompareWith(tmp_sp, "shape_context");
             // (1) has similar 'SP', insert
             if(score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES){
@@ -51,8 +53,11 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  */
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
 	vector<SuperImagePatch*> result;
-    for (SuperImagePatch *candi_sp : sp_vec){
-        for (SuperImagePatch *final_sp : result){
+    for (int i = 0; i < sp_vec.size(); i++) {
+        SuperImagePatch *candi_sp = sp_vec[i];
+        
+        for (int j = 0; j < result.size(); j++) {
+            SuperImagePatch *final_sp = result[j];
             double score = candi_sp->patchCompareWith(final_sp, "shape_context");
             // (1) has similar 'SP', insert
             if(score <= SHAPE_CONTEXT_COMPARE_SECOND_THRES){
