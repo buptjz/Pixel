@@ -3,7 +3,8 @@
 
 //shape context compare
 //similar score <= this threshold will be regarded as the same images
-static const double SHAPE_CONTEXT_COMPARE_THRES = 1.0;
+static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
+static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 1.0;
 
 /*
  Remove duplicate image patches in one images
@@ -15,24 +16,27 @@ static const double SHAPE_CONTEXT_COMPARE_THRES = 1.0;
  if no similar 'SP', then create a new 'SP' with 'P'
  */
 
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_list){
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
 
     vector<SuperImagePatch *> result;
-    for (ImagePatch *tmp_p : patch_list){
+    for (ImagePatch *one_patch : patch_vec){
         for (SuperImagePatch *tmp_sp : result) {
-            double score = tmp_p->patchCompareWith(tmp_sp, "shape_context");
-            //has similar 'SP', insert
-            if(score <= SHAPE_CONTEXT_COMPARE_THRES){
-                tmp_sp->getPatchvector().push_back(tmp_sp);
+            double score = one_patch->patchCompareWith(tmp_sp, "shape_context");
+            // (1) has similar 'SP', insert
+            if(score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES){
+                vector<Patch *> patch_vec = tmp_sp->getPatchvector();
+                patch_vec.push_back(one_patch);
+                tmp_sp->setPatchList(patch_vec);
                 break;
             }
         }
-        // no similar 'SP', generate a new one
-        Mat *_bsip = new Mat(tmp_p->getBinaryImagePatch()->clone());
-        Mat *_osip = new Mat(tmp_p->getOriginalImagePatch()->clone());
-        SuperImagePatch *new_sip = new SuperImagePatch(NULL,_bsip,_osip);
+        // (2) no similar 'SP', generate a new one
+        Mat *_bsip = new Mat(one_patch->getBinaryImagePatch()->clone());
+        Mat *_osip = new Mat(one_patch->getOriginalImagePatch()->clone());
+        SuperImagePatch *new_sip = new SuperImagePatch(nullptr,_bsip,_osip);
         vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
-        patch_vec.push_back(tmp_p);
+        patch_vec.push_back(one_patch);
+        new_sip->setPatchList(patch_vec);
         result.push_back(new_sip);
     }
 	return result;
@@ -45,8 +49,28 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  
  Same idea as removeDuplicateImagePatchs
  */
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&){
+vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
 	vector<SuperImagePatch*> result;
+    for (SuperImagePatch *candi_sp : sp_vec){
+        for (SuperImagePatch *final_sp : result){
+            double score = candi_sp->patchCompareWith(final_sp, "shape_context");
+            // (1) has similar 'SP', insert
+            if(score <= SHAPE_CONTEXT_COMPARE_SECOND_THRES){
+                //merge 2 patch vec
+                vector<Patch *>v1 = final_sp->getPatchvector();
+                vector<Patch *>v2 = candi_sp->getPatchvector();
+                v1.insert(v1.end(), v2.begin(), v2.end());
+                final_sp->setPatchList(v1);
+                break;
+            }
+            // (2) no similar 'SP', generate a new one
+            Mat *_bsip = new Mat(candi_sp->getBinaryImagePatch()->clone());
+            Mat *_osip = new Mat(candi_sp->getOriginalImagePatch()->clone());
+            SuperImagePatch *new_sip = new SuperImagePatch(nullptr,_bsip,_osip);
+            new_sip->setPatchList(candi_sp->getPatchvector());
+            result.push_back(new_sip);
+        }
+    }
 	return result;
 }
 
