@@ -34,7 +34,7 @@ protected:
 	/* 输入连通图， 区域数，返回小图元的位置信息
 	CvRect 创造语句:
 	CvRect *rects = new CvRect[count]*/
-	Rect & getMetaInfos(const Mat &, Rect &, int) const;
+	Rect * getMetaInfos(const Mat &, Rect *, int) const;
 
 private:
 	string originalImageId;//图片的id，要唯一，用“文件夹名_图像名”组成

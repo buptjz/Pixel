@@ -19,12 +19,12 @@ OriginalImage::OriginalImage(const string & originalImageId, const string & path
 	this->pOImage = pOImage;
 }
 
-void OriginalImage::saveOriginalImage()
+void OriginalImage::saveOriginalImage() const
 {
 
 }
 
-const Rect * OriginalImage::getMetaInfos(const Mat * img, Rect * rects, int count) const
+Rect * OriginalImage::getMetaInfos(const Mat & img, Rect * rects, int count) const
 {
 	/* 标识一个区域是否访问过*/
 	bool * regionIsMarked = new bool[count];
@@ -35,14 +35,14 @@ const Rect * OriginalImage::getMetaInfos(const Mat * img, Rect * rects, int coun
 	for (int t = 0; t < 4; ++t)
 		markRange[t] = temp + t*count*sizeof(int);
 	//
-	int height = img->rows;
-	int width = img->cols;
+	int height = img.rows;
+	int width = img.cols;
 	int i, j, index;
 	for (i = 0; i < height; ++i)
 	{
 		for (j = 0; j < width; ++j)
 		{
-			index = static_cast<int> (cvGetReal2D(img, i, j));
+			index = img.at<int>(i,j);
 			if (index == 0)
 				continue;
 			else if (regionIsMarked[index - 1])
@@ -83,7 +83,8 @@ const Rect * OriginalImage::getMetaInfos(const Mat * img, Rect * rects, int coun
 */
 vector<ImagePatch*> OriginalImage::segmentImage() const
 {
-	Mat * preImg = prePareImage(pOImage);
+	Mat preImg(pOImage->rows, pOImage->cols, CV_8UC3);
+	preImg = prePareImage(preImg);
 	int count = 0;
 	//
 
@@ -92,7 +93,7 @@ vector<ImagePatch*> OriginalImage::segmentImage() const
 	rects = getMetaInfos(preImg, rects, count);
 }
 
-Mat * OriginalImage::prePareImage(Mat *) const
+const Mat & OriginalImage::prePareImage(Mat & img) const
 {
 
 }
