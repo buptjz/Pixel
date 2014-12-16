@@ -28,12 +28,10 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             }
         }
         // no similar 'SP', generate a new one
-        Mat *_bsip = new Mat();
-        Mat *_osip = new Mat();
-        tmp_p->getBinaryImagePatch()->copyTo(*_bsip);
-        tmp_p->getOriginalImagePatch()->copyTo(*_osip);
+        Mat *_bsip = new Mat(tmp_p->getBinaryImagePatch()->clone());
+        Mat *_osip = new Mat(tmp_p->getOriginalImagePatch()->clone());
         SuperImagePatch *new_sip = new SuperImagePatch(NULL,_bsip,_osip);
-        vector<Patch*> patch_vec = new_sip->getPatchvector();
+        vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
         patch_vec.push_back(tmp_p);
         result.push_back(new_sip);
     }
