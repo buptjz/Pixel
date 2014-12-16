@@ -3,8 +3,8 @@
 #include "imagePatch.h"
 #include "originalImage.h"
 #include<string>
-#include<highgui.h>
-#include<cv.h>
+#include"highgui.h"
+#include"cv.h"
 
 #include<io.h>
 using namespace std;
@@ -52,7 +52,7 @@ int main(int agrc, char **agrv){
 		//构造OriginalImage类的对象ori
 		string originalImageId = fileName + "_" + imageName;
 		OriginalImage *ori = new OriginalImage(path, originalImageId);
-		IplImage *pImage = cvLoadImage(path.c_str(), -1);
+		IplImage *pImage = NULL; //cvLoadImage(path.c_str(), -1);
 		ori->setImage(pImage);
 
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
