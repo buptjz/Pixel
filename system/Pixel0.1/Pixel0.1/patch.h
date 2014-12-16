@@ -16,8 +16,10 @@ public:
 		binaryImagePatch = bip;
 		originalImagePatch = oip;
 	}
-	Patch(vector< map< string, vector<double>  > > f, Mat *bip, Mat *oip) :Patch(bip, oip)
+	Patch(vector< map< string, vector<double>  > > f, Mat *bip, Mat *oip)
 	{		
+		binaryImagePatch = bip;
+		originalImagePatch = oip;
 		features = f;
 	}
 	/*和当前图元进行比较
