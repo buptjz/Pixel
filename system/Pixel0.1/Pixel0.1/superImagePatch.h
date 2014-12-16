@@ -2,7 +2,6 @@
 #define SUPERIMAGEPATCH_H
 #include "patch.h"
 #include "originalImage.h"
-#include "position.h"
 
 #include<iostream>
 #include<string.h>

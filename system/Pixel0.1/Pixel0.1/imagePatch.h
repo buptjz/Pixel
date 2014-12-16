@@ -1,7 +1,6 @@
 #ifndef IMAGEPATCH_H
 #define IMAGEPATCH_H
 #include "patch.h"
-#include "position.h"
 #include<list>
 #include<map>
 //#include "originalImage.h"

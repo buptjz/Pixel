@@ -27,6 +27,12 @@
     <ClInclude Include="superImagePatch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="sqlliteHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="originalImage.cpp">
@@ -42,6 +48,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="removeDuplicatePatchs.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlliteHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

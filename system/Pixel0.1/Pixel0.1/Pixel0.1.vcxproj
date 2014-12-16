@@ -73,6 +73,8 @@
     <ClInclude Include="imagePatch.h" />
     <ClInclude Include="patch.h" />
     <ClInclude Include="originalImage.h" />
+    <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="sqlliteHelper.h" />
     <ClInclude Include="superImagePatch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +82,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="originalImage.cpp" />
     <ClCompile Include="removeDuplicatePatchs.cpp" />
+    <ClCompile Include="SqlliteHelper.cpp" />
     <ClCompile Include="superImagePatch.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
