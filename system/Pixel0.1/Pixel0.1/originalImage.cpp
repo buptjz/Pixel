@@ -86,14 +86,18 @@ vector<ImagePatch*> OriginalImage::segmentImage() const
 	Mat preImg(pOImage->rows, pOImage->cols, CV_8UC3);
 	preImg = prePareImage(preImg);
 	int count = 0;
+	vector<ImagePatch*> result;
 	//
 
 	//
 	Rect * rects = new Rect[count];
 	rects = getMetaInfos(preImg, rects, count);
+	//
+	return result;
 }
 
 const Mat & OriginalImage::prePareImage(Mat & img) const
 {
-
+	Mat result;
+	return result;
 }
