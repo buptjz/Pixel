@@ -10,7 +10,7 @@ static const Mat & prePareImage(Mat &);
 /* 输入连通图， 区域数，返回小图元的位置信息
 CvRect 创造语句:
 CvRect *rects = new CvRect[count]*/
-static vector<Rect *> getMetaInfos(const Mat &, vector<Rect *>, int);
+static vector<Rect *> & getMetaInfos(const Mat &, vector<Rect *> &, int);
 
 OriginalImage::OriginalImage(const string & path, const string & originalImageId)
 {
@@ -32,7 +32,7 @@ void OriginalImage::saveOriginalImage() const
 
 }
 
-Rect * OriginalImage::getMetaInfos(const Mat & img, Rect * rects, int count) const
+static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, int count)
 {
 	/* 标识一个区域是否访问过*/
 	bool * regionIsMarked = new bool[count];
@@ -70,13 +70,12 @@ Rect * OriginalImage::getMetaInfos(const Mat & img, Rect * rects, int count) con
 			}
 		}
 	}
-	// 将位置信息转为为CvRect
+	Rect *rect = new Rect();
+	// 将位置信息转为为Rect
 	for (i = 0; i < count; ++i)
 	{
-		rects[i].x = markRange[0][i];
-		rects[i].y = markRange[2][i];
-		rects[i].height = markRange[1][i] - markRange[0][i] + 1;
-		rects[i].width = markRange[3][i] - markRange[2][i] + 1;
+		rect = new Rect(markRange[0][i], markRange[2][i], markRange[1][i] - markRange[0][i] + 1, width = markRange[3][i] - markRange[2][i] + 1);
+		rects.push_back(rect);		
 	}
 	//
 	delete temp;
@@ -101,11 +100,14 @@ vector<ImagePatch*> OriginalImage::segmentImage() const
 	vector<Rect *> rects;
 	rects = getMetaInfos(preImg, rects, count);
 	//
-	for
-		return result;
+	for each (Rect * rect in rects)
+	{
+
+	}
+	return result;
 }
 
-const Mat & OriginalImage::prePareImage(Mat & img) const
+const Mat & prePareImage(Mat & img)
 {
 	Mat result;
 	return result;
