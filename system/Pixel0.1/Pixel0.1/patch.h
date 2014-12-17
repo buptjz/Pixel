@@ -5,6 +5,7 @@
 #include<iostream>
 #include<cv.h>
 #include<map>
+#include "sqlliteHelper.h"
 using namespace std;
 using namespace cv;
 //图元块类，小图元和超图元共有的基本方法
@@ -41,7 +42,7 @@ public:
 	double patchCompareWith(Patch *pPatch, string featureType) ;
 	vector<double> patchCompareWith(const vector<Patch*>& images, string featureType) ;
 	//将小图元存入数据库中
-	virtual void savePatch() =0;
+	virtual void savePatch(SQLiteHelper &sql_lite_helper) const = 0;
 
 	void setBinaryImagePatch(Mat *bip) 
 	{

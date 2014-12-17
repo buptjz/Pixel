@@ -3,6 +3,7 @@
 #include "patch.h"
 #include<vector>
 #include<map>
+#include "sqlliteHelper.h"
 //#include "originalImage.h"
 //#include "superImagePatch.h"
 
@@ -59,7 +60,7 @@ public:
 	double patchCompareWith(Patch *pImagePatch, string featureType);
 	*/
 	//将小图元存入数据库中
-	void savePatch();
+	void savePatch(SQLiteHelper &sql_lite_helper) const;
 
 
 private:
