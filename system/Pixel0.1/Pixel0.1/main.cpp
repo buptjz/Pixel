@@ -1,20 +1,37 @@
 #include<iostream>
+#include<fstream>
 #include"superImagePatch.h"
 #include "imagePatch.h"
 #include "originalImage.h"
+#include "jsonHelper.h"
+#include "sqlliteHelper.h"
 #include<string>
 #include<highgui.h>
 #include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
-
 #include<io.h>
 using namespace std;
 using namespace cv;
 
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
-bool creatTables();
+SQLiteHelper sql_lite_helper;
+
 int main(int agrc, char **agrv){
+	fstream _file;
+	_file.open("Pixel.db3", ios::in);
+	if (!_file)
+	{
+		//create database
+		int res = sql_lite_helper.OpenDB("./Pixel.db3");
+		//create tables
+		vector<const char*> tables;
+		tables.push_back("originalImage(originalImageId varchar, path varchar");
+		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
+		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
+		res =  sql_lite_helper.CreateTables(tables);
+	}
+	
 
 	/*//基本测试用例
 	//函数cvLoadImage()的第1 个参数是图像文件的路径. 第2 个参数是读取图像的方式:-1 表示按照图像本身的类型来读取,1 表示强制彩色化,0 表示强制灰值化.
