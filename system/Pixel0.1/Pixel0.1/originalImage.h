@@ -15,8 +15,9 @@ class OriginalImage
 {
 public:
 	OriginalImage();
-	OriginalImage(const string & path, const string & originalImageId);
-	OriginalImage(const string & originalImageId, const string & path, Mat * const pOImage);
+	OriginalImage::OriginalImage(const string & path, const string & originalImageId) :originalImageId(originalImageId), path(path), pOImage(0)	{}
+	OriginalImage::OriginalImage(const string & originalImageId, const string & path, Mat
+		* const pOImage) : originalImageId(originalImageId), path(path), pOImage(pOImage){}
 	const string & getOriginalImageId() const { return originalImageId; }
 	const string & getPath() const { return path; }
 	const Mat * getImage() const { return pOImage; }
