@@ -1,12 +1,10 @@
-#include "imagePatch.h"
-#include "superImagePatch.h"
 #include "tools.h"
+#include "removeDuplicatePatchs.h"
 
 //shape context compare
 //similar score <= this threshold will be regarded as the same images
 static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
 static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
-
 
 /*
  Remove duplicate image patches in one images
