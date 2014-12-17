@@ -1,10 +1,12 @@
 #include "imagePatch.h"
 #include "superImagePatch.h"
+#include "tools.h"
 
 //shape context compare
 //similar score <= this threshold will be regarded as the same images
 static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
-static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 1.0;
+static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
+
 
 /*
  Remove duplicate image patches in one images
@@ -33,9 +35,9 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             }
         }
         // (2) no similar 'SP', generate a new one
-        Mat *_bsip = new Mat(one_patch->getBinaryImagePatch()->clone());
+        Mat bsip = one_patch->getBinaryImagePatch()->clone();
         Mat *_osip = new Mat(one_patch->getOriginalImagePatch()->clone());
-        SuperImagePatch *new_sip = new SuperImagePatch(nullptr,_bsip,_osip);
+        SuperImagePatch *new_sip = new SuperImagePatch(nullptr,&bsip,_osip);
         vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
         patch_vec.push_back(one_patch);
         new_sip->setPatchList(patch_vec);
@@ -51,6 +53,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  
  Same idea as removeDuplicateImagePatchs
  */
+
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
 	vector<SuperImagePatch*> result;
     for (int i = 0; i < sp_vec.size(); i++) {
