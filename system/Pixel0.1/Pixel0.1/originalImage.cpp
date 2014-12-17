@@ -6,26 +6,11 @@
 */
 
 /**/
-static const Mat & prePareImage(Mat &);
+static const Mat & prePareImage(Mat &, Mat &);
 /* 输入连通图， 区域数，返回小图元的位置信息
 CvRect 创造语句:
 CvRect *rects = new CvRect[count]*/
 static vector<Rect *> & getMetaInfos(const Mat &, vector<Rect *> &, int);
-
-OriginalImage::OriginalImage(const string & path, const string & originalImageId)
-{
-	this->originalImageId = originalImageId;
-	this->path = path;
-	pOImage = 0;
-}
-
-OriginalImage::OriginalImage(const string & originalImageId, const string & path, Mat
-	* const pOImage)
-{
-	this->originalImageId = originalImageId;
-	this->path = path;
-	this->pOImage = pOImage;
-}
 
 void OriginalImage::saveOriginalImage() const
 {
@@ -50,7 +35,7 @@ static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, in
 	{
 		for (j = 0; j < width; ++j)
 		{
-			index = img.at<int>(i, j);
+			index = img.ptr(i)[j];
 			if (index == 0)
 				continue;
 			else if (regionIsMarked[index - 1])
@@ -70,17 +55,17 @@ static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, in
 			}
 		}
 	}
-	Rect *rect = new Rect();
+	Rect *rect;
 	// 将位置信息转为为Rect
 	for (i = 0; i < count; ++i)
 	{
 		rect = new Rect(markRange[0][i], markRange[2][i], markRange[1][i] - markRange[0][i] + 1, width = markRange[3][i] - markRange[2][i] + 1);
-		rects.push_back(rect);		
+		rects.push_back(rect);
 	}
 	//
-	delete temp;
-	delete markRange;
-	delete regionIsMarked;
+	delete[] temp;
+	delete[] markRange;
+	delete[] regionIsMarked;
 	return rects;
 }
 
@@ -91,24 +76,31 @@ static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, in
 vector<ImagePatch*> OriginalImage::segmentImage() const
 {
 	Mat preImg(pOImage->rows, pOImage->cols, CV_8UC3);
-	preImg = prePareImage(preImg);
+	preImg = prePareImage(*pOImage, preImg);
 	int count = 0;
 	vector<ImagePatch*> result;
 	//
 
 	//
 	vector<Rect *> rects;
-	rects = getMetaInfos(preImg, rects, count);
+	//rects = getMetaInfos(preImg, rects, count);
 	//
-	for each (Rect * rect in rects)
+	ImagePatch * imgPatch;
+	for (int index = 1; index <= count; ++index)
 	{
-
+		Rect * rect = rects.at(index - 1);
+		string id = originalImageId + "_imagePatch_" + index;
+		Mat bip(*pOImage, *rect);
+		Mat oip = bip == index;
+		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, &bip, &oip);
 	}
+	for (vector<Rect *>::iterator it = rects.begin(); it != rects.end(); ++it)
+		delete *it;
 	return result;
 }
 
-const Mat & prePareImage(Mat & img)
+const Mat & prePareImage(Mat & img, Mat & rimg)
 {
-	Mat result;
-	return result;
+	rimg = img.clone();
+	return rimg;
 }
