@@ -1,20 +1,45 @@
 #include<iostream>
+#include<fstream>
 #include"superImagePatch.h"
 #include "imagePatch.h"
 #include "originalImage.h"
+#include "jsonHelper.h"
+#include "sqlliteHelper.h"
+#include "removeDuplicatePatchs.h"
 #include<string>
 #include<highgui.h>
 #include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
-
 #include<io.h>
 using namespace std;
 using namespace cv;
 
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
-bool creatTables();
+//vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
+//vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
+SQLiteHelper sql_lite_helper;
+
 int main(int agrc, char **agrv){
+	fstream _file;
+	_file.open("Pixel.db3", ios::in);
+	if (!_file)
+	{
+		//create database
+		int res = sql_lite_helper.OpenDB("./Pixel.db3");
+		//create tables
+		vector<const char*> tables;
+		tables.push_back("originalImage(originalImageId varchar, path varchar");
+		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
+		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
+		res = sql_lite_helper.CreateTables(tables);
+	}
+	else
+	{
+		//open database
+		int res = sql_lite_helper.OpenDB("./Pixel.db3");
+	}
+
+
+
 
 	/*//基本测试用例
 	//函数cvLoadImage()的第1 个参数是图像文件的路径. 第2 个参数是读取图像的方式:-1 表示按照图像本身的类型来读取,1 表示强制彩色化,0 表示强制灰值化.
@@ -40,7 +65,7 @@ int main(int agrc, char **agrv){
 	string path;//图像文件路径
 	string fileName = "TestImage";//放原图片的文件夹名
 	string fileAddress = "D:/" + fileName;//文件夹路径
-	
+
 	//遍历文件夹里的图像文件
 	_finddata_t fileinfo;
 	int handle = _findfirst((fileAddress + "/*").c_str(), &fileinfo);
@@ -59,7 +84,7 @@ int main(int agrc, char **agrv){
 
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
 		vector<ImagePatch*> patchs = ori->segmentImage();
-		ori->saveOriginalImage();
+		ori->saveOriginalImage(sql_lite_helper);
 
 		//patchs中所有小图元进行一次去重，返回去重后的SuperImagePatch类的对象集合
 		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
@@ -70,12 +95,12 @@ int main(int agrc, char **agrv){
 		{
 			allSuperImagePatchs.push_back(*itor++);
 		}
-	
+
 		//释放vector<ImagePatch*> patchs的空间
 		/*
 		for (int i = 0; i < patchs.size; i++)
 		{
-			delete patchs[i];
+		delete patchs[i];
 		}
 		*/
 		if (_findnext(handle, &fileinfo) == -1) break;
@@ -89,9 +114,9 @@ int main(int agrc, char **agrv){
 	//将超图元存入数据库并更新子图元表
 	vector<SuperImagePatch*>::iterator  itor = fsip.begin();
 	while (itor != fsip.end())
-	{	
+	{
 		//这里需要把超图元都存入数据库中并更新子图元表中的superImagePatchId
-		((SuperImagePatch*)*itor)->savePatch();
+		((SuperImagePatch*)*itor)->savePatch(sql_lite_helper);
 		//
 		itor++;
 	}

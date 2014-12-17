@@ -19,4 +19,14 @@
 void tool_show_patch(Patch *image, string name);
 void tool_show_mat(Mat mat,string name);
 
+template<class base_type,class child_type>
+vector<base_type*> convert_verctor(vector<child_type*> src)
+{
+	vector<base_type*> ret;
+	for(size_t i = 0;i < src.size(); ++i)
+		ret.push_back(src[i]);
+	return ret;
+}
+
+
 #endif /* defined(__Xcode_Pixel_Proj__tools__) */

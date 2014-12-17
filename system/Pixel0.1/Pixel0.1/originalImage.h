@@ -2,6 +2,7 @@
 #define ORIGINALIMAGE_H
 
 #include "imagePatch.h"
+#include "sqlliteHelper.h"
 #include<cxcore.h>
 #include<highgui.h>
 #include<iostream>
@@ -31,7 +32,7 @@ public:
 	/*分割图片，返回小图元的集合*/
 	vector<ImagePatch *> segmentImage() const;
 	//将图片信息存入数据库中
-	void saveOriginalImage() const;
+	void saveOriginalImage(SQLiteHelper &sql_lite_helper) const;
 
 private:
 	string originalImageId;//图片的id，要唯一，用“文件夹名_图像名”组成

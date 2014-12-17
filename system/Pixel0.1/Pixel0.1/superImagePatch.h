@@ -45,7 +45,7 @@ public:
 	double patchCompareWith(Patch *pSuperImagePatch, string featureType);
 	*/
 	//将超图元存入数据库中(重写方法）
-	void savePatch();
+	void savePatch(SQLiteHelper &sql_lite_helper) const;
 private:
 	string superImagePatchId;//超图元id，要唯一，用“OriginalImageId_“superImagePatch”_编号”组成
 	vector<map<string, vector<double>>> features;//存储图元的各种特征

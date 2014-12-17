@@ -12,9 +12,13 @@ CvRect 创造语句:
 CvRect *rects = new CvRect[count]*/
 static vector<Rect *> & getMetaInfos(const Mat &, vector<Rect *> &, int);
 
-void OriginalImage::saveOriginalImage() const
+void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const
 {
-
+		std::stringstream str_sql;
+		str_sql << "insert into originalImage values(";
+		str_sql << originalImageId << ","<< path << ");";
+		std::string str = str_sql.str();
+		sql_lite_helper.Insert(str.c_str());
 }
 
 static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, int count)
@@ -35,7 +39,7 @@ static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, in
 	{
 		for (j = 0; j < width; ++j)
 		{
-			index = *(img.data + img.step[1] * i + img.step[2] * j);
+			index = img.ptr(i)[j];
 			if (index == 0)
 				continue;
 			else if (regionIsMarked[index - 1])
@@ -55,7 +59,7 @@ static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, in
 			}
 		}
 	}
-	Rect *rect = new Rect();
+	Rect *rect;
 	// 将位置信息转为为Rect
 	for (i = 0; i < count; ++i)
 	{
@@ -83,7 +87,7 @@ vector<ImagePatch*> OriginalImage::segmentImage() const
 
 	//
 	vector<Rect *> rects;
-	rects = getMetaInfos(preImg, rects, count);
+	//rects = getMetaInfos(preImg, rects, count);
 	//
 	ImagePatch * imgPatch;
 	for (int index = 1; index <= count; ++index)

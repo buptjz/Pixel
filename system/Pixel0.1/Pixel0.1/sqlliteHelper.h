@@ -1,7 +1,7 @@
 #ifndef SQLLITEHELPER_H
 #define SQLLITEHELPER_H
 #include "sqlite3.h"
-
+#include<vector>
 #pragma comment(lib, "sqlite3.lib")
 
 
@@ -27,6 +27,10 @@ public:
 	int Delete(const char *delete_state);
 	// 更新操作
 	int Update(const char *update_state);
+
+	//同时创建多个表
+    int CreateTables(std::vector<const char*>  create_tables);
+	
 
 private:
 	sqlite3 *sqlite_db_;// 数据库的指针
