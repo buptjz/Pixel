@@ -5,6 +5,7 @@
 #include "originalImage.h"
 #include "jsonHelper.h"
 #include "sqlliteHelper.h"
+#include "removeDuplicatePatchs.h"
 #include<string>
 #include<highgui.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -13,8 +14,8 @@
 using namespace std;
 using namespace cv;
 
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
+//vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
+//vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
 SQLiteHelper sql_lite_helper;
 
 int main(int agrc, char **agrv){
