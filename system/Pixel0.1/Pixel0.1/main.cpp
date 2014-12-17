@@ -72,10 +72,12 @@ int main(int agrc, char **agrv){
 		}
 	
 		//ÊÍ·Åvector<ImagePatch*> patchsµÄ¿Õ¼ä
+		/*
 		for (int i = 0; i < patchs.size; i++)
 		{
 			delete patchs[i];
 		}
+		*/
 		if (_findnext(handle, &fileinfo) == -1) break;
 	}
 	_findclose(handle);
