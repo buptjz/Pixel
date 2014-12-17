@@ -54,6 +54,27 @@ int SQLiteHelper::CreateTable(const char *table_name_and_field)
 	return 0;
 }
 
+int SQLiteHelper::CreateTables(vector<const char*> create_tables)
+{
+	int res = sqlite3_exec(sqlite_db_, "begin transaction;", CallBackFunc, 0, &err_msg_);
+	for (int i = 0; i<create_tables.size(); i++)
+	{
+		res = CreateTable(create_tables[i]);
+		if (res != SQLITE_OK)
+		{
+			cout << "create tables failed." << err_msg_ << endl;
+			return -1;
+		}
+	}
+
+	res = sqlite3_exec(sqlite_db_, "commit transaction;", 0, 0, &err_msg_);
+
+	cout << "create tables successed." << endl;
+
+	return 0;
+
+}
+
 
 int SQLiteHelper::DropTable(const char *table_name)
 {

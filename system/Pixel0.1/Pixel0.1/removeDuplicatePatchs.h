@@ -9,7 +9,6 @@
 #ifndef Xcode_Pixel_Proj_removeDuplicatePatchs_h
 #define Xcode_Pixel_Proj_removeDuplicatePatchs_h
 
-
 #include "patch.h"
 #include "originalImage.h"
 #include "imagePatch.h"
@@ -23,7 +22,8 @@
 using namespace cv;
 using namespace std;
 
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec);
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec);
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&,bool);
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&);
+vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
 
 #endif
