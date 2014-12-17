@@ -1,4 +1,5 @@
 #include "patch.h"
+#include "params.h"
 #include "opencv2/shape.hpp"
 #include "opencv2/imgproc.hpp"
 /*和当前图元进行比较
@@ -6,7 +7,7 @@
 *输出：本图元和待比较的图元的相似度
 */
 cv::Ptr <cv::ShapeContextDistanceExtractor> sc_extractor = cv::createShapeContextDistanceExtractor();
-static vector<Point> simpleContour( const Mat& currentQuery, int n=80 )
+static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
 {
     vector<vector<Point> > _contoursQuery;
     vector <Point> contoursQuery;
@@ -37,26 +38,17 @@ static vector<Point> simpleContour( const Mat& currentQuery, int n=80 )
 static void _compare_sift(Patch *query, const vector<Patch *>& images, vector<double> &ret, bool useBinary = true)
 {
 }
-static void _compare_sc(Patch *query, const vector<Patch *>& images, vector<double> &ret, bool useBinary = true)
+static void _compare_sc(Patch *query, const vector<Patch *>& images, vector<double> &ret)
 {
 	ret.clear();
-	vector<Point> contQuery;
-	if(useBinary)
-		contQuery = simpleContour(*query->getBinaryImagePatch());
-	else
-		contQuery = simpleContour(*query->getOriginalImagePatch());
+	vector<Point> contQuery = simpleContour(*query->getBinaryImagePatch(),Params::shape_context_sample_point_num);
+
 	for(vector<Patch *>::const_iterator itr = images.begin(); itr != images.end(); ++itr)
 	{
 		Patch* ptr = *itr;
-		vector<Point> contii;
-		if(useBinary)
-			contii = simpleContour(*ptr->getBinaryImagePatch());
-		else
-			contii = simpleContour(*ptr->getOriginalImagePatch());
+		vector<Point> contii = simpleContour(*ptr->getBinaryImagePatch(),Params::shape_context_sample_point_num);
 		ret.push_back(sc_extractor->computeDistance(contQuery,contii));
-
 	}
-
 }
 
 vector<double> Patch::patchCompareWith(const vector<Patch*> &images, string featureType)
