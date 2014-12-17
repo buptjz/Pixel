@@ -7,8 +7,8 @@ static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
 static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
 
 //Strategy 1:
-//vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
-//    vector<SuperImagePatch *> result;
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
+    vector<SuperImagePatch *> result;
 //    bool find_similar ;
 //    for (int i = 0 ; i < patch_vec.size(); i++) {
 //        find_similar = false;
@@ -40,8 +40,8 @@ static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
 //            result.push_back(new_sip);
 //        }
 //    }
-//    return result;
-//}
+    return result;
+}
 
 //Strategy 2:
 vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& patch_vec){
