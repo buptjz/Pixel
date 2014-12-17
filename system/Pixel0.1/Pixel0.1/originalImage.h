@@ -19,9 +19,9 @@ public:
 	OriginalImage(const string & originalImageId, const string & path, Mat * const pOImage);*/
 
 	OriginalImage();
-	OriginalImage::OriginalImage(const string & path, const string & originalImageId) :originalImageId(originalImageId), path(path), pOImage(0)	{}
-	OriginalImage::OriginalImage(const string & originalImageId, const string & path, Mat
-		* const pOImage) : originalImageId(originalImageId), path(path), pOImage(pOImage){}
+	OriginalImage(const string & path, const string & originalImageId) :originalImageId(originalImageId), path(path), pOImage(0)	{}
+	OriginalImage(const string & originalImageId, const string & path, Mat
+	* const pOImage) : originalImageId(originalImageId), path(path), pOImage(pOImage){}
 	const string & getOriginalImageId() const { return originalImageId; }
 	const string & getPath() const { return path; }
 	const Mat * getImage() const { return pOImage; }
@@ -29,13 +29,9 @@ public:
 	void setPath(const string & s){ path = s; }
 	void setImage(Mat *pImage){ pOImage = pImage; }
 	/*分割图片，返回小图元的集合*/
-	vector<ImagePatch *> segmentImage() const
-	{
-		vector<ImagePatch*> res;
-		return res;
-	}
+	vector<ImagePatch *> segmentImage() const;
 	//将图片信息存入数据库中
-	void saveOriginalImage() const{}
+	void saveOriginalImage() const;
 
 private:
 	string originalImageId;//图片的id，要唯一，用“文件夹名_图像名”组成
