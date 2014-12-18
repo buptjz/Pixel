@@ -21,26 +21,23 @@ public:
 	}
 	Patch& operator=(Patch &rhd)
 	{
+		if(this == &rhd)
+			return *this;
 		delete_members();
 		binaryImagePatch = new Mat(rhd.binaryImagePatch->clone());
 		originalImagePatch = new Mat(rhd.originalImagePatch->clone());
 		features = rhd.features;
 		return *this;
 	}
-	~Patch(){delete_members();}
-	void delete_members()
-	{
-		if(NULL != binaryImagePatch)
-			delete binaryImagePatch;
-		if(NULL != originalImagePatch)
-			delete originalImagePatch;
-	}
+	virtual ~Patch(){delete_members();}
+	
 	/*和当前图元进行比较
 	*输入：待比较的图元，比较时使用的特征种类
 	*输出：本图元和待比较的图元的相似度
 	*/
 	double patchCompareWith(Patch *pPatch, const string featureType) ;
 	vector<double> patchCompareWith(const vector<Patch*>& images, const string featureType) ;
+	vector<pair<double,Patch*> > patchCompareWith(const vector<Patch*>& images, const string featureType, size_t top_k) ;
 	//将小图元存入数据库中
 	virtual void savePatch(SQLiteHelper &sql_lite_helper) const = 0;
 
@@ -61,6 +58,14 @@ public:
 	Mat* getOriginalImagePatch() const { return originalImagePatch; }
 	map<string, vector<double> > getFeatures() { return features; }
 private:
+	void delete_members()
+	{
+		if(NULL != binaryImagePatch)
+			delete binaryImagePatch;
+		if(NULL != originalImagePatch)
+			delete originalImagePatch;
+	}
+
 	Mat *binaryImagePatch;//小图元二值化表示
 	Mat *originalImagePatch;//小图元在原图像中的表示
 	map<string, vector<double> > features;//存储图元的各种特征
