@@ -13,6 +13,7 @@
 #include "originalImage.h"
 #include "imagePatch.h"
 #include "superImagePatch.h"
+#include "params.h"
 
 #include<iostream>
 #include<string.h>

@@ -1,13 +1,6 @@
 #include "tools.h"
 #include "removeDuplicatePatchs.h"
 
-
-#define SHAPE_CONTEXT "SHAPE_CONTEXT"
-//shape context compare
-//similar score <= this threshold will be regarded as the same images
-static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
-static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
-
 /*
  find the smallest element(with its index) in vectors
  */
@@ -36,7 +29,9 @@ static SuperImagePatch* generate_super_from_patch(Patch *patch){
     
     Mat *_bsip = new Mat(patch->getBinaryImagePatch()->clone());
     Mat *_osip = new Mat(patch->getOriginalImagePatch()->clone());
-    SuperImagePatch *new_sip = new SuperImagePatch("",_bsip,_osip);
+    string patch_id = super_patch_id_from_timestamp();
+    cout<<"generate super patch id : "<<patch_id<<endl;//debug
+    SuperImagePatch *new_sip = new SuperImagePatch(patch_id,_bsip,_osip);
     vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
     patch_vec.push_back(patch);
     new_sip->setPatchList(patch_vec);
@@ -61,12 +56,12 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         ImagePatch *one_patch = patch_vec[i];
         //convert first ,use second
         vector<Patch *> base_patch_vec = convert_verctor<Patch,SuperImagePatch>(supers);
-        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, SHAPE_CONTEXT);
+        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, Params::SHAPE_CONTEXT);
         
         find_nearest(scores, &nearest_score, &nearest_index);
         
         //(1) has similar 'SP', insert 'P' to 'SP'
-        if (nearest_score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES) {
+        if (nearest_score <= Params::shape_context_compare_1_thres) {
             vector<Patch *> patch_vec = supers[nearest_index]->getPatchvector();
             patch_vec.push_back(one_patch);
             supers[nearest_index]->setPatchList(patch_vec);
@@ -89,10 +84,10 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         ImagePatch *one_patch = patch_vec[i];
         for (int j = 0; j < result.size(); j++) {
             SuperImagePatch *tmp_sp = result[j];
-            double score = one_patch->patchCompareWith(tmp_sp, SHAPE_CONTEXT);
+            double score = one_patch->patchCompareWith(tmp_sp, Params::SHAPE_CONTEXT);
             // (1) has similar 'SP', insert
             cout<<score<<endl;
-            if(score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES){
+            if(score <= Params::shape_context_compare_1_thres){
                 vector<Patch *> patch_vec = tmp_sp->getPatchvector();
                 patch_vec.push_back(one_patch);
                 tmp_sp->setPatchList(patch_vec);
@@ -156,11 +151,11 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         SuperImagePatch *candi_sp = sp_vec[i];
         
         vector<Patch *> base = convert_verctor<Patch,SuperImagePatch>(final_sps);
-        vector<double> scores = candi_sp->patchCompareWith(base, SHAPE_CONTEXT);
+        vector<double> scores = candi_sp->patchCompareWith(base, Params::SHAPE_CONTEXT);
 
         find_nearest(scores, &nearest_score, &nearest_index);
         //(1) has similar 'SP', merge two 'SP's
-        if (nearest_score <= SHAPE_CONTEXT_COMPARE_SECOND_THRES) {
+        if (nearest_score <= Params::shape_context_compare_1_thres) {
             vector<Patch *>v1 = final_sps[nearest_index]->getPatchvector();
             vector<Patch *>v2 = candi_sp->getPatchvector();
             v1.insert(v1.end(), v2.begin(), v2.end());

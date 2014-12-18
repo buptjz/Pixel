@@ -17,16 +17,8 @@ class SuperImagePatch :public Patch
 {
 public:
 	SuperImagePatch(){}
-	SuperImagePatch(string id)
-	{
-		superImagePatchId = id;
-	}
-	SuperImagePatch(string id, Mat *bsip, Mat *osip)
-	{
-		superImagePatchId = id;
-		setBinaryImagePatch(bsip);
-		setOriginalImagePatch(osip);
-	}
+	SuperImagePatch(string id):superImagePatchId(id){}
+	SuperImagePatch(string id, Mat *bsip, Mat *osip):Patch(bsip,osip),superImagePatchId(id){}
 
 
 	void setSuperImagePatchId(string sip) { superImagePatchId = sip; }

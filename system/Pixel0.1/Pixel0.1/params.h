@@ -1,10 +1,15 @@
 #ifndef _PARAMS_H_
 #define _PARAMS_H_
 
+//#include <iostream>
+
+#include <string>
+using namespace std;
+
 class Params
 {
 public:
-	//常用的量
+	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
 
@@ -14,17 +19,12 @@ public:
 	static float shape_context_match_weight;
 	static float shape_context_appearance_weight;
 	static bool shape_context_use_rotation;
+    
+    //shape context compare
+    //similar score <= this threshold will be regarded as the same images
+    static double shape_context_compare_1_thres;
+    static double shape_context_compare_2_thres;
 };
 
-//常用的量
-const string Params::SIFT = "SIFT";
-const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
-
-//params for match
-int Params::shape_context_sample_point_num = 100;
-float Params::shape_context_bending_weight = 0;
-float Params::shape_context_match_weight = 1;
-float Params::shape_context_appearance_weight = 0;
-bool Params::shape_context_use_rotation = false;
 
 #endif
