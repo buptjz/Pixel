@@ -41,6 +41,7 @@ public:
 	*/
 	double patchCompareWith(Patch *pPatch, const string featureType) ;
 	vector<double> patchCompareWith(const vector<Patch*>& images, const string featureType) ;
+	
 	//将小图元存入数据库中
 	virtual void savePatch(SQLiteHelper &sql_lite_helper) const = 0;
 
@@ -59,7 +60,7 @@ public:
 	void setFeatures(map<string, vector<double> > f){ features = f; }
 	Mat* getBinaryImagePatch() const { return binaryImagePatch; }
 	Mat* getOriginalImagePatch() const { return originalImagePatch; }
-	map<string, vector<double> > getFeatures() { return features; }
+	map<string, vector<double> > getFeatures() const { return features; }
 private:
 	Mat *binaryImagePatch;//小图元二值化表示
 	Mat *originalImagePatch;//小图元在原图像中的表示
