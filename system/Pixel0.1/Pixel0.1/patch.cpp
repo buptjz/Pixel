@@ -7,6 +7,15 @@
 *输出：本图元和待比较的图元的相似度
 */
 cv::Ptr <cv::ShapeContextDistanceExtractor> sc_extractor = cv::createShapeContextDistanceExtractor();
+
+static void refresh_sc_extractor_settings()
+{
+	sc_extractor->setShapeContextWeight(Params::shape_context_match_weight);
+	sc_extractor->setBendingEnergyWeight(Params::shape_context_bending_weight);
+	sc_extractor->setImageAppearanceWeight(Params::shape_context_appearance_weight);
+	sc_extractor->setRotationInvariant(Params::shape_context_use_rotation);
+}
+
 static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
 {
     vector<vector<Point> > _contoursQuery;
@@ -40,29 +49,32 @@ static void _compare_sift(Patch *query, const vector<Patch *>& images, vector<do
 }
 static void _compare_sc(Patch *query, const vector<Patch *>& images, vector<double> &ret)
 {
+	refresh_sc_extractor_settings();
 	ret.clear();
 	vector<Point> contQuery = simpleContour(*query->getBinaryImagePatch(),Params::shape_context_sample_point_num);
-
+	
 	for(vector<Patch *>::const_iterator itr = images.begin(); itr != images.end(); ++itr)
 	{
 		Patch* ptr = *itr;
 		vector<Point> contii = simpleContour(*ptr->getBinaryImagePatch(),Params::shape_context_sample_point_num);
+		if(abs(Params::shape_context_appearance_weight) > 0.0001)
+			sc_extractor->setImages(*query->getOriginalImagePatch(),*ptr->getOriginalImagePatch());
 		ret.push_back(sc_extractor->computeDistance(contQuery,contii));
 	}
 }
 
-vector<double> Patch::patchCompareWith(const vector<Patch*> &images, string featureType)
+vector<double> Patch::patchCompareWith(const vector<Patch*> &images, const string featureType)
 {
 	vector<double> ret;
-	if(featureType == "SHAPE_CONTEXT")
+	if(featureType == Params::SHAPE_CONTEXT)
 		_compare_sc(this,images,ret);
-	else if(featureType == "SIFT")
+	else if(featureType == Params::SIFT)
 		_compare_sift(this,images,ret);
 
 	return ret;
 }
 
-double Patch::patchCompareWith(Patch *pPatch, string featureType) 
+double Patch::patchCompareWith(Patch *pPatch, const string featureType) 
 {
 	vector<Patch*> vec;
 	vec.push_back(pPatch);
