@@ -1,49 +1,87 @@
 #include "tools.h"
 #include "removeDuplicatePatchs.h"
 
+
+#define SHAPE_CONTEXT "SHAPE_CONTEXT"
 //shape context compare
 //similar score <= this threshold will be regarded as the same images
 static const double SHAPE_CONTEXT_COMPARE_FIRST_THRES = 1.0;
 static const double SHAPE_CONTEXT_COMPARE_SECOND_THRES = 2.0;
 
-//Strategy 1:
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
-    vector<SuperImagePatch *> result;
-//    bool find_similar ;
-//    for (int i = 0 ; i < patch_vec.size(); i++) {
-//        find_similar = false;
-//        ImagePatch *one_patch = patch_vec[i];
-//        vector<double> scores = one_patch->patchCompareWith(result, "SHAPE_CONTEXT");
-//        
-//        for (int j = 0; j < result.size(); j++) {
-//            SuperImagePatch *tmp_sp = result[j];
-//            double score = one_patch->patchCompareWith(tmp_sp, "SHAPE_CONTEXT");
-//            // (1) has similar 'SP', insert
-//            cout<<score<<endl;
-//            if(score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES){
-//                vector<Patch *> patch_vec = tmp_sp->getPatchvector();
-//                patch_vec.push_back(one_patch);
-//                tmp_sp->setPatchList(patch_vec);
-//                find_similar = true;
-//                break;
-//            }
-//        }
-//        
-//        if (!find_similar) {
-//            // (2) no similar 'SP', generate a new one
-//            Mat *_bsip = new Mat(one_patch->getBinaryImagePatch()->clone());
-//            Mat *_osip = new Mat(one_patch->getOriginalImagePatch()->clone());
-//            SuperImagePatch *new_sip = new SuperImagePatch("",_bsip,_osip);
-//            vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
-//            patch_vec.push_back(one_patch);
-//            new_sip->setPatchList(patch_vec);
-//            result.push_back(new_sip);
-//        }
-//    }
-    return result;
+/*
+ find the smallest element(with its index) in vectors
+ */
+static void find_nearest(vector<double> &scores, double *score,int *index){
+    if (scores.empty()) {
+        return;
+    }
+    
+    *score = scores[0];
+    *index = 0;
+    for(int i = 1; i < (int)scores.size(); i++){
+        if (scores[i] < *score){
+            *score = scores[i];
+            *index = i;
+        }
+    }
 }
 
-//Strategy 2:
+
+/*
+ generate a super_patch pointer from image_patch pointer
+ */
+static SuperImagePatch* generate_super_from_patch(ImagePatch *patch){
+    if (patch == nullptr) {
+        return nullptr;
+    }
+    
+    Mat *_bsip = new Mat(patch->getBinaryImagePatch()->clone());
+    Mat *_osip = new Mat(patch->getOriginalImagePatch()->clone());
+    SuperImagePatch *new_sip = new SuperImagePatch("",_bsip,_osip);
+    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
+    patch_vec.push_back(patch);
+    new_sip->setPatchList(patch_vec);
+    return new_sip;
+}
+
+/*
+ Strategy 1: 1 to many
+ */
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
+    vector<SuperImagePatch *> supers;
+    if (patch_vec.empty()) {
+        return supers;
+    }
+    
+    // init supers with the first image_patch
+    supers.push_back(generate_super_from_patch(patch_vec[0]));
+    
+    double nearest_score = 0.0;
+    int nearest_index = -1;
+    for (int i = 0 ; i < patch_vec.size(); i++) {
+        ImagePatch *one_patch = patch_vec[i];
+        //convert first ,use second
+        vector<Patch *> base_patch_vec = convert_verctor<Patch>(supers);
+        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, SHAPE_CONTEXT);
+        
+        find_nearest(scores, &nearest_score, &nearest_index);
+        
+        //(1) has similar 'SP', insert 'P' to 'SP'
+        if (nearest_score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES) {
+            vector<Patch *> patch_vec = supers[nearest_index]->getPatchvector();
+            patch_vec.push_back(one_patch);
+            supers[nearest_index]->setPatchList(patch_vec);
+        }else{
+        // (2) no similar 'SP', generate a new one
+            supers.push_back(generate_super_from_patch(one_patch));
+        }
+    }
+    return supers;
+}
+
+/*
+ Strategy 2: 1 to 1 comparison
+ */
 vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& patch_vec){
     vector<SuperImagePatch *> result;
     bool find_similar ;
@@ -52,7 +90,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         ImagePatch *one_patch = patch_vec[i];
         for (int j = 0; j < result.size(); j++) {
             SuperImagePatch *tmp_sp = result[j];
-            double score = one_patch->patchCompareWith(tmp_sp, "SHAPE_CONTEXT");
+            double score = one_patch->patchCompareWith(tmp_sp, SHAPE_CONTEXT);
             // (1) has similar 'SP', insert
             cout<<score<<endl;
             if(score <= SHAPE_CONTEXT_COMPARE_FIRST_THRES){
@@ -66,13 +104,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         
         if (!find_similar) {
             // (2) no similar 'SP', generate a new one
-            Mat *_bsip = new Mat(one_patch->getBinaryImagePatch()->clone());
-            Mat *_osip = new Mat(one_patch->getOriginalImagePatch()->clone());
-            SuperImagePatch *new_sip = new SuperImagePatch("",_bsip,_osip);
-            vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
-            patch_vec.push_back(one_patch);
-            new_sip->setPatchList(patch_vec);
-            result.push_back(new_sip);
+            result.push_back(generate_super_from_patch(one_patch));
         }
     }
 	return result;
@@ -93,8 +125,10 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
  once find a pair of 'P' and 'SP' has similarity <= threshold, insert 'P' to 'SP'
  */
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec,bool use1To1){
-    if (use1To1) return removeDuplicateImagePatch1To1(patch_vec);
-    else return removeDuplicateImagePatchs(patch_vec);
+    if (use1To1)
+        return removeDuplicateImagePatch1To1(patch_vec);
+    else
+        return removeDuplicateImagePatchs(patch_vec);
 }
 
 

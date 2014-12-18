@@ -5,6 +5,7 @@
 #include<iostream>
 #include<cv.h>
 #include<map>
+#include "sqlliteHelper.h"
 using namespace std;
 using namespace cv;
 //图元块类，小图元和超图元共有的基本方法
@@ -12,7 +13,7 @@ class Patch{
 public:
 	Patch():binaryImagePatch(NULL),originalImagePatch(NULL){};
 	Patch(Mat *bip, Mat *oip):binaryImagePatch(bip),originalImagePatch(oip){}
-	Patch(vector< map< string, vector<double>  > > f, Mat *bip, Mat *oip):binaryImagePatch(bip),originalImagePatch(oip),features(f){}
+	Patch( map< string, vector<double>  >  f, Mat *bip, Mat *oip):binaryImagePatch(bip),originalImagePatch(oip),features(f){}
 	Patch(Patch &rhd):binaryImagePatch(new Mat()),originalImagePatch(new Mat()),features(rhd.features)
 	{
 		rhd.binaryImagePatch->copyTo(*binaryImagePatch);
@@ -41,7 +42,7 @@ public:
 	double patchCompareWith(Patch *pPatch, const string featureType) ;
 	vector<double> patchCompareWith(const vector<Patch*>& images, const string featureType) ;
 	//将小图元存入数据库中
-	virtual void savePatch() =0;
+	virtual void savePatch(SQLiteHelper &sql_lite_helper) const = 0;
 
 	void setBinaryImagePatch(Mat *bip) 
 	{
@@ -55,14 +56,14 @@ public:
 			delete originalImagePatch;
 		originalImagePatch = oip; 
 	}
-	void setFeatures(vector<map<string, vector<double>>> f){ features = f; }
+	void setFeatures(map<string, vector<double> > f){ features = f; }
 	Mat* getBinaryImagePatch() const { return binaryImagePatch; }
 	Mat* getOriginalImagePatch() const { return originalImagePatch; }
-	vector<map<string, vector<double> > > getFeatures() { return features; }
+	map<string, vector<double> > getFeatures() { return features; }
 private:
 	Mat *binaryImagePatch;//小图元二值化表示
 	Mat *originalImagePatch;//小图元在原图像中的表示
-	vector<map<string, vector<double>>> features;//存储图元的各种特征
+	map<string, vector<double> > features;//存储图元的各种特征
 };
 
 

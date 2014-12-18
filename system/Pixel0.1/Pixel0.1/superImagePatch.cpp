@@ -14,5 +14,5 @@ double SuperImagePatch::patchCompareWith(Patch *pImagePatch, string featureType)
 }
 */
 //将小图元存入数据库中
-void SuperImagePatch::savePatch(){
+void SuperImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
 }

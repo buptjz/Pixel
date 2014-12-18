@@ -12,9 +12,13 @@ CvRect ¥¥‘Ï”Ôæ‰:
 CvRect *rects = new CvRect[count]*/
 static vector<Rect *> & getMetaInfos(const Mat &, vector<Rect *> &, int);
 
-void OriginalImage::saveOriginalImage() const
+void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const
 {
-
+		std::stringstream str_sql;
+		str_sql << "insert into originalImage values(";
+		str_sql << originalImageId << ","<< path << ");";
+		std::string str = str_sql.str();
+		sql_lite_helper.Insert(str.c_str());
 }
 
 static vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, int count)
