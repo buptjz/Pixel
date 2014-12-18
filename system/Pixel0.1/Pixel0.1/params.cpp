@@ -19,5 +19,5 @@ float Params::shape_context_appearance_weight = 0;
 bool Params::shape_context_use_rotation = false;
 
 //shape context compare
-double Params::shape_context_compare_1_thres = 1.0;
+double Params::shape_context_compare_1_thres = 0.1;
 double Params::shape_context_compare_2_thres = 2.0;
