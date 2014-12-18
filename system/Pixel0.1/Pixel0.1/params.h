@@ -4,7 +4,7 @@
 class Params
 {
 public:
-	//常用的量
+	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
 
@@ -16,7 +16,7 @@ public:
 	static bool shape_context_use_rotation;
 };
 
-//常用的量
+//some flages
 const string Params::SIFT = "SIFT";
 const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
 
