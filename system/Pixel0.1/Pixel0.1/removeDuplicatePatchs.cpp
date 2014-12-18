@@ -29,7 +29,9 @@ static SuperImagePatch* generate_super_from_patch(Patch *patch){
     
     Mat *_bsip = new Mat(patch->getBinaryImagePatch()->clone());
     Mat *_osip = new Mat(patch->getOriginalImagePatch()->clone());
-    SuperImagePatch *new_sip = new SuperImagePatch("",_bsip,_osip);
+    string patch_id = super_patch_id_from_timestamp();
+    cout<<"generate super patch id : "<<patch_id<<endl;//debug
+    SuperImagePatch *new_sip = new SuperImagePatch(patch_id,_bsip,_osip);
     vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
     patch_vec.push_back(patch);
     new_sip->setPatchList(patch_vec);
