@@ -13,6 +13,8 @@
 #include <highgui.h>
 #include <opencv.hpp>
 #include <string>
+#include <time.h>
+
 #include "patch.h"
 
 //show patch tool function
