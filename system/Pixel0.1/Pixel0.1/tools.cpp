@@ -7,7 +7,7 @@
 //
 
 #include "tools.h"
-
+#include <ctime>
 
 void tool_show_patch(Patch *image, string name){
     cv::namedWindow(name);

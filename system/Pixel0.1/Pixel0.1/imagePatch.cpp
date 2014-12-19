@@ -44,18 +44,29 @@ void ImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
 	const string originalImageId = originalImage->getOriginalImageId();
 	const string superImagePatchId = superImagePatch->getSuperImagePatchId();
 	string positionStr = rect2JsonString(position);
-	string binarySuperBuffer;
-	mat2jsonString(*((Mat*)getBinaryImagePatch()), binarySuperBuffer);
-	string originalSuperBuffer;
-	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalSuperBuffer);
+	string binaryImagePatchBuffer;
+	mat2jsonString(*((Mat*)getBinaryImagePatch()), binaryImagePatchBuffer);
+	string originalImagePatchBuffer;
+	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalImagePatchBuffer);
 	string featuresStr;
 	map2JsonString((map<string,vector<double> >)getFeatures(), featuresStr);
 	str_sql << "insert into imagePatch values(";
 	str_sql << imagePatchId << "," << originalImageId << ","<<superImagePatch<<",";
-	str_sql << positionStr<<","<<binarySuperBuffer<<","<<originalSuperBuffer<<","<<featuresStr;
+	str_sql << positionStr<<","<<"?"<<","<<"?"<<","<<"?";
 	str_sql << ");";
 	std::string str = str_sql.str();
-	sql_lite_helper.Insert(str.c_str());
+	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
+	int result = sqlite3_prepare(sql_lite_helper.getSqlite3(), str.c_str(), -1, &stat, 0);  //预编译
+	
+	result = sqlite3_bind_blob(stat, 1, binaryImagePatchBuffer.c_str(), binaryImagePatchBuffer.size(), NULL);   //绑定blob类型
+	result = sqlite3_bind_blob(stat, 2, originalImagePatchBuffer.c_str(), originalImagePatchBuffer.size(), NULL);   //绑定blob类型
+	result = sqlite3_bind_text(stat, 3,featuresStr.c_str(), -1, NULL);           //绑定表的第一个字段，这里为text类型
+	result = sqlite3_step(stat);                              //执行sql语句，这样就把数据存到数据库里了
+	if (result != SQLITE_DONE)
+	{
+		printf("insert into blob value failure!");
+	}
+	//sql_lite_helper.Insert(str.c_str());
 }
 
 

@@ -31,6 +31,7 @@ public:
 	//同时创建多个表
     int CreateTables(std::vector<const char*>  create_tables);
 	
+	sqlite3 * getSqlite3() { return sqlite_db_; }
 
 private:
 	sqlite3 *sqlite_db_;// 数据库的指针
