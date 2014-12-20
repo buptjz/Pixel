@@ -1,3 +1,8 @@
+/*
+ Wang Jizhe main function 
+ 2014.12.20
+ */
+
 #include <iostream>
 #include "superImagePatch.h"
 #include "imagePatch.h"
@@ -14,10 +19,6 @@
 #include <opencv2/nonfree/features2d.hpp>
 #include <iostream>
 
-#include "opencv2/features2d.hpp"
-#include "opencv2/xfeatures2d.hpp"
-
-using namespace cv::xfeatures2d;
 using namespace std;
 using namespace cv;
 
