@@ -24,13 +24,13 @@ public:
 	//void setFeatures(vector<map<string, vector<double>>> f){ features = f; }
 	//void setBinarySuperImagePatch(Mat *bsip) { binarySuperImagePatch = bsip; };
 	//void setOriginalSuperImagePatch(Mat *osip) { originalSuperImagePatch = osip; }
-	void setPatchList(vector<Patch*> pl) { patchList = pl; }
+	void setPatchList(vector<string> pl) { patchList = pl; }
 
 	string getSuperImagePatchId() const { return superImagePatchId; }
 	//map<string, vector<double>> getFeatures() { return features; }
 	//Mat* getBinarySuperImagePatch() { return binarySuperImagePatch; }
 	//Mat* getOriginalSuperImagePatch() { return originalSuperImagePatch; }
-	vector<Patch*> getPatchvector() { return patchList; }
+	vector<string> getPatchvector() { return patchList; }
 	/*
 	//两个超图元进行比较，返回表示相似度的一个数(重写方法）
 	double patchCompareWith(Patch *pSuperImagePatch, string featureType);
@@ -42,8 +42,8 @@ private:
 	//map<string, vector<double>> features;//存储图元的各种特征
 	//Mat *binarySuperImagePatch;//超图元二值化表示
 	//Mat *originalSuperImagePatch;//超图元在原图像中的表示
-	vector<Patch*> patchList;//超图元所对应的子图元列表；
-	//vector<string> patchList;// id of imagePatches belong this superImagePatch；
+	//vector<Patch*> patchList;//超图元所对应的子图元列表；
+	vector<string> patchList;// id of imagePatches belong to this superImagePatch；
 };
 
 #endif
