@@ -5,6 +5,7 @@
 //  Created by WangJZ on 14/12/17.
 //  Copyright (c) 2014年 WangJZ. All rights reserved.
 //
+#define _CRT_SECURE_NO_WARNINGS
 
 #include "tools.h"
 #include <ctime>

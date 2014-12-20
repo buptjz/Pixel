@@ -1,11 +1,8 @@
 #ifndef JSONHELPER_H
 #define JSONHELPER_H
-#include "json/json.h"
 #include <map>
 #include <cstring>
 #include<iostream>
-#include <memory.h>
-#include <exception>
 #include <string.h>
 #include<vector>
 #include<stdio.h>
@@ -25,4 +22,6 @@ int mat2jsonString(const Mat&  M, string &jsonString);
 //json×Ö·û´®ÐòÁÐ»¯ÎªMat
 int jsonString2Mat(string &jsonString, Mat& m);
 
+string rect2JsonString(const Rect &rect);
+Rect jsonString2Rect(string &str);
 #endif

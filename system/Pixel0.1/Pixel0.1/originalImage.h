@@ -20,6 +20,7 @@ public:
 	OriginalImage(const string & originalImageId, const string & path, Mat * const pOImage);*/
 
 	OriginalImage();
+	OriginalImage(const string &originalImageId) :originalImageId(originalImageId){ }
 	OriginalImage(const string & path, const string & originalImageId) :originalImageId(originalImageId), path(path), pOImage(0)	{}
 	OriginalImage(const string & originalImageId, const string & path, Mat
 	* const pOImage) : originalImageId(originalImageId), path(path), pOImage(pOImage){}

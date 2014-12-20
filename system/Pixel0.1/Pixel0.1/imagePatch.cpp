@@ -20,28 +20,10 @@ double ImagePatch::patchCompareWith(Patch *pImagePatch, string featureType){
 }
 */
 
-string rect2JsonString(const Rect &rect)
-{
-	map<string, vector<double> > m;
-	vector<double> v;
-	double x = (double)rect.x;
-	double y = (double)rect.y;
-	double w = (double)rect.width;
-	double h = (double)rect.height;
-	v.push_back(x);
-	v.push_back(y);
-	v.push_back(w);
-	v.push_back(h);
-	m["position"] = v;
-	string res;
-	map2JsonString(m, res);
-	return res;
-}
-
 //将小图元存入数据库中
 void ImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
 	std::stringstream str_sql;
-	const string originalImageId = originalImage->getOriginalImageId();
+	const string originalImageIdsStr = originalImage->getOriginalImageId();
 	const string superImagePatchId = superImagePatch->getSuperImagePatchId();
 	string positionStr = rect2JsonString(position);
 	string binaryImagePatchBuffer;
@@ -51,7 +33,7 @@ void ImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
 	string featuresStr;
 	map2JsonString((map<string,vector<double> >)getFeatures(), featuresStr);
 	str_sql << "insert into imagePatch values(";
-	str_sql << imagePatchId << "," << originalImageId << ","<<superImagePatch<<",";
+	str_sql << imagePatchId << "," << originalImageIdsStr << "," << superImagePatch << ",";
 	str_sql << positionStr<<","<<"?"<<","<<"?"<<","<<"?";
 	str_sql << ");";
 	std::string str = str_sql.str();

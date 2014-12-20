@@ -1,6 +1,10 @@
-#include "jsonHelper.h"
-using namespace std;
 #define _CRT_SECURE_NO_WARNINGS
+#include "jsonHelper.h"
+#include "json/json.h"
+#include <memory.h>
+#include <exception>
+using namespace std;
+
 //map类型转换为json字符串
 int map2JsonString(map<string, vector<double> > m, string &jsonString)
 {
@@ -87,12 +91,15 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 		data[size] = '\0';
 		if (M.isContinuous())
 		{
+			/*
 			errno_t  err = memcpy_s(data, size + 1, (char*)M.data, size);
 			if (err)
 			{
 				printf("mat2jsonString : Error executing memcpy_s.\n");
 				return -1;
 			}
+			*/
+			memcpy(data, (char*)M.data, size);
 			//strncpy_s(data, size+1, (char*)M.data, size);
 			//strncpy(data, (char*)M.data, (size_t)(cols*rows*chan*eSiz));
 		}
@@ -158,12 +165,15 @@ int jsonString2Mat(string &jsonString, Mat& M)
 		if (M.isContinuous())
 		{
 			//strncpy_s((char*)M.data, data.size()-1, data.c_str(),data.size());
+			/*		
 			errno_t  err =  memcpy_s((char*)M.data, data.size() - 1, data.c_str(), data.size());
 			if (err)
 			{
 				printf("mat2jsonString : Error executing memcpy_s.\n");
 				return -1;
 			}
+			*/
+			memcpy((char*)M.data, data.c_str(), data.size()-1);
 		}
 	}
 	catch (std::exception &ex)
@@ -171,6 +181,38 @@ int jsonString2Mat(string &jsonString, Mat& M)
 		printf("jsonString2Mat exception %s.\n", ex.what());
 		return -1;
 	}
-
 	return 0;
+}
+
+
+string rect2JsonString(const Rect &rect)
+{
+	map<string, vector<double> > m;
+	vector<double> v;
+	double x = (double)rect.x;
+	double y = (double)rect.y;
+	double w = (double)rect.width;
+	double h = (double)rect.height;
+	v.push_back(x);
+	v.push_back(y);
+	v.push_back(w);
+	v.push_back(h);
+	m["position"] = v;
+	string res;
+	map2JsonString(m, res);
+	return res;
+}
+
+Rect jsonString2Rect(string &str)
+{
+	map<string, vector<double> > m;
+	jsonString2Map(str, m);
+	vector<double> v = m["position"];
+	int x = (int)v[0];
+	int y = (int)v[1];
+	int w = (int)v[2];
+	int h = (int)v[3];
+	Rect* rect = new Rect(x, y, w, h);
+
+	return *rect;
 }

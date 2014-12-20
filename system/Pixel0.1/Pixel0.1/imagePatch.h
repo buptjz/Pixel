@@ -50,8 +50,6 @@ public:
 	*/
 	//将小图元存入数据库中
 	void savePatch(SQLiteHelper &sql_lite_helper) const;
-
-
 private:
 	string imagePatchId;//小图元id，要唯一，用“OriginalImageId_"imagePatch"_编号”组成
 	OriginalImage* originalImage;//小图元所属的图像

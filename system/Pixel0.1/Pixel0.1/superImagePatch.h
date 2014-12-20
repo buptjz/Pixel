@@ -43,6 +43,7 @@ private:
 	//Mat *binarySuperImagePatch;//超图元二值化表示
 	//Mat *originalSuperImagePatch;//超图元在原图像中的表示
 	vector<Patch*> patchList;//超图元所对应的子图元列表；
+	//vector<string> patchList;// id of imagePatches belong this superImagePatch；
 };
 
 #endif

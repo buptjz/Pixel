@@ -3,6 +3,7 @@
 #include "opencv2/shape.hpp"
 #include "opencv2/imgproc.hpp"
 #include <queue>
+#include<functional>
 #include <opencv2/highgui.hpp>
 #include <algorithm>
 /*和当前图元进行比较
