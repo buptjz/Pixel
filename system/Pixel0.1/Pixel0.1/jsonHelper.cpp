@@ -12,9 +12,9 @@ int map2JsonString(map<string, vector<double> > m, string &jsonString)
 		{
 			string key = it->first;
 			vector<double> value = it->second;
-			for (int i = 0; i < value.size(); i++)
+			for (size_t i = 0; i < value.size(); i++)
 			{
-				string  num = to_string(value[i]);
+				string  num = to_string(static_cast<long double>(value[i]));
 				jvalue[key].append(num);
 			}
 		}
@@ -50,7 +50,7 @@ int jsonString2Map(string& jsonString, map<string, vector<double> > m)
 			vector<double> v;
 			string key = *iter;
 			arrayObj = value[key];
-			for (int i = 0; i < arrayObj.size(); i++)
+			for (size_t i = 0; i < arrayObj.size(); i++)
 			{
 				v.push_back(arrayObj[i].asDouble());
 			}
@@ -78,10 +78,10 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 		int rows = M.rows;
 		int chan = M.channels();
 		int eSiz = (M.dataend - M.datastart) / (cols*rows*chan);
-		jvalue["cols"] = to_string(cols);
-		jvalue["rows"] = to_string(rows);
-		jvalue["chan"] = to_string(chan);
-		jvalue["eSiz"] = to_string(eSiz);
+		jvalue["cols"] = to_string(static_cast<long double>(cols));
+		jvalue["rows"] = to_string(static_cast<long double>(rows));
+		jvalue["chan"] = to_string(static_cast<long double>(chan));
+		jvalue["eSiz"] = to_string(static_cast<long double>(eSiz));
 		size_t size = cols*rows*chan*eSiz;
 		char* data = new char[size+1];
 		data[size] = '\0';

@@ -20,7 +20,6 @@ public:
 	SuperImagePatch(string id):superImagePatchId(id){}
 	SuperImagePatch(string id, Mat *bsip, Mat *osip):Patch(bsip,osip),superImagePatchId(id){}
 
-
 	void setSuperImagePatchId(string sip) { superImagePatchId = sip; }
 	//void setFeatures(vector<map<string, vector<double>>> f){ features = f; }
 	//void setBinarySuperImagePatch(Mat *bsip) { binarySuperImagePatch = bsip; };

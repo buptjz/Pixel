@@ -57,7 +57,7 @@ int SQLiteHelper::CreateTable(const char *table_name_and_field)
 int SQLiteHelper::CreateTables(vector<const char*> create_tables)
 {
 	int res = sqlite3_exec(sqlite_db_, "begin transaction;", CallBackFunc, 0, &err_msg_);
-	for (int i = 0; i<create_tables.size(); i++)
+	for (size_t i = 0; i<create_tables.size(); i++)
 	{
 		res = CreateTable(create_tables[i]);
 		if (res != SQLITE_OK)

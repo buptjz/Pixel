@@ -17,7 +17,7 @@ static void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int ap
 
 OriginalImage::OriginalImage(){}
 
-void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const{};
+//void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const{};
 
 vector<Rect *> & getMetaInfos(const Mat & img, vector<Rect *> & rects, int count)
 {
