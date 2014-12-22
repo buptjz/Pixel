@@ -18,6 +18,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 
+using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
 
@@ -142,74 +143,26 @@ static Mat drawGoodMatches(
 ////////////////////////////////////////////////////
 // This program demonstrates the usage of SURF_OCL.
 // use cpu findHomography interface to calculate the transformation matrix
-int surf_match_func(int argc, char* argv[])
-{
-    const char* keys =
-    "{ h help     | false            | print help message  }"
-    "{ l left     | box.png          | specify left image  }"
-    "{ r right    | box_in_scene.png | specify right image }"
-    "{ o output   | SURF_output.jpg  | specify output save path }"
-    "{ m cpu_mode | false            | run without OpenCL }";
-    
-    CommandLineParser cmd(argc, argv, keys);
-    if (cmd.has("help"))
-    {
-        std::cout << "Usage: surf_matcher [options]" << std::endl;
-        std::cout << "Available options:" << std::endl;
-        cmd.printMessage();
-        return EXIT_SUCCESS;
-    }
-    if (cmd.has("cpu_mode"))
-    {
-        ocl::setUseOpenCL(false);
-        std::cout << "OpenCL was disabled" << std::endl;
-    }
-    
-    UMat img1, img2;
-    
+int surf_match_func(const Mat &img1,const Mat &img2){
+
+//    ocl::setUseOpenCL(false);
+//    std::cout << "OpenCL was disabled" << std::endl;
     std::string outpath = "SURF.jpg";
-    
-    //这里用box.png和box_in_scene.png就会报错!为啥？
-    std::string leftName = "/Volumes/BigData/Pixel/data/test_data/left01.jpg";
-    imread(leftName, IMREAD_GRAYSCALE).copyTo(img1);
-    if(img1.empty())
-    {
-        std::cout << "Couldn't load " << leftName << std::endl;
-        cmd.printMessage();
-        return EXIT_FAILURE;
-    }
-    
-    std::string rightName = "/Volumes/BigData/Pixel/data/test_data/left02.jpg";
-    imread(rightName, IMREAD_GRAYSCALE).copyTo(img2);
-    if(img2.empty())
-    {
-        std::cout << "Couldn't load " << rightName << std::endl;
-        cmd.printMessage();
-        return EXIT_FAILURE;
-    }
-    
     double surf_time = 0.;
-    
     //declare input/output
-    std::vector<KeyPoint> keypoints1, keypoints2;
+    vector<KeyPoint> keypoints1, keypoints2;
     std::vector<DMatch> matches;
     
-    UMat _descriptors1, _descriptors2;
-    Mat descriptors1 = _descriptors1.getMat(ACCESS_RW),
-    descriptors2 = _descriptors2.getMat(ACCESS_RW);
-    
+    Mat descriptors1, descriptors2;
     //instantiate detectors/matchers
     SURFDetector surf;
     
     SURFMatcher<BFMatcher> matcher;
-    
     //-- start of timing section
-    
-    for (int i = 0; i <= LOOP_NUM; i++)
-    {
+    for (int i = 0; i <= LOOP_NUM; i++){
         if(i == 1) workBegin();
-        surf(img1.getMat(ACCESS_READ), Mat(), keypoints1, descriptors1);
-        surf(img2.getMat(ACCESS_READ), Mat(), keypoints2, descriptors2);
+        surf(img1, Mat(), keypoints1, descriptors1);
+        surf(img2, Mat(), keypoints2, descriptors2);
         matcher.match(descriptors1, descriptors2, matches);
     }
     workEnd();
@@ -221,7 +174,7 @@ int surf_match_func(int argc, char* argv[])
     
     
     std::vector<Point2f> corner;
-    Mat img_matches = drawGoodMatches(img1.getMat(ACCESS_READ), img2.getMat(ACCESS_READ), keypoints1, keypoints2, matches, corner);
+    Mat img_matches = drawGoodMatches(img1, img2, keypoints1, keypoints2, matches, corner);
     
     //-- Show detected matches
     
