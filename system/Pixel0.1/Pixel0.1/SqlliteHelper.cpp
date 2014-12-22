@@ -2,7 +2,9 @@
 
 #include <iostream>
 using namespace std;
-
+sqlite3 * SQLiteHelper::sqlite_db_ = NULL;
+char* SQLiteHelper::err_msg_;		// 错误信息
+bool SQLiteHelper::is_close_;		// 关闭数据的标识
 int SQLiteHelper::OpenDB(const char *path)
 {
 	int res = sqlite3_open(path, &sqlite_db_);

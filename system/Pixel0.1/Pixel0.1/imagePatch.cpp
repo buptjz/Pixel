@@ -21,7 +21,7 @@ double ImagePatch::patchCompareWith(Patch *pImagePatch, string featureType){
 */
 
 //将小图元存入数据库中
-void ImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
+void ImagePatch::savePatch() const{
 	std::stringstream str_sql;
 	const string originalImageIdsStr = originalImage->getOriginalImageId();
 	const string superImagePatchId = superImagePatch->getSuperImagePatchId();
@@ -38,7 +38,8 @@ void ImagePatch::savePatch(SQLiteHelper &sql_lite_helper) const{
 	str_sql << ");";
 	std::string str = str_sql.str();
 	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
-	int result = sqlite3_prepare(sql_lite_helper.getSqlite3(), str.c_str(), -1, &stat, 0);  //预编译
+	//int result = sqlite3_prepare(SQLiteHelper::getSqlite3(), str.c_str(), -1, &stat, 0);  //预编译
+	int result = sqlite3_prepare(SQLiteHelper::sqlite_db_, str.c_str(), -1, &stat, 0);
 	
 	result = sqlite3_bind_blob(stat, 1, binaryImagePatchBuffer.c_str(), binaryImagePatchBuffer.size(), NULL);   //绑定blob类型
 	result = sqlite3_bind_blob(stat, 2, originalImagePatchBuffer.c_str(), originalImagePatchBuffer.size(), NULL);   //绑定blob类型

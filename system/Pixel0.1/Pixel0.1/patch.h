@@ -39,7 +39,7 @@ public:
 	vector<double> patchCompareWith(const vector<Patch*>& images, const string featureType) ;
 	vector<pair<double,Patch*> > patchCompareWith(const vector<Patch*>& images, const string featureType, size_t top_k) ;
 	//将小图元存入数据库中
-	virtual void savePatch(SQLiteHelper &sql_lite_helper) const = 0;
+	virtual void savePatch() const = 0;
 
 	void setBinaryImagePatch(Mat *bip) 
 	{

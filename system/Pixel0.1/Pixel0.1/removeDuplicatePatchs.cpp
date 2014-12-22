@@ -32,7 +32,7 @@ static SuperImagePatch* generate_super_from_patch(Patch *patch){
     string patch_id = super_patch_id_from_timestamp();
     cout<<"generate super patch id : "<<patch_id<<endl;//debug
     SuperImagePatch *new_sip = new SuperImagePatch(patch_id,_bsip,_osip);
-    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
+    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchList();
     patch_vec.push_back(patch);
     new_sip->setPatchList(patch_vec);
     return new_sip;
@@ -62,7 +62,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         
         //(1) has similar 'SP', insert 'P' to 'SP'
         if (nearest_score <= Params::shape_context_compare_1_thres) {
-            vector<Patch *> patch_vec = supers[nearest_index]->getPatchvector();
+            vector<Patch *> patch_vec = supers[nearest_index]->getPatchList();
             patch_vec.push_back(one_patch);
             supers[nearest_index]->setPatchList(patch_vec);
         }else{
@@ -88,7 +88,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
             // (1) has similar 'SP', insert
             cout<<score<<endl;
             if(score <= Params::shape_context_compare_1_thres){
-                vector<Patch *> patch_vec = tmp_sp->getPatchvector();
+                vector<Patch *> patch_vec = tmp_sp->getPatchList();
                 patch_vec.push_back(one_patch);
                 tmp_sp->setPatchList(patch_vec);
                 find_similar = true;
@@ -156,8 +156,8 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         find_nearest(scores, &nearest_score, &nearest_index);
         //(1) has similar 'SP', merge two 'SP's
         if (nearest_score <= Params::shape_context_compare_1_thres) {
-            vector<Patch *>v1 = final_sps[nearest_index]->getPatchvector();
-            vector<Patch *>v2 = candi_sp->getPatchvector();
+            vector<Patch *>v1 = final_sps[nearest_index]->getPatchList();
+            vector<Patch *>v2 = candi_sp->getPatchList();
             v1.insert(v1.end(), v2.begin(), v2.end());
             final_sps[nearest_index]->setPatchList(v1);
         }else{

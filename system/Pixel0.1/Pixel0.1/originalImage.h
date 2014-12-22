@@ -33,19 +33,19 @@ public:
 	/*分割图片，返回小图元的集合*/
 	vector<ImagePatch *> segmentImage() const;
 	//将图片信息存入数据库中
-	void saveOriginalImage(SQLiteHelper &sql_lite_helper) const
+	void saveOriginalImage()
 	{
 		std::stringstream str_sql;
 		str_sql << "insert into originalImage values(";
 		str_sql << originalImageId << "," << path<< ");";
 		std::string str = str_sql.str();
-		sql_lite_helper.Insert(str.c_str());
+		SQLiteHelper::Insert(str.c_str());
 	}
-
 private:
 	string originalImageId;//图片的id，要唯一，用“文件夹名_图像名”组成
 	string path;
 	Mat *pOImage;
+
 };
 
 #endif

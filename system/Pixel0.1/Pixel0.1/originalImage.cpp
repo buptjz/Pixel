@@ -1,5 +1,6 @@
 #include<opencv2/imgproc/imgproc.hpp>
 #include"originalImage.h"
+#include "sqlliteHelper.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
