@@ -33,8 +33,13 @@ static SuperImagePatch* generate_super_from_patch(Patch *patch){
     cout<<"generate super patch id : "<<patch_id<<endl;//debug
     SuperImagePatch *new_sip = new SuperImagePatch(patch_id,_bsip,_osip);
     vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchList();
+	//BUG!!! noted by catking
+	/*
+    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
+>>>>>>> origin/master
     patch_vec.push_back(patch);
     new_sip->setPatchList(patch_vec);
+	*/
     return new_sip;
 }
 
