@@ -18,6 +18,7 @@
 #include <opencv2/nonfree/nonfree.hpp>
 #include <opencv2/nonfree/features2d.hpp>
 #include <iostream>
+#include "surfMatch.h"
 
 using namespace std;
 using namespace cv;
@@ -34,6 +35,7 @@ using namespace cv;
 //}
 
 int main(int agrc, char **agrv){
+    
 //    test_descriptor();
     vector<ImagePatch*> all_patch;
     string root = "/Volumes/BigData/Pixel/data/ordered/";
@@ -42,6 +44,8 @@ int main(int agrc, char **agrv){
         string b_image_name = root + to_string(i) + ".jpg";
         Mat cimg = imread(c_image_name,CV_32F);//32-bit RGB image
         Mat bimg = imread(b_image_name,CV_8UC1);//8-bit Black-White image
+        
+        surf_match_func(cimg,bimg);
         Mat *c = new Mat(cimg);
         Mat *b = new Mat(bimg);
         Rect rect = Rect();

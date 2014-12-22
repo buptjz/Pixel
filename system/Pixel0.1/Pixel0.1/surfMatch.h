@@ -11,5 +11,6 @@
 
 #include <stdio.h>
 
+int surf_match_func(const Mat &,const Mat &);
 
 #endif /* defined(__Xcode_Pixel_Proj__surfMatch__) */

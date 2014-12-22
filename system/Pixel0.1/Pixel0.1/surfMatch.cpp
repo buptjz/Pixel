@@ -22,7 +22,6 @@ using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
 
-const int LOOP_NUM = 10;
 const int GOOD_PTS_MAX = 50;
 const float GOOD_PORTION = 0.15f;
 
@@ -158,30 +157,28 @@ int surf_match_func(const Mat &img1,const Mat &img2){
     SURFDetector surf;
     
     SURFMatcher<BFMatcher> matcher;
+    
     //-- start of timing section
-    for (int i = 0; i <= LOOP_NUM; i++){
-        if(i == 1) workBegin();
-        surf(img1, Mat(), keypoints1, descriptors1);
-        surf(img2, Mat(), keypoints2, descriptors2);
-        matcher.match(descriptors1, descriptors2, matches);
-    }
+    workBegin();
+    surf(img1, Mat(), keypoints1, descriptors1);
+    surf(img2, Mat(), keypoints2, descriptors2);
+    matcher.match(descriptors1, descriptors2, matches);
     workEnd();
+
     std::cout << "FOUND " << keypoints1.size() << " keypoints on first image" << std::endl;
     std::cout << "FOUND " << keypoints2.size() << " keypoints on second image" << std::endl;
     
-    surf_time = getTime();
-    std::cout << "SURF run time: " << surf_time / LOOP_NUM << " ms" << std::endl<<"\n";
-    
-    
-    std::vector<Point2f> corner;
-    Mat img_matches = drawGoodMatches(img1, img2, keypoints1, keypoints2, matches, corner);
-    
-    //-- Show detected matches
-    
-    namedWindow("surf matches", 0);
-    imshow("surf matches", img_matches);
-    imwrite(outpath, img_matches);
-    
-    waitKey(0);
+//    surf_time = getTime();
+//    std::cout << "SURF run time: " << surf_time << " ms" << std::endl<<"\n";
+//    
+//    std::vector<Point2f> corner;
+//    Mat img_matches = drawGoodMatches(img1, img2, keypoints1, keypoints2, matches, corner);
+//    
+//    //-- Show detected matches
+//    namedWindow("surf matches", 0);
+//    imshow("surf matches", img_matches);
+//    imwrite(outpath, img_matches);
+//    
+//    waitKey(0);
     return EXIT_SUCCESS;
 }
