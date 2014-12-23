@@ -1,4 +1,5 @@
 #include"originalImage.h"
+#include "sqlliteHelper.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
@@ -10,7 +11,15 @@ static int CannyAndMorphing(Mat &, Mat &);
 /* Mat必须是单通道的*/
 static int FindRegFromEdge(Mat &);
 
-void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const{};
+//void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const{};
+void OriginalImage::saveOriginalImage()const
+{
+	std::stringstream str_sql;
+	str_sql << "insert into originalImage values(";
+	str_sql << originalImageId << "," << path << ");";
+	std::string str = str_sql.str();
+	SQLiteHelper::Insert(str.c_str());
+}
 
 vector<Rect *> & OriginalImage::getMetaInfos(vector<Rect *> & rects, int count) const
 {

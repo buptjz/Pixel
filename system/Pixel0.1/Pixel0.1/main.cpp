@@ -16,7 +16,6 @@ using namespace cv;
 
 //vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch*>&);
 //vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
-SQLiteHelper sql_lite_helper;
 
 int main(int agrc, char **agrv){
 	fstream _file;
@@ -24,18 +23,18 @@ int main(int agrc, char **agrv){
 	if (!_file)
 	{
 		//create database
-		int res = sql_lite_helper.OpenDB("./Pixel.db3");
+		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 		//create tables
 		vector<const char*> tables;
 		tables.push_back("originalImage(originalImageId varchar, path varchar");
 		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
 		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
-		res = sql_lite_helper.CreateTables(tables);
+		res = SQLiteHelper::CreateTables(tables);
 	}
 	else
 	{
 		//open database
-		int res = sql_lite_helper.OpenDB("./Pixel.db3");
+		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 	}
 
 
@@ -84,7 +83,7 @@ int main(int agrc, char **agrv){
 
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
 		vector<ImagePatch*> patchs = ori->segmentImage();
-		ori->saveOriginalImage(sql_lite_helper);
+		ori->saveOriginalImage();
 
 		//patchs中所有小图元进行一次去重，返回去重后的SuperImagePatch类的对象集合
 		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
@@ -116,7 +115,7 @@ int main(int agrc, char **agrv){
 	while (itor != fsip.end())
 	{
 		//这里需要把超图元都存入数据库中并更新子图元表中的superImagePatchId
-		((SuperImagePatch*)*itor)->savePatch(sql_lite_helper);
+		((SuperImagePatch*)*itor)->savePatch();
 		//
 		itor++;
 	}

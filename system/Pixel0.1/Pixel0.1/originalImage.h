@@ -30,6 +30,9 @@ public:
 
 	OriginalImage(){}
 	OriginalImage(const string & path, const string & originalImageId) :originalImageId(originalImageId), path(path), pOImage(0), regImage(NULL){}
+
+	OriginalImage(const string &originalImageId) :originalImageId(originalImageId){ }
+
 	OriginalImage(const string & originalImageId, const string & path, Mat
 		* const pOImage) : originalImageId(originalImageId), path(path), pOImage(pOImage), regImage(NULL){}
 	const string & getOriginalImageId() const { return originalImageId; }
@@ -41,7 +44,7 @@ public:
 	/*分割图片，返回小图元的集合*/
 	vector<ImagePatch *> segmentImage();
 	//将图片信息存入数据库中
-	void saveOriginalImage(SQLiteHelper &sql_lite_helper) const;
+	void saveOriginalImage()const;
 	/* 显示不同区域*/
 	void ShowRegion() const;
 	/* 显示区域的矩形框*/

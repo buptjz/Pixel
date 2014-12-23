@@ -2,7 +2,9 @@
 
 #include <iostream>
 using namespace std;
-
+sqlite3 * SQLiteHelper::sqlite_db_ = NULL;
+char* SQLiteHelper::err_msg_;		// 错误信息
+bool SQLiteHelper::is_close_;		// 关闭数据的标识
 int SQLiteHelper::OpenDB(const char *path)
 {
 	int res = sqlite3_open(path, &sqlite_db_);
@@ -57,7 +59,7 @@ int SQLiteHelper::CreateTable(const char *table_name_and_field)
 int SQLiteHelper::CreateTables(vector<const char*> create_tables)
 {
 	int res = sqlite3_exec(sqlite_db_, "begin transaction;", CallBackFunc, 0, &err_msg_);
-	for (int i = 0; i<create_tables.size(); i++)
+	for (size_t i = 0; i<create_tables.size(); i++)
 	{
 		res = CreateTable(create_tables[i]);
 		if (res != SQLITE_OK)

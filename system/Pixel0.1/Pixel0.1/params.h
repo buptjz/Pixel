@@ -9,7 +9,7 @@ using namespace std;
 class Params
 {
 public:
-	//常用的量
+	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
 
