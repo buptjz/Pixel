@@ -18,6 +18,8 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 
+#include "surfMatch.h"
+
 using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
@@ -35,7 +37,12 @@ struct SURFDetector{
     }
 };
 
-//http://blog.csdn.net/panda1234lee/article/details/10896099
+/*
+ http://blog.csdn.net/panda1234lee/article/details/10896099
+ http://docs.opencv.org/trunk/doc/py_tutorials/py_feature2d/py_matcher/py_matcher.html
+ http://stackoverflow.com/questions/21406182/opencv-saving-image-keypoints-and-descriptors-to-file
+ */
+
 
 int surf_match_func(const Mat &img1,const Mat &img2){
     FlannBasedMatcher matcher;
@@ -52,6 +59,7 @@ int surf_match_func(const Mat &img1,const Mat &img2){
     const float minRatio = 1.f / 1.5f;
     matcher.knnMatch(descriptors1, descriptors2, m_knnMatches,2);
     
+    //nearest desp >> second nearest desp will be regarded as good matching
     for (int i=0; i<m_knnMatches.size(); i++){
         const DMatch& bestMatch = m_knnMatches[i][0];
         const DMatch& betterMatch = m_knnMatches[i][1];
@@ -64,6 +72,10 @@ int surf_match_func(const Mat &img1,const Mat &img2){
         cout<<"matches is empty! "<<endl;
     
     return double(matches.size());
+}
+
+double surf_match_score(const ImagePatch &ip1, const ImagePatch &ip2){
+    return 0.0;
 }
 
 void test_surf_match_func(){
