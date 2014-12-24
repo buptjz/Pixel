@@ -22,24 +22,30 @@ static void find_nearest(vector<double> &scores, double *score,int *index){
 /*
  generate a super_patch pointer from image_patch pointer
  */
-static SuperImagePatch* generate_super_from_patch(Patch *patch){
+static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
     if (patch == nullptr) {
         return nullptr;
     }
     
     Mat *_bsip = new Mat(patch->getBinaryImagePatch()->clone());
     Mat *_osip = new Mat(patch->getOriginalImagePatch()->clone());
-    string patch_id = super_patch_id_from_timestamp();
-    cout<<"generate super patch id : "<<patch_id<<endl;//debug
-    SuperImagePatch *new_sip = new SuperImagePatch(patch_id,_bsip,_osip);
-    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchList();
-	//BUG!!! noted by catking
-	/*
-    vector<Patch*> patch_vec = (vector<Patch*> )new_sip->getPatchvector();
->>>>>>> origin/master
-    patch_vec.push_back(patch);
-    new_sip->setPatchList(patch_vec);
-	*/
+    
+    string super_patch_id = super_patch_id_from_timestamp();
+    cout<<"generate super patch id : "<<super_patch_id<<endl;//debug
+    
+    /*construct super image patch*/
+    SuperImagePatch *new_sip = new SuperImagePatch(super_patch_id,_bsip,_osip);
+    
+    //set imagepatch pointer
+    vector<Patch*> patch_pointer_vec = new_sip->getPatchList();
+    patch_pointer_vec.push_back(patch);
+    new_sip->setPatchList(patch_pointer_vec);
+    
+    //set imagepatch id
+    vector<string> patch_ids_vec = new_sip->getPatchIdList();
+    patch_ids_vec.push_back(patch->getImagePatchId());
+    new_sip->setPatchIdList(patch_ids_vec);
+
     return new_sip;
 }
 
@@ -53,7 +59,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
     }
     
     // init supers with the first image_patch
-    supers.push_back(generate_super_from_patch(patch_vec[0]));
+    supers.push_back(generate_super_from_imagepatch(patch_vec[0]));
     
     double nearest_score = 0.0;
     int nearest_index = -1;
@@ -67,12 +73,19 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         
         //(1) has similar 'SP', insert 'P' to 'SP'
         if (nearest_score <= Params::shape_context_compare_1_thres) {
+            //set pointer
             vector<Patch *> patch_vec = supers[nearest_index]->getPatchList();
             patch_vec.push_back(one_patch);
             supers[nearest_index]->setPatchList(patch_vec);
+            
+            //set ids
+            vector<string> patch_ids = supers[nearest_index]->getPatchIdList();
+            patch_ids.push_back(one_patch->getImagePatchId());
+            supers[nearest_index]->setPatchIdList(patch_ids);
+            
         }else{
         // (2) no similar 'SP', generate a new one
-            supers.push_back(generate_super_from_patch(one_patch));
+            supers.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
     return supers;
@@ -93,9 +106,16 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
             // (1) has similar 'SP', insert
             cout<<score<<endl;
             if(score <= Params::shape_context_compare_1_thres){
+                //set pointer
                 vector<Patch *> patch_vec = tmp_sp->getPatchList();
                 patch_vec.push_back(one_patch);
                 tmp_sp->setPatchList(patch_vec);
+                
+                //set ids
+                vector<string> patch_ids = tmp_sp->getPatchIdList();
+                patch_ids.push_back(one_patch->getImagePatchId());
+                tmp_sp->setPatchIdList(patch_ids);
+                
                 find_similar = true;
                 break;
             }
@@ -103,7 +123,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         
         if (!find_similar) {
             // (2) no similar 'SP', generate a new one
-            result.push_back(generate_super_from_patch(one_patch));
+            result.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
 	return result;
@@ -147,7 +167,8 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
     }
     
     //init with the first one
-    final_sps.push_back(generate_super_from_patch(sp_vec[0]));
+    SuperImagePatch *new_super = new SuperImagePatch(*sp_vec[0]);
+    final_sps.push_back(new_super);
     
     //compare each one in sp_vec to final_supers_vector
     double nearest_score = 0.0;
@@ -161,13 +182,22 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         find_nearest(scores, &nearest_score, &nearest_index);
         //(1) has similar 'SP', merge two 'SP's
         if (nearest_score <= Params::shape_context_compare_1_thres) {
+            //set pointers
             vector<Patch *>v1 = final_sps[nearest_index]->getPatchList();
             vector<Patch *>v2 = candi_sp->getPatchList();
             v1.insert(v1.end(), v2.begin(), v2.end());
             final_sps[nearest_index]->setPatchList(v1);
+            
+            //set ids
+            vector<string> s1 = final_sps[nearest_index]->getPatchIdList();
+            vector<string> s2 = candi_sp->getPatchIdList();
+            s1.insert(s1.end(), s2.begin(), s2.end());
+            final_sps[nearest_index]->setPatchIdList(s1);
+            
         }else{
         // (2) no similar 'SP', generate a new one from current 'SP'
-            final_sps.push_back(generate_super_from_patch(candi_sp));
+            SuperImagePatch *new_super = new SuperImagePatch(*sp_vec[0]);
+            final_sps.push_back(new_super);
         }
     }
     return final_sps;
