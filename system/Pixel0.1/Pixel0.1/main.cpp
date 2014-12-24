@@ -26,7 +26,7 @@ int main(int agrc, char **agrv){
 		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 		//create tables
 		vector<const char*> tables;
-		tables.push_back("originalImage(originalImageId varchar, path varchar");
+		tables.push_back("originalImage(originalImageId varchar, path varchar)");
 		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
 		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
 		res = SQLiteHelper::CreateTables(tables);
@@ -60,7 +60,6 @@ int main(int agrc, char **agrv){
 	*/
 
 	vector<SuperImagePatch*> allSuperImagePatchs;
-	string imageName;//定义图像文件的名称 
 	string path;//图像文件路径
 	string fileName = "TestImage";//放原图片的文件夹名
 	string fileAddress = "D:/" + fileName;//文件夹路径
@@ -76,7 +75,7 @@ int main(int agrc, char **agrv){
 		//=========================================================
 		path = fileAddress + "/" + fileinfo.name;
 		//构造OriginalImage类的对象ori
-		string originalImageId = fileName + "_" + imageName;
+		string originalImageId = fileName + "_" + fileinfo.name;
 		OriginalImage *ori = new OriginalImage(path, originalImageId);
 		Mat pImage = imread(path.c_str(), -1);
 		ori->setImage(&pImage);
@@ -84,6 +83,11 @@ int main(int agrc, char **agrv){
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
 		vector<ImagePatch*> patchs = ori->segmentImage();
 		ori->saveOriginalImage();
+		for (int i = 0; i < patchs.size(); i++)
+		{
+			patchs[i]->savePatch();
+		}
+
 
 		//patchs中所有小图元进行一次去重，返回去重后的SuperImagePatch类的对象集合
 		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
@@ -96,12 +100,11 @@ int main(int agrc, char **agrv){
 		}
 
 		//释放vector<ImagePatch*> patchs的空间
-		/*
-		for (int i = 0; i < patchs.size; i++)
+		for (int i = 0; i < patchs.size(); i++)
 		{
-		delete patchs[i];
+			delete patchs[i];
 		}
-		*/
+		//遍历下一幅原图像
 		if (_findnext(handle, &fileinfo) == -1) break;
 	}
 	_findclose(handle);
