@@ -11,6 +11,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
 #include<io.h>
+#include "readSqllite.h"
 using namespace std;
 using namespace cv;
 
@@ -37,9 +38,6 @@ int main(int agrc, char **agrv){
 		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 	}
 
-
-
-
 	/*//基本测试用例
 	//函数cvLoadImage()的第1 个参数是图像文件的路径. 第2 个参数是读取图像的方式:-1 表示按照图像本身的类型来读取,1 表示强制彩色化,0 表示强制灰值化.
 	IplImage* image = cvLoadImage("D:\\demo.jpg", -1);
@@ -59,6 +57,7 @@ int main(int agrc, char **agrv){
 	cvDestroyWindow("图像显示");//销毁窗口资源
 	*/
 
+	/*
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path;//图像文件路径
 	string fileName = "TestImage";//放原图片的文件夹名
@@ -122,6 +121,14 @@ int main(int agrc, char **agrv){
 		//
 		itor++;
 	}
+	*/
+
+	SuperImagePatch sip;
+	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
+	sip.savePatch();
+	string superImageId = sip.getSuperImagePatchId();
+
+	SuperImagePatch *psip = readSuperImagePatch(superImageId);
 
 	return 0;
 }
