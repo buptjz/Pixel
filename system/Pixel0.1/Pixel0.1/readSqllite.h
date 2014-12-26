@@ -4,5 +4,5 @@
 
 OriginalImage* readOriginalImage( string originalImageId);
 ImagePatch* readImagePatch(string imagePatchId);
-
+SuperImagePatch* readSuperImagePatch(string superImagePatchId);
 #endif

@@ -13,12 +13,20 @@
 #include "imagePatch.h"
 
 /*
- match two patches using surf algorithm, return the matching score
-ranges [0,1] , the bigger, the better
+ Surf Interfaces: Maintenance by JZ
+ match two patches using surf algorithm
  */
-double surf_match_score(const ImagePatch &ip1, const ImagePatch &ip2);
 
-int surf_match_func(const Mat &,const Mat &);
+//get surf descriptors from an image mat
+void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors);
+
+//Return matching score by surf algorithm with two Images Mats
+double surf_match_score_with_mat(const Mat &,const Mat&);
+
+//Return matching score by surf algorithm with two descriptors' vectors
+double surf_match_score_with_descriptor(const Mat&, const Mat&);
+
+//test function
 void test_surf_match_func();
 
 #endif /* defined(__Xcode_Pixel_Proj__surfMatch__) */

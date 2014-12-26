@@ -98,3 +98,84 @@ ImagePatch* readImagePatch(string imagePatchId)
 	return pip;
 
 }
+//superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)
+SuperImagePatch* readSuperImagePatch(string superImagePatchId)
+{
+	SuperImagePatch* sip;
+	string binaryImagePatchBuffer;
+	string originalImagePatchBuffer;
+	string featuresStr;
+
+	Mat *binaryImagePatch = new Mat;
+	Mat *originalImagePatch = new Mat;
+	map<string, vector<double> > features;
+
+	string sql = "select * from superImagePatch where superImagePatchId = '" + superImagePatchId + "'";
+	//执行查询
+	sqlite3_stmt *pstmt;
+	const char   *error = 0;
+	//if (sqlite3_prepare(SQLiteHelper::getSqlite3(), sql.c_str(), sql.size(), &pstmt, &error) == SQLITE_OK) {
+	if (sqlite3_prepare(SQLiteHelper::sqlite_db_, sql.c_str(), -1, &pstmt, &error) == SQLITE_OK) {
+		while (1)
+		{
+			int ret = sqlite3_step(pstmt);
+			if (ret != SQLITE_ROW)
+				break;
+			superImagePatchId = ((char*)sqlite3_column_text(pstmt, 0));
+			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
+			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
+			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
+		}
+	}
+	else
+	{
+		cout << "error in reading SuperImagePatch form database" << endl;
+	}
+	sqlite3_finalize(pstmt);
+	jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
+	jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
+	jsonString2Map(featuresStr, features);
+	sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
+	//关闭数据库
+	/*
+	char *errmsg = NULL;
+	char** dbResult = NULL;
+	int nRow, nColumn;
+	int result = sqlite3_get_table(sql_lite_helper.getSqlite3(), sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
+
+	//查询成功
+	int index = nColumn; //dbResult 前面第一行数据是字段名称，从 nColumn 索引开始才是真正的数据
+	string originalImageId = dbResult[index++];
+	string superImagePatchId = dbResult[index++];
+	string positionStr = dbResult[index++];
+	string binaryImagePatchBuffer = dbResult[index++];
+	string originalImagePatchBuffer = dbResult[index++];
+	string featuresStr = dbResult[index++];
+	sqlite3_free_table(dbResult);//释放查询空间
+	*/
+
+	return sip;
+
+}
+/*
+生成superImagePatch后，由superImagePatch对象里的vector<string> patchIdList更新ImagePatch里的superImagePatchId
+*/
+int updateImagePatchTable(SuperImagePatch & sip)
+{
+	string superImagePatchId = sip.getSuperImagePatchId();
+	string imagePatchId = "";
+	vector<string> patchIdList = sip.getPatchIdList();
+	for (int i = 0; i < patchIdList.size(); i++)
+	{
+		imagePatchId = patchIdList[i];
+		//更新superImagePatchId
+		string sql = "update imagePatch set superImagePatchId =" + superImagePatchId + "where imagePatchId = " + imagePatchId + ";" ; 
+		int res =  SQLiteHelper::Update(sql.c_str());
+		if (res == -1){
+			return -1;
+		}
+	}
+
+
+	return 0;
+}

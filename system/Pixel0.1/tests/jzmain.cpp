@@ -24,6 +24,8 @@ using namespace std;
 using namespace cv;
 
 int main(int agrc, char **agrv){
+    SuperImagePatch sip;
+    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
 //    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;
@@ -34,17 +36,20 @@ int main(int agrc, char **agrv){
         Mat cimg = imread(c_image_name,CV_32F);//32-bit RGB image
         Mat bimg = imread(b_image_name,CV_8UC1);//8-bit Black-White image
         
-        surf_match_func(cimg,bimg);
+        cout<<surf_match_score_with_mat(cimg,bimg)<<endl;
+    
         Mat *c = new Mat(cimg);
         Mat *b = new Mat(bimg);
         Rect rect = Rect();
-        ImagePatch *ip = new ImagePatch(" ", nullptr, rect, b, c);
+        OriginalImage *oi = new OriginalImage("ori" + to_string(i));
+        ImagePatch *ip = new ImagePatch("ori_id", oi, rect, b, c);
         all_patch.push_back(ip);
 //        tool_show_mat(bimg, b_image_name);
 //        tool_show_mat(cimg, c_image_name);
     }
-    
-    vector<SuperImagePatch*> fsip = removeDuplicateImagePatchs(all_patch);
+//    
+//    vector<SuperImagePatch *> fsip = removeDuplicateImagePatchs(all_patch);
+//    vector<SuperImagePatch *> fsip_removed = removeDuplicateSuperImagePatchs(fsip);
     return 0;
 }
 

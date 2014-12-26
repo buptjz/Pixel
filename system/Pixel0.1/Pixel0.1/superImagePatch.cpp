@@ -15,7 +15,7 @@ double SuperImagePatch::patchCompareWith(Patch *pImagePatch, string featureType)
 	return 0;
 }
 */
-//将小图元存入数据库中
+//将超图元存入数据库中
 void SuperImagePatch::savePatch() const{
 	std::stringstream str_sql;
 	const string superImagePatchIdStr = superImagePatchId;
@@ -25,8 +25,8 @@ void SuperImagePatch::savePatch() const{
 	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalSuperImagePatchBuffer);
 	string featuresStr;
 	map2JsonString((map<string, vector<double> >)getFeatures(), featuresStr);
-	str_sql << "insert into imagePatch values(";
-	str_sql << superImagePatchIdStr <<  "," << "?" << "," << "?" << "," << "?";
+	str_sql << "insert into superImagePatch values(";
+	str_sql << "'"<<superImagePatchIdStr <<"'"<<  "," << "?" << "," << "?" << "," << "?";
 	str_sql << ");";
 	std::string str = str_sql.str();
 	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
@@ -40,4 +40,5 @@ void SuperImagePatch::savePatch() const{
 	{
 		printf("insert into blob value failure!");
 	}
+	sqlite3_finalize(stat);
 }

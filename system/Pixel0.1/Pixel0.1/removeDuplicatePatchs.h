@@ -27,4 +27,8 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&,bool);
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&);
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
 
+
+//for test
+void giveVGeAPatch(string img_path, SuperImagePatch &sip);
+
 #endif
