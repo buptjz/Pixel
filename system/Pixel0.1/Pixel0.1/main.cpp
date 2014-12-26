@@ -10,8 +10,9 @@
 #include<highgui.h>
 #include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
-//#include<io.h>
+#include<io.h>
 #include "readSqllite.h"
+#include "tools.h"
 using namespace std;
 using namespace cv;
 
@@ -57,11 +58,13 @@ int main(int agrc, char **agrv){
 	cvDestroyWindow("图像显示");//销毁窗口资源
 	*/
 
-	/*
+
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path;//图像文件路径
-	string fileName = "colorimage";//放原图片的文件夹名
-	string fileAddress = "C:/Users/catking/Documents/images_data/data/" + fileName;//文件夹路径
+	//string fileName = "colorimage";//放原图片的文件夹名
+	//string fileAddress = "C:/Users/catking/Documents/images_data/data/" + fileName;//文件夹路径
+	string fileName = "TestImage";//放原图片的文件夹名
+	string fileAddress = "D:/" + fileName;//文件夹路径
 
 	//遍历文件夹里的图像文件
 	_finddata_t fileinfo;
@@ -76,15 +79,17 @@ int main(int agrc, char **agrv){
 		//构造OriginalImage类的对象ori
 		string originalImageId = fileName + "_" + fileinfo.name;
 		OriginalImage *ori = new OriginalImage(path, originalImageId);
+		
 		Mat pImage = imread(path.c_str(), -1);
 		ori->setImage(&pImage);
-
+		tool_show_mat(pImage, "originalImage");
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库
 		vector<ImagePatch*> patchs = ori->segmentImage();
-		ori->saveOriginalImage();
+	//	ori->saveOriginalImage();
 		for (int i = 0; i < patchs.size(); i++)
 		{
-			patchs[i]->savePatch();
+		//	patchs[i]->savePatch();
+			tool_show_patch(patchs[i], to_string(i));
 		}
 
 
@@ -121,8 +126,8 @@ int main(int agrc, char **agrv){
 		//
 		itor++;
 	}
-	*/
-
+	
+	/*
 	SuperImagePatch sip;
 //	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
     giveVGeAPatch("/Users/wangjz/Desktop",sip);
@@ -130,7 +135,7 @@ int main(int agrc, char **agrv){
 	string superImageId = sip.getSuperImagePatchId();
 
 	SuperImagePatch *psip = readSuperImagePatch(superImageId);
-
+	*/
 	return 0;
 }
 
