@@ -61,10 +61,10 @@ int main(int agrc, char **agrv){
 
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path;//图像文件路径
-	//string fileName = "colorimage";//放原图片的文件夹名
-	//string fileAddress = "C:/Users/catking/Documents/images_data/data/" + fileName;//文件夹路径
-	string fileName = "TestImage";//放原图片的文件夹名
-	string fileAddress = "D:/" + fileName;//文件夹路径
+	string fileName = "colorimage";//放原图片的文件夹名
+	string fileAddress = "C:/Users/catking/Documents/images_data/data/" + fileName;//文件夹路径
+	//string fileName = "TestImage";//放原图片的文件夹名
+	//string fileAddress = "D:/" + fileName;//文件夹路径
 
 	//遍历文件夹里的图像文件
 	_finddata_t fileinfo;
@@ -89,7 +89,7 @@ int main(int agrc, char **agrv){
 		for (int i = 0; i < patchs.size(); i++)
 		{
 		//	patchs[i]->savePatch();
-			tool_show_patch(patchs[i], to_string(i));
+			tool_show_patch(patchs[i], to_string((long double)i));
 		}
 
 

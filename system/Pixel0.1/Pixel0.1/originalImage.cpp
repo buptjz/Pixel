@@ -153,7 +153,8 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		Rect * rect = rects.at(index - 1);
 		string id = originalImageId + "_imagePatch_" + index;
 		Mat *bip = new Mat(*pOImage, *rect);
-		Mat *oip = new Mat(*bip == index);
+		//Mat *oip = new Mat(*bip == index);
+		Mat *oip = new Mat(*bip);
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
 		result.push_back(imgPatch);
 	}
