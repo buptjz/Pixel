@@ -264,6 +264,11 @@ void giveVGeAPatch(string img_path, SuperImagePatch &sip){
     OriginalImage *oi = new OriginalImage("orid321");
     ImagePatch *ip = new ImagePatch("ori_id", oi, rect, b, c);
     SuperImagePatch *tmp = generate_super_from_imagepatch(ip);
+    map<string,vector<double>> mm;
+    vector<double> vec;
+    vec.push_back(412.007);
+    mm["JZ_TEST"] = vec;
+    tmp->setFeatures(mm);
     sip = *tmp;
 }
 

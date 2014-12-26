@@ -34,13 +34,19 @@ struct SURFDetector{
     }
 };
 
+/*
+ Convert vector<double> to Mat
+ */
 static void double_vec2mat(){
     
 }
+
+/*
+ Convert Mat to vector<double>
+ */
 static void mat2double_vec(const Mat &mat, vector<double> &ret_vec){
     if (mat.cols == 0 || mat.rows == 0)
         return;
-    
     
 }
 
