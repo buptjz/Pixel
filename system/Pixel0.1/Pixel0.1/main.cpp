@@ -10,7 +10,7 @@
 #include<highgui.h>
 #include <opencv2/highgui/highgui.hpp>
 #include<cv.h>
-#include<io.h>
+//#include<io.h>
 #include "readSqllite.h"
 using namespace std;
 using namespace cv;
@@ -124,7 +124,8 @@ int main(int agrc, char **agrv){
 	*/
 
 	SuperImagePatch sip;
-	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
+//	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
+    giveVGeAPatch("/Users/wangjz/Desktop",sip);
 	sip.savePatch();
 	string superImageId = sip.getSuperImagePatchId();
 
