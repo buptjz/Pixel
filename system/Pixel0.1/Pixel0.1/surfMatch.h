@@ -16,9 +16,8 @@
  match two patches using surf algorithm, return the matching score
 ranges [0,1] , the bigger, the better
  */
-double surf_match_score(const ImagePatch &ip1, const ImagePatch &ip2);
-
-int surf_match_func(const Mat &,const Mat &);
+double surf_match_score_with_mat(const Mat &,const Mat&);
+double surf_match_score_with_descriptor(const Mat&, const Mat&);
 void test_surf_match_func();
 
 #endif /* defined(__Xcode_Pixel_Proj__surfMatch__) */
