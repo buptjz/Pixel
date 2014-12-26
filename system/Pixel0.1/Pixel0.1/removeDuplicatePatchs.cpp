@@ -55,7 +55,7 @@ static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
  Strategy [1]: 1 to many
  */
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
-    cout<<"***************************[Start] Remove Duplicate Image patchs***************************"<<endl;
+    cout<<"***********************[Start] Remove Duplicate Image patchs***********************"<<endl;
     vector<SuperImagePatch *> supers;
     if (patch_vec.empty()) {
         return supers;
@@ -69,7 +69,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
     for (size_t i = 1; i < patch_vec.size(); i++) {
         
         ImagePatch *one_patch = patch_vec[i];
-        cout<<"----------------------------------------------------"<<endl;
+        cout<<"-------------------------------->"<<endl;
         cout<<"[Patch="<<one_patch->getImagePatchId()<<"] start searching same"<<endl;
         //convert first ,use second
         vector<Patch *> base_patch_vec = convert_verctor<Patch,SuperImagePatch>(supers);
@@ -98,7 +98,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             supers.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
-    cout<<"***************************[End] Remove Duplicate Image patchs***************************"<<endl;
+    cout<<"***********************[End] Remove Duplicate Image patchs***********************"<<endl;
     return supers;
 }
 
@@ -171,7 +171,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  */
 
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
-    cout<<"***************************[Start] Remove Duplicate SuperImage patchs***************************"<<endl;
+    cout<<"********************[Start] Remove Duplicate SuperImage patchs********************"<<endl;
     vector<SuperImagePatch*> final_sps;
     
     if (sp_vec.empty()) {
@@ -187,7 +187,7 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
     int nearest_index = -1;
     for (size_t i = 1; i < sp_vec.size(); i++) {
         SuperImagePatch *candi_sp = sp_vec[i];
-        cout<<"----------------------------------------------------"<<endl;
+        cout<<"----------------------------->"<<endl;
         cout<<"[SuperPatch="<<candi_sp->getSuperImagePatchId()<<"] start [Filtering]"<<endl;
         vector<Patch *> base = convert_verctor<Patch,SuperImagePatch>(final_sps);
         vector<double> scores = candi_sp->patchCompareWith(base, Params::SHAPE_CONTEXT);
@@ -215,7 +215,7 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
             cout<<"No same, generate new one with superImagePatch id="<<candi_sp->getSuperImagePatchId()<<endl;
         }
     }
-    cout<<"***************************[End] Remove Duplicate SuperImage patchs***************************"<<endl;
+    cout<<"********************[ End ] Remove Duplicate SuperImage patchs********************"<<endl;
     return final_sps;
 }
 
