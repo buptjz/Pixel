@@ -110,12 +110,12 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	Mat *originalImagePatch = new Mat;
 	map<string, vector<double> > features;
 
-	string sql = "select * from superImagePatch where superImagePatchId =" + superImagePatchId;
+	string sql = "select * from superImagePatch where superImagePatchId = '" + superImagePatchId + "'";
 	//÷¥––≤È—Ø
 	sqlite3_stmt *pstmt;
 	const char   *error = 0;
 	//if (sqlite3_prepare(SQLiteHelper::getSqlite3(), sql.c_str(), sql.size(), &pstmt, &error) == SQLITE_OK) {
-	if (sqlite3_prepare(SQLiteHelper::sqlite_db_, sql.c_str(), sql.size(), &pstmt, &error) == SQLITE_OK) {
+	if (sqlite3_prepare(SQLiteHelper::sqlite_db_, sql.c_str(), -1, &pstmt, &error) == SQLITE_OK) {
 		while (1)
 		{
 			int ret = sqlite3_step(pstmt);
