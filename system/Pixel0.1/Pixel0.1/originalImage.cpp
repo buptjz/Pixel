@@ -223,6 +223,7 @@ int CannyAndMorphing(Mat & input, Mat & result)
 	return index-=1;
 }
 
+//bug ! marked by JZ
 int FindRegFromEdge(Mat & img)
 {
 	int rows = img.rows, cols=img.cols, r, c;
@@ -237,6 +238,7 @@ int FindRegFromEdge(Mat & img)
 			}
 		}
 	}
+    return -1;
 }
 
 void OriginalImage::ShowRegion() const
