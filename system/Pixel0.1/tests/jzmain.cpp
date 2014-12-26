@@ -24,6 +24,9 @@ using namespace std;
 using namespace cv;
 
 int main(int agrc, char **agrv){
+    SuperImagePatch sip;
+    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
+    
 //    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;

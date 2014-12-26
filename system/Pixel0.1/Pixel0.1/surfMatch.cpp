@@ -25,23 +25,40 @@ using namespace cv::xfeatures2d;
 
 struct SURFDetector{
     Ptr<Feature2D> surf;
-    SURFDetector(double hessian = 800.0)
-    {
+    SURFDetector(double hessian = 800.0){
         surf = SURF::create(hessian);
     }
     template<class T>
-    void operator()(const T& in, const T& mask, std::vector<cv::KeyPoint>& pts, T& descriptors, bool useProvided = false)
-    {
+    void operator()(const T& in, const T& mask, std::vector<cv::KeyPoint>& pts, T& descriptors, bool useProvided = false){
         surf->detectAndCompute(in, mask, pts, descriptors, useProvided);
     }
 };
 
+static void double_vec2mat(){
+    
+}
+static void mat2double_vec(const Mat &mat, vector<double> &ret_vec){
+    if (mat.cols == 0 || mat.rows == 0)
+        return;
+    
+    
+}
+
 /*
+ get surf descriptors from an image mat
+ */
+void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
+    vector<KeyPoint> keypoints;
+    SURFDetector surf;
+    surf(img, Mat(), keypoints, ret_descriptors);
+}
+
+/*
+ References:
  http://blog.csdn.net/panda1234lee/article/details/10896099
  http://docs.opencv.org/trunk/doc/py_tutorials/py_feature2d/py_matcher/py_matcher.html
  http://stackoverflow.com/questions/21406182/opencv-saving-image-keypoints-and-descriptors-to-file
  */
-
 
 /*
  Return matching score by surf algorithm with two descriptors' vectors
@@ -81,8 +98,6 @@ double surf_match_score_with_mat(const Mat &img1,const Mat &img2){
     surf(img2, Mat(), keypoints2, descriptors2);
     return surf_match_score_with_descriptor(descriptors1, descriptors2);
 }
-
-
 
 void test_surf_match_func(){
     //    test_descriptor();

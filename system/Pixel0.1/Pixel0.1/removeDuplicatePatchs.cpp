@@ -1,6 +1,10 @@
 #include "tools.h"
 #include "removeDuplicatePatchs.h"
 
+
+
+
+
 /*
  find the smallest element(with its index) in vectors
  */
@@ -247,4 +251,20 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
 //    }
 //	return result;
 //}
+
+
+void giveVGeAPatch(string img_path, SuperImagePatch &sip){
+//    SuperImagePatch sip;
+//    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
+    vector<ImagePatch*> all_patch;
+    Mat img = imread(img_path,CV_32F);//32-bit RGB image
+    Mat *b = new Mat(img);
+    Mat *c = new Mat(img.clone());
+    Rect rect = Rect();
+    OriginalImage *oi = new OriginalImage("orid321");
+    ImagePatch *ip = new ImagePatch("ori_id", oi, rect, b, c);
+    SuperImagePatch *tmp = generate_super_from_imagepatch(ip);
+    sip = *tmp;
+}
+
 
