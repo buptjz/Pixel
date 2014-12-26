@@ -121,10 +121,10 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 			int ret = sqlite3_step(pstmt);
 			if (ret != SQLITE_ROW)
 				break;
-			string superImagePatchI((char*)sqlite3_column_text(pstmt, 0));
-			string binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
-			string originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
-			string featuresStr((char*)sqlite3_column_text(pstmt, 3));
+			superImagePatchId = ((char*)sqlite3_column_text(pstmt, 0));
+			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
+			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
+			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
 		}
 	}
 	else
