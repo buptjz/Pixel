@@ -65,7 +65,8 @@ vector<Rect *> & OriginalImage::getMetaInfos(vector<Rect *> & rects, int count) 
 	// 将位置信息转为为Rect
 	for (i = 0; i < count; ++i)
 	{
-		rect = new Rect(markRange[0][i], markRange[2][i], markRange[1][i] - markRange[0][i] + 1, markRange[3][i] - markRange[2][i] + 1);
+		//rect = new Rect(markRange[0][i], markRange[2][i], markRange[1][i] - markRange[0][i] + 1, markRange[3][i] - markRange[2][i] + 1);
+		rect = new Rect(markRange[2][i], markRange[0][i], markRange[3][i] - markRange[2][i] + 1, markRange[1][i] - markRange[0][i] + 1);
 		rects.push_back(rect);
 	}
 	//
@@ -219,7 +220,8 @@ int CannyAndMorphing(Mat & input, Mat & result)
 	findContours(temp, edges, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 	int index = 1;
 	for (int idx = 0; idx >= 0; idx = hierarchy[idx][0])
-		drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
+		//drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
+		drawContours(result, edges, idx, Scalar(index++));
 	return index-=1;
 }
 
