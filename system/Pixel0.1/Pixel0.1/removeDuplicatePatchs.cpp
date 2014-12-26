@@ -30,11 +30,13 @@ static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
     Mat *_bsip = new Mat(patch->getBinaryImagePatch()->clone());
     Mat *_osip = new Mat(patch->getOriginalImagePatch()->clone());
     
-    string super_patch_id = super_patch_id_from_timestamp();
-    cout<<"generate super patch id : "<<super_patch_id<<endl;//debug
+    string time_number = super_patch_id_from_timestamp();
+    string sp_id = patch->getOriginalImage()->getOriginalImageId() + "_superImagePatch_" + time_number;
+    
+    cout<<"generate super patch id : "<<sp_id<<endl;//debug
     
     /*construct super image patch*/
-    SuperImagePatch *new_sip = new SuperImagePatch(super_patch_id,_bsip,_osip);
+    SuperImagePatch *new_sip = new SuperImagePatch(sp_id,_bsip,_osip);
     
     //set imagepatch pointer
     vector<Patch*> patch_pointer_vec = new_sip->getPatchList();
@@ -53,6 +55,7 @@ static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
  Strategy [1]: 1 to many
  */
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
+    cout<<"***************************[Start] Remove Duplicate Image patchs***************************"<<endl;
     vector<SuperImagePatch *> supers;
     if (patch_vec.empty()) {
         return supers;
@@ -64,15 +67,21 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
     double nearest_score = 0.0;
     int nearest_index = -1;
     for (size_t i = 1; i < patch_vec.size(); i++) {
+        
         ImagePatch *one_patch = patch_vec[i];
+        cout<<"----------------------------------------------------"<<endl;
+        cout<<"[Patch="<<one_patch->getImagePatchId()<<"] start searching same"<<endl;
         //convert first ,use second
         vector<Patch *> base_patch_vec = convert_verctor<Patch,SuperImagePatch>(supers);
         vector<double> scores = one_patch->patchCompareWith(base_patch_vec, Params::SHAPE_CONTEXT);
         
         find_nearest(scores, &nearest_score, &nearest_index);
-        
+        cout<<"nearest_score = "<<nearest_score;
         //(1) has similar 'SP', insert 'P' to 'SP'
         if (nearest_score <= Params::shape_context_compare_1_thres) {
+            cout<<",merge! "<<endl;
+            cout<<"The same SuperPatch= "<<supers[nearest_index]->getSuperImagePatchId()<<endl;
+            
             //set pointer
             vector<Patch *> patch_vec = supers[nearest_index]->getPatchList();
             patch_vec.push_back(one_patch);
@@ -85,9 +94,11 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             
         }else{
         // (2) no similar 'SP', generate a new one
+            cout<<",generate new one"<<endl;
             supers.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
+    cout<<"***************************[End] Remove Duplicate Image patchs***************************"<<endl;
     return supers;
 }
 
@@ -160,6 +171,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  */
 
 vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
+    cout<<"***************************[Start] Remove Duplicate SuperImage patchs***************************"<<endl;
     vector<SuperImagePatch*> final_sps;
     
     if (sp_vec.empty()) {
@@ -175,14 +187,17 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
     int nearest_index = -1;
     for (size_t i = 1; i < sp_vec.size(); i++) {
         SuperImagePatch *candi_sp = sp_vec[i];
-        
+        cout<<"----------------------------------------------------"<<endl;
+        cout<<"[SuperPatch="<<candi_sp->getSuperImagePatchId()<<"] start [Filtering]"<<endl;
         vector<Patch *> base = convert_verctor<Patch,SuperImagePatch>(final_sps);
         vector<double> scores = candi_sp->patchCompareWith(base, Params::SHAPE_CONTEXT);
 
         find_nearest(scores, &nearest_score, &nearest_index);
         //(1) has similar 'SP', merge two 'SP's
-        if (nearest_score <= Params::shape_context_compare_1_thres) {
+        cout<<"nearest_score = "<<nearest_score<<endl;
+        if (nearest_score <= Params::shape_context_compare_2_thres) {
             //set pointers
+            cout<<"Merge ! Same SuperImagePatch = " <<final_sps[nearest_index]->getSuperImagePatchId()<<endl;
             vector<Patch *>v1 = final_sps[nearest_index]->getPatchList();
             vector<Patch *>v2 = candi_sp->getPatchList();
             v1.insert(v1.end(), v2.begin(), v2.end());
@@ -193,13 +208,14 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
             vector<string> s2 = candi_sp->getPatchIdList();
             s1.insert(s1.end(), s2.begin(), s2.end());
             final_sps[nearest_index]->setPatchIdList(s1);
-            
         }else{
         // (2) no similar 'SP', generate a new one from current 'SP'
-            SuperImagePatch *new_super = new SuperImagePatch(*sp_vec[0]);
+            SuperImagePatch *new_super = new SuperImagePatch(*candi_sp);
             final_sps.push_back(new_super);
+            cout<<"No same, generate new one with superImagePatch id="<<candi_sp->getSuperImagePatchId()<<endl;
         }
     }
+    cout<<"***************************[End] Remove Duplicate SuperImage patchs***************************"<<endl;
     return final_sps;
 }
 
