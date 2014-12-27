@@ -24,7 +24,7 @@ void SuperImagePatch::savePatch() const{
 	string originalSuperImagePatchBuffer;
 	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalSuperImagePatchBuffer);
 	string featuresStr;
-	map2JsonString((map<string, vector<double> >)getFeatures(), featuresStr);
+//	map2JsonString((map<string, vector<double> >)getFeatures(), featuresStr);
 	str_sql << "insert into superImagePatch values(";
 	str_sql << "'"<<superImagePatchIdStr <<"'"<<  "," << "?" << "," << "?" << "," << "?";
 	str_sql << ");";

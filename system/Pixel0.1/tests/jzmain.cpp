@@ -36,6 +36,8 @@ int main(int agrc, char **agrv){
         Mat cimg = imread(c_image_name,CV_32F);//32-bit RGB image
         Mat bimg = imread(b_image_name,CV_8UC1);//8-bit Black-White image
         
+        vector<double> aaa;
+        generate_surf_descriptors(cimg,aaa);
         cout<<surf_match_score_with_mat(cimg,bimg)<<endl;
     
         Mat *c = new Mat(cimg);

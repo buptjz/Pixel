@@ -20,6 +20,9 @@
 //get surf descriptors from an image mat
 void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors);
 
+//get surf double vector descriptors
+void generate_surf_descriptors(const Mat &img, vector<double> &ret_vec);
+
 //Return matching score by surf algorithm with two Images Mats
 double surf_match_score_with_mat(const Mat &,const Mat&);
 

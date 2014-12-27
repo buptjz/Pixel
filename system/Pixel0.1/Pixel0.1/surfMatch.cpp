@@ -35,19 +35,41 @@ struct SURFDetector{
 };
 
 /*
- Convert vector<double> to Mat
+ Convert vector<double> to surf descriptors mat
  */
-static void double_vec2mat(){
-    
+
+static void double_vec2surf_desp_mat(const vector<double> &vec, Mat &ret_M){
+    //TODO : a lot of constants here!
+    int cols = 64;
+    int rows = (int)vec.size() / 64;
+    ret_M = Mat(rows,cols,CV_32FC1);//这样写行么？
+    int ind = 0;
+    for (int r = 0; r < ret_M.rows; r++)
+        for (int c = 0; c < ret_M.cols; c++)
+            ret_M.at<double>(r,c) = vec[ind++];
 }
 
 /*
- Convert Mat to vector<double>
+ Convert surf descriptors Mat to vector<double>
+ http://answers.opencv.org/question/8873/best-way-to-store-a-mat-object-in-android/
  */
-static void mat2double_vec(const Mat &mat, vector<double> &ret_vec){
-    if (mat.cols == 0 || mat.rows == 0)
+static void surf_desp_mat2double_vec(const Mat &M, vector<double> &ret_vec){
+    if (M.cols == 0 || M.rows == 0)
         return;
     
+    int cols = M.cols;
+    int rows = M.rows;
+    int chan = M.channels();
+    size_t eSiz = M.elemSize();
+    size_t total_size = cols*rows*chan*eSiz;
+    
+    if (M.isContinuous()){
+        for (size_t i = 0; i < total_size; i += eSiz)
+            ret_vec.push_back(double(*(M.data+i)));
+    }else{
+        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
+    }
+
 }
 
 /*
@@ -58,6 +80,21 @@ void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
     SURFDetector surf;
     surf(img, Mat(), keypoints, ret_descriptors);
 }
+
+/*
+ get surf double vector descriptors from an image mat
+ */
+void generate_surf_descriptors(const Mat &img, vector<double> &ret_vec){
+    Mat descriptors;
+    generate_surf_descriptors(img, descriptors);
+    surf_desp_mat2double_vec(descriptors, ret_vec);
+    
+    Mat res;
+    double_vec2surf_desp_mat(ret_vec, res);
+    
+    cout<<"end"<<endl;
+}
+
 
 /*
  References:
