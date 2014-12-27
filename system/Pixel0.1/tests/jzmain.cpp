@@ -24,8 +24,10 @@ using namespace std;
 using namespace cv;
 
 int main(int agrc, char **agrv){
-    SuperImagePatch sip;
-    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
+    test_surf_match_func();
+    
+//    SuperImagePatch sip;
+//    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
 //    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;
@@ -38,7 +40,7 @@ int main(int agrc, char **agrv){
         
         vector<double> aaa;
         generate_surf_descriptors(cimg,aaa);
-        cout<<surf_match_score_with_mat(cimg,bimg)<<endl;
+//        cout<<surf_match_score_with_mat(cimg,bimg)<<endl;
     
         Mat *c = new Mat(cimg);
         Mat *b = new Mat(bimg);

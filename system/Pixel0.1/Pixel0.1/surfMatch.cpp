@@ -35,42 +35,52 @@ struct SURFDetector{
     }
 };
 
-/*
- Convert vector<double> to surf descriptors mat
- */
+//Still has bugs ,abort
+///*
+// Convert vector<double> to surf descriptors mat
+// */
+//
+//static Mat double_vec2surf_desp_mat(const vector<double> &vec){
+//    int cols = Params::surf_dimensions;
+//    int rows = (int)vec.size() / Params::surf_dimensions;
+//    
+//    Mat ret_M(rows,cols,CV_32FC1);
+//    
+//    size_t eSiz = ret_M.elemSize();
+//    size_t total_size = cols * rows* 1 * eSiz;
+//    
+//    int ind = 0;
+//    for (size_t i = 0; i < total_size; i += eSiz){
+//        double* tmp = (double *)ret_M.data + i;
+//        *tmp = vec[ind++];
+//    }
+//    cout<<ret_M.elemSize();
+//    return ret_M;
+//}
 
-static void double_vec2surf_desp_mat(const vector<double> &vec, Mat &ret_M){
-    int cols = Params::surf_dimensions;
-    int rows = (int)vec.size() / Params::surf_dimensions;
-    ret_M = Mat(rows,cols,CV_32FC1);
-    int ind = 0;
-    for (int r = 0; r < ret_M.rows; r++)
-        for (int c = 0; c < ret_M.cols; c++)
-            ret_M.at<double>(r,c) = vec[ind++];
-}
-
-/*
- Convert surf descriptors Mat to vector<double>
- http://answers.opencv.org/question/8873/best-way-to-store-a-mat-object-in-android/
- */
-static void surf_desp_mat2double_vec(const Mat &M, vector<double> &ret_vec){
-    if (M.cols == 0 || M.rows == 0)
-        return;
-    
-    int cols = M.cols;
-    int rows = M.rows;
-    int chan = M.channels();
-    size_t eSiz = M.elemSize();
-    size_t total_size = cols*rows*chan*eSiz;
-    
-    if (M.isContinuous()){
-        for (size_t i = 0; i < total_size; i += eSiz)
-            ret_vec.push_back(double(*(M.data+i)));
-    }else{
-        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
-    }
-
-}
+///*
+// Convert surf descriptors Mat to vector<double>
+// http://answers.opencv.org/question/8873/best-way-to-store-a-mat-object-in-android/
+// */
+//static vector<double> surf_desp_mat2double_vec(const Mat &M){
+//    vector<double> ret_vec;
+//    if (M.cols == 0 || M.rows == 0)
+//        return ret_vec;
+//    
+//    int cols = M.cols;
+//    int rows = M.rows;
+//    int chan = M.channels();
+//    size_t eSiz = M.elemSize();
+//    size_t total_size = cols * rows * chan * eSiz;
+//    
+//    if (M.isContinuous()){
+//        for (size_t i = 0; i < total_size; i += eSiz)
+//            ret_vec.push_back(double(*(M.data+i)));
+//    }else{
+//        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
+//    }
+//    return ret_vec;
+//}
 
 /*
  get surf descriptors from an image mat
@@ -86,12 +96,7 @@ void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
  */
 void generate_surf_descriptors(const Mat &img, vector<double> &ret_vec){
     Mat descriptors;
-    generate_surf_descriptors(img, descriptors);
-    surf_desp_mat2double_vec(descriptors, ret_vec);
-    
-    Mat res;
-    double_vec2surf_desp_mat(ret_vec, res);
-    
+    generate_surf_descriptors(img,descriptors);
     cout<<"end"<<endl;
 }
 
@@ -126,7 +131,7 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
     
     if(!matches.size())
         cout<<"matches is empty! "<<endl;
-    
+
     return double(matches.size());
 }
 
@@ -139,6 +144,19 @@ double surf_match_score_with_mat(const Mat &img1,const Mat &img2){
     SURFDetector surf;
     surf(img1, Mat(), keypoints1, descriptors1);
     surf(img2, Mat(), keypoints2, descriptors2);
+    
+
+    /*-----------DEBUG START ----------*/    
+    BFMatcher matcher;
+    vector<DMatch> matches;
+    Mat img_matched;
+    matcher.match(descriptors1, descriptors2, matches);
+    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matched, Scalar(255,255,255));
+    imshow("surf_Matches",img_matched);//显示的标题为Matches
+    waitKey(0);
+    return 0;
+    /*-----------DEBUG END ----------*/
+    
     return surf_match_score_with_descriptor(descriptors1, descriptors2);
 }
 
