@@ -5,11 +5,14 @@
 //  Created by WangJZ on 14/12/18.
 //  Copyright (c) 2014年 WangJZ. All rights reserved.
 //
-
-
 #include "params.h"
+#include <opencv2\imgproc.hpp>
 const string Params::SIFT = "SIFT";
 const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
+
+//params for images
+int Params::color_image_type = CV_8UC3;
+int Params::grey_image_type = CV_8UC1;
 
 //params for match
 int Params::shape_context_sample_point_num = 100;

@@ -80,7 +80,7 @@ int main(int agrc, char **agrv){
 		string originalImageId = fileName + "_" + fileinfo.name;
 		OriginalImage *ori = new OriginalImage(path, originalImageId);
 		
-		Mat pImage = imread(path.c_str(), -1);
+		Mat pImage = imread_and_preprocess(path.c_str());
 		ori->setImage(&pImage);
 		tool_show_mat(pImage, "originalImage");
 		//将ori分割后得到小图元的集合patchs，并将其存入数据库

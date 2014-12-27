@@ -34,5 +34,7 @@ vector<base_type*> convert_verctor(vector<child_type*> src)
 	return ret;
 }
 
+//read an image and change its depth
+Mat imread_and_preprocess(const string& filename);
 
 #endif /* defined(__Xcode_Pixel_Proj__tools__) */

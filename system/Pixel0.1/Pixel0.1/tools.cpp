@@ -8,6 +8,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "tools.h"
+#include "params.h"
 #include <ctime>
 
 void tool_show_patch(Patch *image, string name){
@@ -38,4 +39,13 @@ string super_patch_id_from_timestamp(){
     unique_patch_id++;
 
     return str;
+}
+
+Mat imread_and_preprocess(const string& filename)
+{
+	Mat tmp = imread(filename);
+	if(tmp.data == NULL)
+		return tmp;
+	tmp.convertTo(tmp,Params::color_image_type);
+	return tmp;
 }

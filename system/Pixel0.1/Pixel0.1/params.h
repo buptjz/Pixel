@@ -12,6 +12,10 @@ public:
 	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
+	
+	//params for images
+	static int color_image_type;
+	static int grey_image_type;
 
 	//params for match
 	static int shape_context_sample_point_num;

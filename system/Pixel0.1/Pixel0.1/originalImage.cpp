@@ -1,5 +1,6 @@
 #include"originalImage.h"
 #include "sqlliteHelper.h"
+#include "params.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
@@ -61,7 +62,7 @@ vector<Rect *> & OriginalImage::getMetaInfos(vector<Rect *> & rects, int count) 
 			}
 		}
 	}
-	Rect *rect = new Rect();
+	Rect *rect;
 	// 将位置信息转为为Rect
 	for (i = 0; i < count; ++i)
 	{
@@ -152,9 +153,11 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	{
 		Rect * rect = rects.at(index - 1);
 		string id = originalImageId + "_imagePatch_" + index;
-		Mat *bip = new Mat(*pOImage, *rect);
+		Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
+		Mat *bip = new Mat;
+		oip->convertTo(*bip,Params::grey_image_type);
 		//Mat *oip = new Mat(*bip == index);
-		Mat *oip = new Mat(*bip);
+		//Mat *oip = new Mat(*bip);
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
 		result.push_back(imgPatch);
 	}
@@ -198,7 +201,11 @@ void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_
 
 Mat & SimplePre(Mat & org, Mat & result)
 {
-	cvtColor(org, result, CV_RGB2GRAY);
+	if (org.channels() > 1)
+		cvtColor(org, result, CV_BGR2GRAY,1);
+	else
+		result = org.clone();
+	result.convertTo(result,Params::grey_image_type);
 	medianBlur(result, result, 3);
 	resize(result, result, Size(3 * org.rows, 3 * org.cols));
 	return result;
