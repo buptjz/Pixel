@@ -31,7 +31,10 @@ void ImagePatch::savePatch() const{
 	string originalImagePatchBuffer;
 	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalImagePatchBuffer);
 	string featuresStr;
-//	map2JsonString((map<string,vector<double> >)getFeatures(), featuresStr);
+    
+    map<string, vector<double> > tmp = getFeatures();
+	map2JsonString(tmp, featuresStr);
+
 	str_sql << "insert into imagePatch values(";
 	str_sql << imagePatchId << "," << originalImageIdsStr << "," << superImagePatch << ",";
 	str_sql << positionStr<<","<<"?"<<","<<"?"<<","<<"?";
