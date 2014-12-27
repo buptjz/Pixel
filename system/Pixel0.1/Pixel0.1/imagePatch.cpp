@@ -32,7 +32,7 @@ void ImagePatch::savePatch() const{
 	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalImagePatchBuffer);
 	string featuresStr;
     
-    map<string, vector<double> > tmp = getFeatures();
+    map<string, string > tmp = getFeatures();
 	map2JsonString(tmp, featuresStr);
 
 	str_sql << "insert into imagePatch values(";

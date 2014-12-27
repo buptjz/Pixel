@@ -44,7 +44,7 @@ ImagePatch* readImagePatch(string imagePatchId)
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
-	map<string, vector<double> > features;
+	map<string, string > features;
 	Rect position;
 
 	string sql = "select * from imagePatch where imagePatchId =" + imagePatchId;
@@ -108,7 +108,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
-	map<string, vector<double> > features;
+	map<string, string> features;
 
 	string sql = "select * from superImagePatch where superImagePatchId = '" + superImagePatchId + "'";
 	//÷¥––≤È—Ø

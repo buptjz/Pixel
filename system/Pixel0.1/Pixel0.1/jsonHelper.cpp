@@ -6,21 +6,17 @@
 using namespace std;
 
 //map类型转换为json字符串
-int map2JsonString(map<string, vector<double> > &m, string &jsonString)
+int map2JsonString( const map<string, string> &m, string &jsonString)
 {
 	try
 	{
 		Json::Value jvalue;
-		map<string, vector<double> > ::iterator it;
+		map<string, string> ::const_iterator it;
 		for (it = m.begin(); it != m.end(); ++it)
 		{
 			string key = it->first;
-			vector<double> value = it->second;
-			for (size_t i = 0; i < value.size(); i++)
-			{
-				//string  num = to_string(static_cast<long double>(value[i]));
-				jvalue[key].append(value[i]);
-			}
+			string value = it->second;
+			jvalue[key] = value;
 		}
 		// JSON转换为JSON字符串（已格式化）
 		jsonString = jvalue.toStyledString();
@@ -33,14 +29,13 @@ int map2JsonString(map<string, vector<double> > &m, string &jsonString)
 }
 
 //json字符串转换为map
-int jsonString2Map(string& jsonString, map<string, vector<double> > &m)
+int jsonString2Map(const string& jsonString, map<string, string > &m)
 {
 	try
 	{
 		bool bRet = false;
 		Json::Reader reader;
 		Json::Value value;
-		Json::Value arrayObj;
 		// JSON字符串转换为JSON数据
 		bRet = reader.parse(jsonString, value);
 		if (bRet == false)
@@ -51,14 +46,9 @@ int jsonString2Map(string& jsonString, map<string, vector<double> > &m)
 		Json::Value::Members  member = value.getMemberNames();
 		for (Json::Value::Members::iterator iter = member.begin(); iter != member.end(); ++iter)
 		{
-			vector<double> v;
 			string key = *iter;
-			arrayObj = value[key];
-			for (size_t i = 0; i < arrayObj.size(); i++)
-			{
-				v.push_back(arrayObj[i].asDouble());
-			}
-			m[key] = v;
+			string str = value[key].asString();
+			m[key] = str;
 		}
 	}
 	catch (std::exception &ex)
@@ -126,7 +116,7 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 }
 
 //json字符串序列化为Mat
-int jsonString2Mat(string &jsonString, Mat& M)
+int jsonString2Mat(const string &jsonString, Mat& M)
 {
 	try
 	{
@@ -203,17 +193,36 @@ string rect2JsonString(const Rect &rect)
 	v.push_back(y);
 	v.push_back(w);
 	v.push_back(h);
-	m["position"] = v;
-	string res;
-	map2JsonString(m, res);
-	return res;
+
+	Json::Value jvalue;	
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		jvalue["position"].append(v[i]);
+	}
+	// JSON转换为JSON字符串（已格式化）
+	string jsonString = jvalue.toStyledString();
+
+	return jsonString;
 }
 
 Rect jsonString2Rect(string &str)
 {
-	map<string, vector<double> > m;
-	jsonString2Map(str, m);
-	vector<double> v = m["position"];
+	vector<double> v;
+
+	bool bRet = false;
+	Json::Reader reader;
+	Json::Value value;
+	Json::Value arrayObj;
+
+	// JSON字符串转换为JSON数据
+	bRet = reader.parse(str, value);
+	string key = "position";
+	arrayObj = value[key];
+	for (size_t i = 0; i < arrayObj.size(); i++)
+	{
+		v.push_back(arrayObj[i].asDouble());
+	}
+
 	int x = (int)v[0];
 	int y = (int)v[1];
 	int w = (int)v[2];
