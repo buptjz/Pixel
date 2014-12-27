@@ -15,8 +15,8 @@ static int FindRegFromEdge(Mat &);
 void OriginalImage::saveOriginalImage()const
 {
 	std::stringstream str_sql;
-	str_sql << "insert into originalImage values(";
-	str_sql << originalImageId << "," << path << ");";
+	str_sql << "insert into originalImage values('";
+	str_sql << originalImageId << "','" << path << "');";
 	std::string str = str_sql.str();
 	SQLiteHelper::Insert(str.c_str());
 }
@@ -151,7 +151,7 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	for (int index = 1; index <= coupreImgnt; ++index)
 	{
 		Rect * rect = rects.at(index - 1);
-		string id = originalImageId + "_imagePatch_" + index;
+		string id = originalImageId + "_imagePatch_" + to_string(index);
 		Mat *bip = new Mat(*pOImage, *rect);
 		//Mat *oip = new Mat(*bip == index);
 		Mat *oip = new Mat(*bip);
@@ -198,6 +198,10 @@ void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_
 
 Mat & SimplePre(Mat & org, Mat & result)
 {
+	/*if (org.channels()==3)
+	{
+		cvtColor(org, result, CV_RGB2GRAY);
+	}*/
 	cvtColor(org, result, CV_RGB2GRAY);
 	medianBlur(result, result, 3);
 	resize(result, result, Size(3 * org.rows, 3 * org.cols));

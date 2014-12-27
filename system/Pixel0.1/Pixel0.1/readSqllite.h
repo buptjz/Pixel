@@ -2,7 +2,7 @@
 #define READSQLLITE_H
 #include "originalImage.h"
 
-OriginalImage* readOriginalImage( string originalImageId);
+OriginalImage* readOriginalImage(const string &originalImageId);
 ImagePatch* readImagePatch(string imagePatchId);
 SuperImagePatch* readSuperImagePatch(string superImagePatchId);
 #endif

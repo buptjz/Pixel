@@ -10,10 +10,10 @@
 #include<iostream>
 using namespace cv;
 
-OriginalImage* readOriginalImage(string originalImageId)
+OriginalImage* readOriginalImage(const string &originalImageId)
 {
 	OriginalImage* poi;
-	string sql = "select path from originalImage where originalImageId = " + originalImageId;
+	string sql = "select path from originalImage where originalImageId = '" + originalImageId +"'";
 	char *errmsg = NULL;
 	char** dbResult = NULL;
 	int nRow, nColumn;
@@ -47,7 +47,7 @@ ImagePatch* readImagePatch(string imagePatchId)
 	map<string, string > features;
 	Rect position;
 
-	string sql = "select * from imagePatch where imagePatchId =" + imagePatchId;
+	string sql = "select * from imagePatch where imagePatchId ='" + imagePatchId + "'";
 	//÷¥––≤È—Ø
 	sqlite3_stmt *pstmt;
 	const char   *error = 0;
