@@ -18,6 +18,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #include "surfMatch.h"
+#include "params.h"
 
 using namespace std;
 using namespace cv;
@@ -39,10 +40,9 @@ struct SURFDetector{
  */
 
 static void double_vec2surf_desp_mat(const vector<double> &vec, Mat &ret_M){
-    //TODO : a lot of constants here!
-    int cols = 64;
-    int rows = (int)vec.size() / 64;
-    ret_M = Mat(rows,cols,CV_32FC1);//这样写行么？
+    int cols = Params::surf_dimensions;
+    int rows = (int)vec.size() / Params::surf_dimensions;
+    ret_M = Mat(rows,cols,CV_32FC1);
     int ind = 0;
     for (int r = 0; r < ret_M.rows; r++)
         for (int c = 0; c < ret_M.cols; c++)
@@ -112,7 +112,6 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
     vector<vector<DMatch>> m_knnMatches;
     
     matches.clear();
-    const float minRatio = 1.f / 1.5f;
     matcher.knnMatch(desp1, desp2, m_knnMatches,2);
     
     //nearest desp >> second nearest desp will be regarded as good matching
@@ -120,7 +119,8 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
         const DMatch& bestMatch = m_knnMatches[i][0];
         const DMatch& betterMatch = m_knnMatches[i][1];
         float distanceRatio = bestMatch.distance / betterMatch.distance;
-        if (distanceRatio < minRatio)
+        
+        if (distanceRatio < Params::surf_min_ratio)
             matches.push_back(bestMatch);
     }
     
