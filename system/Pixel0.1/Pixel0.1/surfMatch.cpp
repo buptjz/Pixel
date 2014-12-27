@@ -18,6 +18,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #include "surfMatch.h"
+#include "params.h"
 
 using namespace std;
 using namespace cv;
@@ -34,21 +35,52 @@ struct SURFDetector{
     }
 };
 
-/*
- Convert vector<double> to Mat
- */
-static void double_vec2mat(){
-    
-}
+//Still has bugs ,abort
+///*
+// Convert vector<double> to surf descriptors mat
+// */
+//
+//static Mat double_vec2surf_desp_mat(const vector<double> &vec){
+//    int cols = Params::surf_dimensions;
+//    int rows = (int)vec.size() / Params::surf_dimensions;
+//    
+//    Mat ret_M(rows,cols,CV_32FC1);
+//    
+//    size_t eSiz = ret_M.elemSize();
+//    size_t total_size = cols * rows* 1 * eSiz;
+//    
+//    int ind = 0;
+//    for (size_t i = 0; i < total_size; i += eSiz){
+//        double* tmp = (double *)ret_M.data + i;
+//        *tmp = vec[ind++];
+//    }
+//    cout<<ret_M.elemSize();
+//    return ret_M;
+//}
 
-/*
- Convert Mat to vector<double>
- */
-static void mat2double_vec(const Mat &mat, vector<double> &ret_vec){
-    if (mat.cols == 0 || mat.rows == 0)
-        return;
-    
-}
+///*
+// Convert surf descriptors Mat to vector<double>
+// http://answers.opencv.org/question/8873/best-way-to-store-a-mat-object-in-android/
+// */
+//static vector<double> surf_desp_mat2double_vec(const Mat &M){
+//    vector<double> ret_vec;
+//    if (M.cols == 0 || M.rows == 0)
+//        return ret_vec;
+//    
+//    int cols = M.cols;
+//    int rows = M.rows;
+//    int chan = M.channels();
+//    size_t eSiz = M.elemSize();
+//    size_t total_size = cols * rows * chan * eSiz;
+//    
+//    if (M.isContinuous()){
+//        for (size_t i = 0; i < total_size; i += eSiz)
+//            ret_vec.push_back(double(*(M.data+i)));
+//    }else{
+//        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
+//    }
+//    return ret_vec;
+//}
 
 /*
  get surf descriptors from an image mat
@@ -75,7 +107,6 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
     vector<vector<DMatch>> m_knnMatches;
     
     matches.clear();
-    const float minRatio = 1.f / 1.5f;
     matcher.knnMatch(desp1, desp2, m_knnMatches,2);
     
     //nearest desp >> second nearest desp will be regarded as good matching
@@ -83,13 +114,14 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
         const DMatch& bestMatch = m_knnMatches[i][0];
         const DMatch& betterMatch = m_knnMatches[i][1];
         float distanceRatio = bestMatch.distance / betterMatch.distance;
-        if (distanceRatio < minRatio)
+        
+        if (distanceRatio < Params::surf_min_ratio)
             matches.push_back(bestMatch);
     }
     
     if(!matches.size())
         cout<<"matches is empty! "<<endl;
-    
+
     return double(matches.size());
 }
 
@@ -102,6 +134,19 @@ double surf_match_score_with_mat(const Mat &img1,const Mat &img2){
     SURFDetector surf;
     surf(img1, Mat(), keypoints1, descriptors1);
     surf(img2, Mat(), keypoints2, descriptors2);
+    
+
+    /*-----------DEBUG START ----------*/    
+    BFMatcher matcher;
+    vector<DMatch> matches;
+    Mat img_matched;
+    matcher.match(descriptors1, descriptors2, matches);
+    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matched, Scalar(255,255,255));
+    imshow("surf_Matches",img_matched);//显示的标题为Matches
+    waitKey(0);
+    return 0;
+    /*-----------DEBUG END ----------*/
+    
     return surf_match_score_with_descriptor(descriptors1, descriptors2);
 }
 

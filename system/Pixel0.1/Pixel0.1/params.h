@@ -28,6 +28,10 @@ public:
     //similar score <= this threshold will be regarded as the same images
     static double shape_context_compare_1_thres;
     static double shape_context_compare_2_thres;
+    
+    //surf
+    static int surf_dimensions;
+    static double surf_min_ratio;
 };
 
 

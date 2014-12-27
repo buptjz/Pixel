@@ -24,17 +24,20 @@ double ImagePatch::patchCompareWith(Patch *pImagePatch, string featureType){
 void ImagePatch::savePatch() const{
 	std::stringstream str_sql;
 	const string originalImageIdsStr = originalImage->getOriginalImageId();
-	const string superImagePatchId = superImagePatch->getSuperImagePatchId();
-	string positionStr = rect2JsonString(position);
+	const string superImagePatchId = "";
+ 	string positionStr = rect2JsonString(position);
 	string binaryImagePatchBuffer;
 	mat2jsonString(*((Mat*)getBinaryImagePatch()), binaryImagePatchBuffer);
 	string originalImagePatchBuffer;
 	mat2jsonString(*((Mat*)getOriginalImagePatch()), originalImagePatchBuffer);
 	string featuresStr;
-	map2JsonString((map<string,vector<double> >)getFeatures(), featuresStr);
-	str_sql << "insert into imagePatch values(";
-	str_sql << imagePatchId << "," << originalImageIdsStr << "," << superImagePatch << ",";
-	str_sql << positionStr<<","<<"?"<<","<<"?"<<","<<"?";
+    
+    map<string, string > tmp = getFeatures();
+	map2JsonString(tmp, featuresStr);
+
+	str_sql << "insert into imagePatch values('";
+	str_sql << imagePatchId << "','" << originalImageIdsStr << "','" << superImagePatchId<< "','";
+	str_sql << positionStr<<"',"<<"?"<<","<<"?"<<","<<"?";
 	str_sql << ");";
 	std::string str = str_sql.str();
 	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
@@ -49,6 +52,7 @@ void ImagePatch::savePatch() const{
 	{
 		printf("insert into blob value failure!");
 	}
+	sqlite3_finalize(stat);
 	//sql_lite_helper.Insert(str.c_str());
 }
 

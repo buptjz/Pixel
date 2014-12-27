@@ -16,8 +16,8 @@ static int FindRegFromEdge(Mat &);
 void OriginalImage::saveOriginalImage()const
 {
 	std::stringstream str_sql;
-	str_sql << "insert into originalImage values(";
-	str_sql << originalImageId << "," << path << ");";
+	str_sql << "insert into originalImage values('";
+	str_sql << originalImageId << "','" << path << "');";
 	std::string str = str_sql.str();
 	SQLiteHelper::Insert(str.c_str());
 }

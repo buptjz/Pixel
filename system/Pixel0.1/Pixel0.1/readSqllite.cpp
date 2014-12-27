@@ -10,10 +10,10 @@
 #include<iostream>
 using namespace cv;
 
-OriginalImage* readOriginalImage(string originalImageId)
+OriginalImage* readOriginalImage(const string &originalImageId)
 {
 	OriginalImage* poi;
-	string sql = "select path from originalImage where originalImageId = " + originalImageId;
+	string sql = "select path from originalImage where originalImageId = '" + originalImageId +"'";
 	char *errmsg = NULL;
 	char** dbResult = NULL;
 	int nRow, nColumn;
@@ -44,10 +44,10 @@ ImagePatch* readImagePatch(string imagePatchId)
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
-	map<string, vector<double> > features;
+	map<string, string > features;
 	Rect position;
 
-	string sql = "select * from imagePatch where imagePatchId =" + imagePatchId;
+	string sql = "select * from imagePatch where imagePatchId ='" + imagePatchId + "'";
 	//执行查询
 	sqlite3_stmt *pstmt;
 	const char   *error = 0;
@@ -108,7 +108,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
-	map<string, vector<double> > features;
+	map<string, string> features;
 
 	string sql = "select * from superImagePatch where superImagePatchId = '" + superImagePatchId + "'";
 	//执行查询
@@ -136,6 +136,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
 	jsonString2Map(featuresStr, features);
 	sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
+	sip->setFeatures(features);
 	//关闭数据库
 	/*
 	char *errmsg = NULL;
