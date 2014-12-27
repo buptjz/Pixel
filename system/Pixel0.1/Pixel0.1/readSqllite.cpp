@@ -136,6 +136,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
 	jsonString2Map(featuresStr, features);
 	sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
+	sip->setFeatures(features);
 	//¹Ø±ÕÊı¾İ¿â
 	/*
 	char *errmsg = NULL;

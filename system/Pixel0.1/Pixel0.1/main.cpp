@@ -58,7 +58,7 @@ int main(int agrc, char **agrv){
 	cvDestroyWindow("图像显示");//销毁窗口资源
 	*/
 
-
+	/*
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path;//图像文件路径
 	string fileName = "colorimage";//放原图片的文件夹名
@@ -127,15 +127,15 @@ int main(int agrc, char **agrv){
 		itor++;
 	}
 	
-	/*
+	*/
 	SuperImagePatch sip;
-//	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
-    giveVGeAPatch("/Users/wangjz/Desktop",sip);
+	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
+   // giveVGeAPatch("/Users/wangjz/Desktop",sip);
 	sip.savePatch();
 	string superImageId = sip.getSuperImagePatchId();
 
 	SuperImagePatch *psip = readSuperImagePatch(superImageId);
-	*/
+	tool_show_mat(*(psip->getOriginalImagePatch()), "sip");
 	return 0;
 }
 

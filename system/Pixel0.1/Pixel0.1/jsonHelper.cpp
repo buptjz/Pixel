@@ -6,7 +6,7 @@
 using namespace std;
 
 //map类型转换为json字符串
-int map2JsonString(map<string, vector<double> > m, string &jsonString)
+int map2JsonString(map<string, vector<double> > &m, string &jsonString)
 {
 	try
 	{
@@ -18,8 +18,8 @@ int map2JsonString(map<string, vector<double> > m, string &jsonString)
 			vector<double> value = it->second;
 			for (size_t i = 0; i < value.size(); i++)
 			{
-				string  num = to_string(static_cast<long double>(value[i]));
-				jvalue[key].append(num);
+				//string  num = to_string(static_cast<long double>(value[i]));
+				jvalue[key].append(value[i]);
 			}
 		}
 		// JSON转换为JSON字符串（已格式化）
@@ -33,7 +33,7 @@ int map2JsonString(map<string, vector<double> > m, string &jsonString)
 }
 
 //json字符串转换为map
-int jsonString2Map(string& jsonString, map<string, vector<double> > m)
+int jsonString2Map(string& jsonString, map<string, vector<double> > &m)
 {
 	try
 	{
@@ -82,10 +82,15 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 		int rows = M.rows;
 		int chan = M.channels();
 		int eSiz = (M.dataend - M.datastart) / (cols*rows*chan);
-		jvalue["cols"] = to_string(static_cast<long double>(cols));
+		//string temp = to_string(static_cast<long double>(cols));
+	/*	jvalue["cols"] = to_string(static_cast<long double>(cols));
 		jvalue["rows"] = to_string(static_cast<long double>(rows));
 		jvalue["chan"] = to_string(static_cast<long double>(chan));
-		jvalue["eSiz"] = to_string(static_cast<long double>(eSiz));
+		jvalue["eSiz"] = to_string(static_cast<long double>(eSiz));*/
+		jvalue["cols"] = cols;
+		jvalue["rows"] = rows;
+		jvalue["chan"] = chan;
+		jvalue["eSiz"] = eSiz; 
 		size_t size = cols*rows*chan*eSiz;
 		char* data = new char[size+1];
 		data[size] = '\0';
@@ -141,6 +146,7 @@ int jsonString2Mat(string &jsonString, Mat& M)
 		int chan;
 		int eSiz;
 		string data;
+		
 		cols = value["cols"].asInt();
 		rows = value["rows"].asInt();
 		chan = value["chan"].asInt();
