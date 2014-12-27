@@ -92,16 +92,6 @@ void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
 }
 
 /*
- get surf double vector descriptors from an image mat
- */
-void generate_surf_descriptors(const Mat &img, vector<double> &ret_vec){
-    Mat descriptors;
-    generate_surf_descriptors(img,descriptors);
-    cout<<"end"<<endl;
-}
-
-
-/*
  References:
  http://blog.csdn.net/panda1234lee/article/details/10896099
  http://docs.opencv.org/trunk/doc/py_tutorials/py_feature2d/py_matcher/py_matcher.html
