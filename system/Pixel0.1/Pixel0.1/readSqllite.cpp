@@ -36,7 +36,7 @@ ImagePatch* readImagePatch(string imagePatchId)
 {
 	ImagePatch* pip;
 	string originalImageId ;
-	string superImagePatchI;
+	string superImagePatchId;
 	string positionStr;
 	string binaryImagePatchBuffer;
 	string originalImagePatchBuffer;
@@ -58,13 +58,14 @@ ImagePatch* readImagePatch(string imagePatchId)
 			int ret = sqlite3_step(pstmt);
 			if (ret != SQLITE_ROW)
 				break;
-			string originalImageId((char*)sqlite3_column_text(pstmt, 0));
-			string superImagePatchI((char*)sqlite3_column_text(pstmt, 1));
-			string positionStr = ((char*)sqlite3_column_text(pstmt, 2));
-			string binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 3));
-			string originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 4));
+			//string imagePatchId = ((char*)sqlite3_column_text(pstmt, 0));
+			originalImageId = ((char*)sqlite3_column_text(pstmt, 1));
+			superImagePatchId = ((char*)sqlite3_column_text(pstmt, 2));
+			positionStr = ((char*)sqlite3_column_text(pstmt, 3));
+			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 4));
+			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 5));
 			//int len = sqlite3_column_bytes(pstmt, 4);
-			string featuresStr((char*)sqlite3_column_text(pstmt, 5));
+			featuresStr = ((char*)sqlite3_column_text(pstmt, 5));
 		}
 	}
 	sqlite3_finalize(pstmt);

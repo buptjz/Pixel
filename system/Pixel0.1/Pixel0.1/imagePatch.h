@@ -37,7 +37,16 @@ public:
 	//void setFeatures(vector<map<string, vector<double>>> f){ features = f; }
 
 	string getImagePatchId() const{ return imagePatchId; }
-	OriginalImage* getOriginalImage() const{ return originalImage; }
+	OriginalImage* getOriginalImage() const
+	{
+		/*if (originalImage->getPath() == "")
+		{
+			OriginalImage* originalImageTemp = readOriginalImage(imagePatchId);
+			originalImage->setPath(originalImageTemp->getPath());
+			originalImage->setImage((Mat*)originalImageTemp->getImage());
+		}*/
+		return originalImage;
+	}
 	Rect getPosition() { 	return position; }
 	//Mat* getBinaryImagePatch() const { return binaryImagePatch; }
 	//Mat* getOriginalImagePatch() const { return originalImagePatch; }
