@@ -3,6 +3,7 @@
 #include "json/json.h"
 #include <memory.h>
 #include <exception>
+#include "base64.h"
 using namespace std;
 
 //map类型转换为json字符串
@@ -82,8 +83,7 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 		jvalue["chan"] = chan;
 		jvalue["eSiz"] = eSiz; 
 		size_t size = cols*rows*chan*eSiz;
-		char* data = new char[size+1];
-		data[size] = '\0';
+		unsigned char* data = new unsigned char[size];
 		if (M.isContinuous())
 		{
 			/*
@@ -103,7 +103,7 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 			cout << "Mat is not continuous!";
 			return -1;
 		}
-		jvalue["data"] = data;
+		jvalue["data"] = base64_encode(data, size);
 		jsonString = jvalue.toStyledString();
 	}
 	catch (std::exception &ex)
@@ -141,6 +141,7 @@ int jsonString2Mat(const string &jsonString, Mat& M)
 		rows = value["rows"].asInt();
 		chan = value["chan"].asInt();
 		eSiz = value["eSiz"].asInt();
+		size_t size = cols*rows*chan*eSiz;
 		data = value["data"].asString();
 		// Determine type of the matrix 
 		int type = 0;
@@ -169,7 +170,7 @@ int jsonString2Mat(const string &jsonString, Mat& M)
 				return -1;
 			}
 			*/
-			memcpy((char*)M.data, data.c_str(), data.size()-1);
+			memcpy((char*)M.data, base64_decode(data).c_str(), size);
 		}
 	}
 	catch (std::exception &ex)
