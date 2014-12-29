@@ -119,8 +119,8 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
             matches.push_back(bestMatch);
     }
     
-    if(!matches.size())
-        cout<<"matches is empty! "<<endl;
+//    if(!matches.size())
+//        cout<<"matches is empty! "<<endl;
 
     return double(matches.size());
 }
@@ -135,29 +135,198 @@ double surf_match_score_with_mat(const Mat &img1,const Mat &img2){
     surf(img1, Mat(), keypoints1, descriptors1);
     surf(img2, Mat(), keypoints2, descriptors2);
     
-
     /*-----------DEBUG START ----------*/    
-    BFMatcher matcher;
-    vector<DMatch> matches;
-    Mat img_matched;
-    matcher.match(descriptors1, descriptors2, matches);
-    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matched, Scalar(255,255,255));
-    imshow("surf_Matches",img_matched);//显示的标题为Matches
-    waitKey(0);
-    return 0;
+//    BFMatcher matcher;
+//    vector<DMatch> matches;
+//    Mat img_matched;
+//    matcher.match(descriptors1, descriptors2, matches);
+//    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matched, Scalar(255,255,255));
+//    imshow("surf_Matches",img_matched);//显示的标题为Matches
+//    waitKey(0);
+//    return 0;
     /*-----------DEBUG END ----------*/
     
     return surf_match_score_with_descriptor(descriptors1, descriptors2);
 }
 
 void test_surf_match_func(){
-    //    test_descriptor();
-    string root = "/Volumes/BigData/Pixel/data/ordered/";
-    string left_image_name = root + "1.jpg";
-    string right_image_name = root + "2.jpg";
-    Mat l_img = imread(left_image_name,CV_8UC1);//32-bit RGB image
-    Mat r_img = imread(right_image_name,CV_8UC1);//8-bit Black-White image
-    cout<<surf_match_score_with_mat(l_img,r_img)<<endl;
+    string root = "/Volumes/BigData/Pixel/data/transformed_imgs/all/";
+    vector<string> img_names = {"a.jpg",
+        "a_rot_180.jpg",
+        "a_rot_270.jpg",
+        "a_rot_30.jpg",
+        "a_rot_45.jpg",
+        "a_rot_60.jpg",
+        "a_rot_90.jpg",
+        "a_size_100.jpg",
+        "a_size_100_rot_180.jpg",
+        "a_size_100_rot_270.jpg",
+        "a_size_100_rot_30.jpg",
+        "a_size_100_rot_60.jpg",
+        "a_size_100_rot_90.jpg",
+        "a_size_203.jpg",
+        "a_size_25.jpg",
+        "a_size_25_rot_180.jpg",
+        "a_size_25_rot_270.jpg",
+        "a_size_25_rot_30.jpg",
+        "a_size_25_rot_60.jpg",
+        "a_size_25_rot_90.jpg",
+        "a_size_49.jpg",
+        "a_size_76.jpg",
+        "a_size_76_rot_180.jpg",
+        "a_size_76_rot_270.jpg",
+        "a_size_76_rot_30.jpg",
+        "a_size_76_rot_60.jpg",
+        "a_size_76_rot_90.jpg",
+        "b.jpg",
+        "b_rot_180.jpg",
+        "b_rot_270.jpg",
+        "b_rot_30.jpg",
+        "b_rot_45.jpg",
+        "b_rot_60.jpg",
+        "b_rot_90.jpg",
+        "b_size_100.jpg",
+        "b_size_100_rot_180.jpg",
+        "b_size_100_rot_270.jpg",
+        "b_size_100_rot_30.jpg",
+        "b_size_100_rot_60.jpg",
+        "b_size_100_rot_90.jpg",
+        "b_size_203.jpg",
+        "b_size_25.jpg",
+        "b_size_25_rot_180.jpg",
+        "b_size_25_rot_270.jpg",
+        "b_size_25_rot_30.jpg",
+        "b_size_25_rot_60.jpg",
+        "b_size_25_rot_90.jpg",
+        "b_size_49.jpg",
+        "b_size_76.jpg",
+        "b_size_76_rot_180.jpg",
+        "b_size_76_rot_270.jpg",
+        "b_size_76_rot_30.jpg",
+        "b_size_76_rot_60.jpg",
+        "b_size_76_rot_90.jpg",
+        "c.jpg",
+        "c_rot_180.jpg",
+        "c_rot_270.jpg",
+        "c_rot_30.jpg",
+        "c_rot_45.jpg",
+        "c_rot_60.jpg",
+        "c_rot_90.jpg",
+        "c_size_100.jpg",
+        "c_size_100_rot_180.jpg",
+        "c_size_100_rot_270.jpg",
+        "c_size_100_rot_30.jpg",
+        "c_size_100_rot_60.jpg",
+        "c_size_100_rot_90.jpg",
+        "c_size_203.jpg",
+        "c_size_25.jpg",
+        "c_size_25_rot_180.jpg",
+        "c_size_25_rot_270.jpg",
+        "c_size_25_rot_30.jpg",
+        "c_size_25_rot_60.jpg",
+        "c_size_25_rot_90.jpg",
+        "c_size_49.jpg",
+        "c_size_76.jpg",
+        "c_size_76_rot_180.jpg",
+        "c_size_76_rot_270.jpg",
+        "c_size_76_rot_30.jpg",
+        "c_size_76_rot_60.jpg",
+        "c_size_76_rot_90.jpg",
+        "d.jpg",
+        "d_rot_180.jpg",
+        "d_rot_270.jpg",
+        "d_rot_30.jpg",
+        "d_rot_45.jpg",
+        "d_rot_60.jpg",
+        "d_rot_90.jpg",
+        "d_size_100.jpg",
+        "d_size_100_rot_180.jpg",
+        "d_size_100_rot_270.jpg",
+        "d_size_100_rot_30.jpg",
+        "d_size_100_rot_60.jpg",
+        "d_size_100_rot_90.jpg",
+        "d_size_203.jpg",
+        "d_size_25.jpg",
+        "d_size_25_rot_180.jpg",
+        "d_size_25_rot_270.jpg",
+        "d_size_25_rot_30.jpg",
+        "d_size_25_rot_60.jpg",
+        "d_size_25_rot_90.jpg",
+        "d_size_49.jpg",
+        "d_size_76.jpg",
+        "d_size_76_rot_180.jpg",
+        "d_size_76_rot_270.jpg",
+        "d_size_76_rot_30.jpg",
+        "d_size_76_rot_60.jpg",
+        "d_size_76_rot_90.jpg",
+        "e.jpg",
+        "e_rot_180.jpg",
+        "e_rot_270.jpg",
+        "e_rot_30.jpg",
+        "e_rot_45.jpg",
+        "e_rot_60.jpg",
+        "e_rot_90.jpg",
+        "e_size_100.jpg",
+        "e_size_100_rot_180.jpg",
+        "e_size_100_rot_270.jpg",
+        "e_size_100_rot_30.jpg",
+        "e_size_100_rot_60.jpg",
+        "e_size_100_rot_90.jpg",
+        "e_size_203.jpg",
+        "e_size_25.jpg",
+        "e_size_25_rot_180.jpg",
+        "e_size_25_rot_270.jpg",
+        "e_size_25_rot_30.jpg",
+        "e_size_25_rot_60.jpg",
+        "e_size_25_rot_90.jpg",
+        "e_size_49.jpg",
+        "e_size_76.jpg",
+        "e_size_76_rot_180.jpg",
+        "e_size_76_rot_270.jpg",
+        "e_size_76_rot_30.jpg",
+        "e_size_76_rot_60.jpg",
+        "e_size_76_rot_90.jpg",
+        "f.jpg",
+        "f_rot_180.jpg",
+        "f_rot_270.jpg",
+        "f_rot_30.jpg",
+        "f_rot_45.jpg",
+        "f_rot_60.jpg",
+        "f_rot_90.jpg",
+        "f_size_100.jpg",
+        "f_size_100_rot_180.jpg",
+        "f_size_100_rot_270.jpg",
+        "f_size_100_rot_30.jpg",
+        "f_size_100_rot_60.jpg",
+        "f_size_100_rot_90.jpg",
+        "f_size_203.jpg",
+        "f_size_25.jpg",
+        "f_size_25_rot_180.jpg",
+        "f_size_25_rot_270.jpg",
+        "f_size_25_rot_30.jpg",
+        "f_size_25_rot_60.jpg",
+        "f_size_25_rot_90.jpg",
+        "f_size_49.jpg",
+        "f_size_76.jpg",
+        "f_size_76_rot_180.jpg",
+        "f_size_76_rot_270.jpg",
+        "f_size_76_rot_30.jpg",
+        "f_size_76_rot_60.jpg",
+        "f_size_76_rot_90.jpg",
+    };
+    
+    string left_image_name = "f_size_25_rot_180.jpg";
+    for (int i = 0; i < img_names.size(); i++) {
+        string right_image_name = img_names[i];
+        Mat l_img = imread(root + left_image_name,CV_8UC1);//32-bit RGB image
+        Mat r_img = imread(root + right_image_name,CV_8UC1);//8-bit Black-White image
+        
+        cout<<surf_match_score_with_mat(l_img,r_img)<<"--";
+        cout<<left_image_name<<":";
+        cout<<right_image_name<<".."<<endl;
+
+    }
+
 }
 
 
