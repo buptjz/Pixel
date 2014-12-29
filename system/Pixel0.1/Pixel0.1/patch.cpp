@@ -25,7 +25,6 @@ static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
 {
     vector<vector<Point> > _contoursQuery;
     vector <Point> contoursQuery;
-
 	cv::findContours(currentQuery.clone(), _contoursQuery, RETR_LIST, CHAIN_APPROX_NONE);
     for (size_t border=0; border<_contoursQuery.size(); border++)
     {

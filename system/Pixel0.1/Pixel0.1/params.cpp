@@ -6,13 +6,18 @@
 //  Copyright (c) 2014年 WangJZ. All rights reserved.
 //
 #include "params.h"
-#include <opencv2\imgproc.hpp>
+#include <opencv2/imgproc.hpp>
 const string Params::SIFT = "SIFT";
 const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
 
 //params for images
 int Params::color_image_type = CV_8UC3;
+int Params::color_image_channels = 3;
 int Params::grey_image_type = CV_8UC1;
+int Params::grey_image_channels = 1;
+
+//segment
+int Params::patch_pixal_least = 100;
 
 //params for match
 int Params::shape_context_sample_point_num = 100;

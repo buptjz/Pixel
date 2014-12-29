@@ -152,10 +152,13 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	for (int index = 1; index <= coupreImgnt; ++index)
 	{
 		Rect * rect = rects.at(index - 1);
+		if(rect->width * rect->height < Params::patch_pixal_least)
+			continue;
 		string id = originalImageId + "_imagePatch_" + index;
 		Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
-		Mat *bip = new Mat;
-		oip->convertTo(*bip,Params::grey_image_type);
+		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
+		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
+		//std::cout<< "bip channels:" << bip->channels();
 		//Mat *oip = new Mat(*bip == index);
 		//Mat *oip = new Mat(*bip);
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
@@ -201,8 +204,8 @@ void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_
 
 Mat & SimplePre(Mat & org, Mat & result)
 {
-	if (org.channels() > 1)
-		cvtColor(org, result, CV_BGR2GRAY,1);
+	if (org.channels() > Params::grey_image_channels)
+		cvtColor(org, result, CV_BGR2GRAY,Params::grey_image_channels);
 	else
 		result = org.clone();
 	result.convertTo(result,Params::grey_image_type);

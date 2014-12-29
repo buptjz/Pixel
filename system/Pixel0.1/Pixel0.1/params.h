@@ -15,7 +15,12 @@ public:
 	
 	//params for images
 	static int color_image_type;
+	static int color_image_channels;
 	static int grey_image_type;
+	static int grey_image_channels;
+
+	//params for segment
+	static int patch_pixal_least;
 
 	//params for match
 	static int shape_context_sample_point_num;
