@@ -82,10 +82,8 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 		jvalue["chan"] = chan;
 		jvalue["eSiz"] = eSiz; 
 		size_t size = cols*rows*chan*eSiz;
-		//char* data = new char[size+1];
-		//data[size] = '\0';
-		string data;
-
+		char* data = new char[size+1];
+		data[size] = '\0';
 		if (M.isContinuous())
 		{
 			/*
@@ -96,14 +94,7 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 				return -1;
 			}
 			*/
-
-			//memcpy(data, (char*)M.data, size);
-			for (int i = 0; i < size; i++)
-			{
-				jvalue["data"].append(*(char*)M.data);
-			}
-			
-			//data.assign((char*)M.data, size);
+			memcpy(data, (char*)M.data, size);
 			//strncpy_s(data, size+1, (char*)M.data, size);
 			//strncpy(data, (char*)M.data, (size_t)(cols*rows*chan*eSiz));
 		}
@@ -112,7 +103,7 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 			cout << "Mat is not continuous!";
 			return -1;
 		}
-		//jvalue["data"] = data;
+		jvalue["data"] = data;
 		jsonString = jvalue.toStyledString();
 	}
 	catch (std::exception &ex)
@@ -144,20 +135,14 @@ int jsonString2Mat(const string &jsonString, Mat& M)
 		int rows;
 		int chan;
 		int eSiz;
-		int size = arrayObj.size();
-		char *data = new char[size];
+		string data;
 		
 		cols = value["cols"].asInt();
 		rows = value["rows"].asInt();
 		chan = value["chan"].asInt();
 		eSiz = value["eSiz"].asInt();
-		//data = value["data"].asString();
+		data = value["data"].asString();
 		// Determine type of the matrix 
-		arrayObj = value["data"];
-		for (int i = 0; arrayObj < size; i++)
-		{
-			*(data+i) = arrayObj[i].asString().c_str()[0];
-		}
 		int type = 0;
 		switch (eSiz){
 		case sizeof(char) :
@@ -184,8 +169,7 @@ int jsonString2Mat(const string &jsonString, Mat& M)
 				return -1;
 			}
 			*/
-			//memcpy((char*)M.data, data.c_str(), data.size());
-			memcpy((char*)M.data, data, size);
+			memcpy((char*)M.data, data.c_str(), data.size()-1);
 		}
 	}
 	catch (std::exception &ex)
