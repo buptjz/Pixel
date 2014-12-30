@@ -36,7 +36,7 @@ ImagePatch* readImagePatch(string imagePatchId)
 {
 	ImagePatch* pip;
 	string originalImageId ;
-	string superImagePatchI;
+	string superImagePatchId;
 	string positionStr;
 	string binaryImagePatchBuffer;
 	string originalImagePatchBuffer;
@@ -58,13 +58,13 @@ ImagePatch* readImagePatch(string imagePatchId)
 			int ret = sqlite3_step(pstmt);
 			if (ret != SQLITE_ROW)
 				break;
-			string originalImageId((char*)sqlite3_column_text(pstmt, 0));
-			string superImagePatchI((char*)sqlite3_column_text(pstmt, 1));
-			string positionStr = ((char*)sqlite3_column_text(pstmt, 2));
-			string binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 3));
-			string originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 4));
-			//int len = sqlite3_column_bytes(pstmt, 4);
-			string featuresStr((char*)sqlite3_column_text(pstmt, 5));
+			//imagePatchId = ((char*)sqlite3_column_text(pstmt, 0));
+			originalImageId = ((char*)sqlite3_column_text(pstmt, 1));
+			superImagePatchId = ((char*)sqlite3_column_text(pstmt, 2));
+			positionStr = ((char*)sqlite3_column_text(pstmt, 3));
+			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 4));
+			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 5));
+			featuresStr = ((char*)sqlite3_column_text(pstmt, 6));
 		}
 	}
 	sqlite3_finalize(pstmt);
@@ -74,30 +74,11 @@ ImagePatch* readImagePatch(string imagePatchId)
 	position = jsonString2Rect(positionStr);
 	OriginalImage* ori = new OriginalImage(originalImageId);
 	pip = new ImagePatch(imagePatchId, ori, position, binaryImagePatch, originalImagePatch);
-	//关闭数据库
-	/*
-	char *errmsg = NULL;
-	char** dbResult = NULL;
-	int nRow, nColumn;
-	int result = sqlite3_get_table(sql_lite_helper.getSqlite3(), sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
-
-	//查询成功
-	int index = nColumn; //dbResult 前面第一行数据是字段名称，从 nColumn 索引开始才是真正的数据
-	string originalImageId = dbResult[index++];
-	string superImagePatchId = dbResult[index++];
-	string positionStr = dbResult[index++];
-	string binaryImagePatchBuffer = dbResult[index++];
-	string originalImagePatchBuffer = dbResult[index++];
-	string featuresStr = dbResult[index++];
-	
-
-	sqlite3_free_table(dbResult);//释放查询空间
-	*/
-
 
 	return pip;
 
 }
+
 //superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)
 SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 {

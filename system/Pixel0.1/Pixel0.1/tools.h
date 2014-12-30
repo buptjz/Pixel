@@ -37,4 +37,8 @@ vector<base_type*> convert_verctor(vector<child_type*> src)
 //read an image and change its depth
 Mat imread_and_preprocess(const string& filename);
 
+
+//split string
+std::vector<std::string> split(std::string str, std::string pattern);
+
 #endif /* defined(__Xcode_Pixel_Proj__tools__) */

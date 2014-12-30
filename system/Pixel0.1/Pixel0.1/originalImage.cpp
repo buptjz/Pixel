@@ -154,7 +154,11 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		Rect * rect = rects.at(index - 1);
 		if(rect->width * rect->height < Params::patch_pixal_least)
 			continue;
-		string id = originalImageId + "_imagePatch_" + index;
+		stringstream ss;
+		string str;
+		ss << index;
+		ss >> str;
+		string id = originalImageId + "_imagePatch_" + str;
 		Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
 		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
 		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
