@@ -7,7 +7,6 @@
 #include "segment-image.h"
 
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
@@ -57,7 +56,7 @@ Mat convertNativeToMat(image<rgb>* input){
  Typical parameters are sigma = 0.5, k = 500, min = 20.
  Larger values for k result in larger components in the result.
  */
-Mat runEgbisOnMat(Mat *input, float sigma, float k, int min_size, int *numccs) {
+Mat runEgbisOnMat(int *numccs,Mat *input, float sigma=0.5, float k=500, int min_size=20) {
     int w = input->cols;
     int h = input->rows;
     Mat output(Size(w,h),CV_8UC3);
@@ -71,11 +70,12 @@ Mat runEgbisOnMat(Mat *input, float sigma, float k, int min_size, int *numccs) {
 
     return output;
 }
-
-int test_egbis(int argc, char **argv) {
-    Mat img = imread(argv[1]);
-    int num_ccs;
-    Mat egbisImage = runEgbisOnMat(&img, 0.5, 500, 200, &num_ccs);
-    return 0;
-}
+//
+//int test_egbis(int argc, char **argv) {
+//    Mat img = imread(argv[1]);
+//    int num_ccs;
+////    Mat egbisImage = runEgbisOnMat(&img, 0.5, 500, 200, &num_ccs);
+//    Mat egbisImage = runEgbisOnMat(&num_ccs,&img);
+//    return 0;
+//}
 
