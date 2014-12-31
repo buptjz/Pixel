@@ -27,8 +27,8 @@ float Params::shape_context_appearance_weight = 0;
 bool Params::shape_context_use_rotation = false;
 
 //shape context compare
-double Params::shape_context_compare_1_thres = 0.1;
-double Params::shape_context_compare_2_thres = 2.0;
+double Params::shape_context_compare_1_thres = 0.15;
+double Params::shape_context_compare_2_thres = 0.15;
 
 int Params::surf_dimensions = 64;
 double Params::surf_min_ratio = 1.0f / 1.5f;
