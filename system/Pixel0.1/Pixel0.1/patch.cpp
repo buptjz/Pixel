@@ -21,10 +21,13 @@ static void refresh_sc_extractor_settings()
 	sc_extractor->setRotationInvariant(Params::shape_context_use_rotation);
 }
 
-static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
+//currentQuery must be gray image with 1 channel. if not , it will be converted into 1 channel
+static vector<Point> simpleContour( Mat& currentQuery, int n = 80 )
 {
     vector<vector<Point> > _contoursQuery;
     vector <Point> contoursQuery;
+	if(currentQuery.channels() > 1)
+		cvtColor(currentQuery,currentQuery,CV_BGR2GRAY,1);
 	cv::findContours(currentQuery.clone(), _contoursQuery, RETR_LIST, CHAIN_APPROX_NONE);
     for (size_t border=0; border<_contoursQuery.size(); border++)
     {
@@ -33,6 +36,9 @@ static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
             contoursQuery.push_back( _contoursQuery[border][p] );
         }
     }
+	vector<Point> cont;
+	if(contoursQuery.size() == 0)
+		return cont;
     // In case actual number of points is less than n
     int dummy=0;
     for (int add=(int)contoursQuery.size()-1; add<n; add++)
@@ -42,7 +48,7 @@ static vector<Point> simpleContour( const Mat& currentQuery, int n = 80 )
 
     // Uniformly sampling
     random_shuffle(contoursQuery.begin(), contoursQuery.end());
-    vector<Point> cont;
+    
     for (int i=0; i<n; i++)
     {
         cont.push_back(contoursQuery[i]);
