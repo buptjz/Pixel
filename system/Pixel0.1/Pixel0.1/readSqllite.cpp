@@ -8,6 +8,7 @@
 #include <cv.h>
 #include<highgui.h>
 #include<iostream>
+#include "tools.h"
 using namespace cv;
 
 OriginalImage* readOriginalImage(const string &originalImageId)
@@ -86,10 +87,12 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	string binaryImagePatchBuffer;
 	string originalImagePatchBuffer;
 	string featuresStr;
+	string imagePatchIdList;
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
 	map<string, string> features;
+	vector<string> patchIdList;
 
 	string sql = "select * from superImagePatch where superImagePatchId = '" + superImagePatchId + "'";
 	//执行查询
@@ -106,6 +109,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
 			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
 			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
+			imagePatchIdList = ((char*)sqlite3_column_text(pstmt, 4));
 		}
 	}
 	else
@@ -116,9 +120,11 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
 	jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
 	jsonString2Map(featuresStr, features);
+	string pattern = ",";
+	patchIdList = split(imagePatchIdList, pattern);
 	sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
 	sip->setFeatures(features);
-
+	sip->setPatchIdList(patchIdList);
 	return sip;
 }
 
@@ -134,10 +140,12 @@ vector<Patch*> readAllSuperImagePatches()
 	string binaryImagePatchBuffer;
 	string originalImagePatchBuffer;
 	string featuresStr;
+	string imagePatchIdList;
 
 	Mat *binaryImagePatch = new Mat;
 	Mat *originalImagePatch = new Mat;
 	map<string, string> features;
+	vector<string> patchIdList;
 
 	string sql = "select * from superImagePatch";
 	//执行查询
@@ -154,12 +162,16 @@ vector<Patch*> readAllSuperImagePatches()
 			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
 			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
 			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
+			imagePatchIdList = ((char*)sqlite3_column_text(pstmt, 4));
 
 			jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
 			jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
 			jsonString2Map(featuresStr, features);
+			string pattern = ",";
+			patchIdList = split(imagePatchIdList, pattern);
 			sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
 			sip->setFeatures(features);
+			sip->setPatchIdList(patchIdList);
 			images.push_back(sip);
 		}
 	}

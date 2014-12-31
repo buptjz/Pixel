@@ -26,16 +26,24 @@ void SuperImagePatch::savePatch() const{
 	string featuresStr;
     map<string, string> tmp = getFeatures();
 	map2JsonString(tmp, featuresStr);
+	//子图元id列表，用“,”分隔
+	string imagePatchIdList;
+	vector<string> patchIdList = getPatchIdList();
+	for (int i = 0; i < patchList.size(); i++)
+	{
+		imagePatchIdList = "" + patchIdList[i] + ",";
+	}
 	str_sql << "insert into superImagePatch values(";
 	str_sql << "'"<<superImagePatchIdStr <<"'"<<  "," << "?" << "," << "?" << "," << "?";
-	str_sql << ");";
+	str_sql << ","<<"?"<<");";
 	std::string str = str_sql.str();
 	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
 	//int result = sqlite3_prepare(SQLiteHelper::getSqlite3(), str.c_str(), -1, &stat, 0);  //预编译
 	int result = sqlite3_prepare(SQLiteHelper::sqlite_db_, str.c_str(), -1, &stat, 0);
 	result = sqlite3_bind_blob(stat, 1, binarySuperImagePatchBuffer.c_str(), binarySuperImagePatchBuffer.size(), NULL);   //绑定blob类型
 	result = sqlite3_bind_blob(stat, 2, originalSuperImagePatchBuffer.c_str(), originalSuperImagePatchBuffer.size(), NULL);   //绑定blob类型
-	result = sqlite3_bind_text(stat, 3, featuresStr.c_str(), -1, NULL);           //绑定表的第一个字段，这里为text类型
+	result = sqlite3_bind_text(stat, 3, featuresStr.c_str(), -1, NULL);           //绑定text类型
+	result = sqlite3_bind_text(stat, 4, imagePatchIdList.c_str(), -1, NULL);           //绑定text类型
 	result = sqlite3_step(stat);                              //执行sql语句，这样就把数据存到数据库里了
 	if (result != SQLITE_DONE)
 	{

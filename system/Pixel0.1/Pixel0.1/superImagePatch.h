@@ -45,7 +45,7 @@ public:
 		}
 		return patchList;
 	}
-	vector<string> getPatchIdList() { return patchIdList; }
+	vector<string> getPatchIdList() const{ return patchIdList; }
 	/*
 	//两个超图元进行比较，返回表示相似度的一个数(重写方法）
 	double patchCompareWith(Patch *pSuperImagePatch, string featureType);
