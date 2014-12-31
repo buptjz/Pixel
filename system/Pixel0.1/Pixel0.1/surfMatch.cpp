@@ -100,6 +100,7 @@ void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
 
 /*
  Return matching score by surf algorithm with two descriptors' vectors
+ matching score is s, 0 <= s <=1, s = number of matching / number of desp1
  */
 double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
     BFMatcher matcher;//Can also try FlannBasedMatcher
@@ -119,10 +120,9 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
             matches.push_back(bestMatch);
     }
     
-//    if(!matches.size())
-//        cout<<"matches is empty! "<<endl;
+    int desp1_len = desp1.rows;
 
-    return double(matches.size());
+    return matches.size() / (double)desp1_len;
 }
 
 /*
