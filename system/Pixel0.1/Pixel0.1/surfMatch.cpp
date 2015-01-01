@@ -150,7 +150,7 @@ double surf_match_score_with_mat(const Mat &img1,const Mat &img2){
 }
 
 void test_surf_match_func(){
-    string root = "/Volumes/BigData/Pixel/data/transformed_imgs/all/";
+    string root = "C:/Users/catking/Documents/images_data/data/all/";
     vector<string> img_names = {"a.jpg",
         "a_rot_180.jpg",
         "a_rot_270.jpg",
