@@ -34,5 +34,5 @@ int Params::surf_dimensions = 64;
 double Params::surf_min_ratio = 1.0f / 1.5f;
 
 
-string  Params::featureType = "SIFT";//featureType used 
-size_t Params::top_k = 10;//return the top_k simplar superImagePatches
+string  Params::featureType = SHAPE_CONTEXT;//featureType used 
+size_t Params::top_k = 5;//return the top_k simplar superImagePatches
