@@ -29,10 +29,14 @@ int main(int agrc, char **agrv){
 
     vector<ImagePatch*> all_patch;
     string root = "/Volumes/BigData/Pixel/data/ordered/";
-    Mat img = imread(root+"demo2.png");
+    Mat ori = imread(root+"demo.jpg",CV_LOAD_IMAGE_COLOR);
+    cout << ori.channels() << endl;
+    cout << ori.depth() << endl;
+    cout << ori.elemSize() << endl;
+//    cvtColor(ori, img, );
     int number = 0;
-    Mat cimg_seged = runEgbisOnMat(&number,&img);
-    cout << cimg_seged;
+    Mat cimg_seged = runEgbisOnMat(&number,&ori);
+//    cout << cimg_seged;
     tool_show_mat(cimg_seged, "segment");
 //    
 //    for (int i = 1; i < 4; i++) {
