@@ -33,7 +33,12 @@ int main(int agrc, char **agrv){
     tool_print_mat_info(ori);
 //    cvtColor(ori, img, );
     int number = 0;
-    Mat cimg_seged = runEgbisOnMat(&number,&ori);
+    
+    float sigma=0.5;
+    float k=2000;
+    int min_size=20;
+    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
+    
 //    cout << cimg_seged;
     tool_show_mat(cimg_seged, "segment");
 //    

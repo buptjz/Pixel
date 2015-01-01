@@ -16,33 +16,35 @@ using namespace std;
  OpenCV C++ Wrapper using the Mat class
  */
 image<rgb>* convertMatToNativeImage(Mat *input){
-    int w = input->cols;
-    int h = input->rows;
+    int w = input->cols;//width
+    int h = input->rows;//height
     image<rgb> *im = new image<rgb>(w,h);
 
-    for(int i=0; i<input->rows; i++)
-    {
-        for(int j=0; j<input->cols; j++)
-        {
+    for(int i = 0; i < h; i++){
+        for(int j = 0; j < w; j++){
             rgb curr;
             Vec3b intensity = input->at<Vec3b>(i,j);
             curr.b = intensity.val[0];
             curr.g = intensity.val[1];
             curr.r = intensity.val[2];
-            im->data[i+j*w] = curr;
+//            cout<< i+j*w << " ";
+            im->data[j+i*w] = curr;
+//            im->data[i * w +j] = curr;
         }
     }
     return im;
 }
+
 
 Mat convertNativeToMat(image<rgb>* input){
     int w = input->width();
     int h = input->height();
     Mat output(Size(w,h),CV_8UC3);
 
-    for(int i =0; i<w; i++){
-        for(int j=0; j<h; j++){
-            rgb curr = input->data[i+j*w];
+    for(int i = 0; i < h; i++){
+        for(int j = 0; j < w; j++){
+            rgb curr = input->data[j+i*w];
+//            rgb curr = input->data[i * w +j];
             output.at<Vec3b>(i,j)[0] = curr.b;
             output.at<Vec3b>(i,j)[1] = curr.g;
             output.at<Vec3b>(i,j)[2] = curr.r;
