@@ -17,7 +17,7 @@
 using namespace cv;
 using namespace std;
 
-Mat egbis_segment_image(image<rgb> *im,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
+Mat egbis_segment_image(image<rgb> *im,Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
 
 /*
  * Segment an image
@@ -30,6 +30,6 @@ Mat egbis_segment_image(image<rgb> *im,int *num_ccs, float sigma=0.5, float c=50
  * min_size: minimum component size (enforced by post-processing stage).
  * num_ccs: number of connected components in the segmentation.
  */
-Mat egbis_segment_image(const Mat &m,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
+Mat egbis_segment_image(const Mat &m, Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
 
 #endif /* defined(__Xcode_Pixel_Proj__jz_segment_image__) */

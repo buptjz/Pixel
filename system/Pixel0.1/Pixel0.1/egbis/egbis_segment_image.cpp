@@ -13,6 +13,17 @@
 #include "filter.h"
 #include "segment-graph.h"
 #include "image_convert.h"
+#include "tools.h"
+
+// random color
+rgb random_rgb(){
+    rgb c;
+    c.r = (uchar)random();
+    c.g = (uchar)random();
+    c.b = (uchar)random();
+    return c;
+}
+
 
 // dissimilarity measure between pixels
 static inline float diff(image<float> *r, image<float> *g, image<float> *b,
@@ -22,9 +33,9 @@ static inline float diff(image<float> *r, image<float> *g, image<float> *b,
                 square(imRef(b, x1, y1)-imRef(b, x2, y2)));
 }
 
-Mat egbis_segment_image(const Mat &m,int *num_ccs, float sigma, float c, int min_size){
+Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
     image<rgb> *nativeImage = convertMatToNativeImage(&m);
-    Mat retMat = egbis_segment_image(nativeImage, num_ccs,sigma,c,min_size);
+    Mat retMat = egbis_segment_image(nativeImage, retColorMat, num_ccs,sigma,c,min_size);
     delete nativeImage;
     return retMat;
 }
@@ -41,9 +52,10 @@ Mat egbis_segment_image(const Mat &m,int *num_ccs, float sigma, float c, int min
  * num_ccs: number of connected components in the segmentation.
  */
 
-Mat egbis_segment_image(image<rgb> *im,int *num_ccs, float sigma, float c, int min_size){
-    int width = im->width();
-    int height = im->height();
+
+Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
+    int width = im->width();//cols number
+    int height = im->height();//rows number
     
     image<float> *r = new image<float>(width, height);
     image<float> *g = new image<float>(width, height);
@@ -115,13 +127,14 @@ Mat egbis_segment_image(image<rgb> *im,int *num_ccs, float sigma, float c, int m
     delete [] edges;
     *num_ccs = u->num_sets();
     
-    Mat retMat = Mat::zeros(width, height, CV_16UC1);
+    Mat retMat = Mat::zeros(height, width, CV_8UC1);
+    tool_print_mat_info(retMat);
     map<int, int> index_map;
     map<int, int>::iterator it;
     int comp_index,color_index = 0;
     int cur_color;
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (uint y = 0; y < height; y++) {
+        for (uint x = 0; x < width; x++) {
             comp_index = u->find(y * width + x);
             if( index_map.count(comp_index) == 0){
                 cur_color = color_index;
@@ -130,9 +143,27 @@ Mat egbis_segment_image(image<rgb> *im,int *num_ccs, float sigma, float c, int m
                 cur_color = index_map[comp_index];
             }
             //TODO : has Problem here?
-            retMat.at<uint>(y,x) = cur_color;
+//            retMat.at<uint>(y,x) = (uint)cur_color;
+            *(retMat.data + (y * width + x)) = cur_color;
         }
     }
+    
+    /*-----------------For Showing segment result start--------------------*/
+    retColorMat = Mat::zeros(height,width, CV_8UC3);
+    rgb *colors = new rgb[width*height];
+    for (int i = 0; i < width*height; i++)
+        colors[i] = random_rgb();
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int comp = u->find(y * width + x);
+            retColorMat.at<Vec3b>(y,x)[0] = colors[comp].b;
+            retColorMat.at<Vec3b>(y,x)[1] = colors[comp].g;
+            retColorMat.at<Vec3b>(y,x)[2] = colors[comp].r;
+        }
+    }
+    delete [] colors;
+    /*-----------------For Showing segment result end--------------------*/
+    
     delete u;
     return retMat;
 }

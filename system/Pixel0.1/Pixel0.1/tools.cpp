@@ -20,7 +20,10 @@ void tool_print_mat_info(Mat M){
     cout << "[eSize] " << M.elemSize() << endl;
     cout << "[Chann] " << M.channels() << endl;
     cout << "[Depth] " << M.depth() << endl;
+    cout << "[Conti] " << M.isContinuous() << endl;
+    cout << "[lengt] " << M.dataend - M.datastart << endl;
     cout << "------------------------------" << endl;
+
 }
 
 
