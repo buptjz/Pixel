@@ -127,7 +127,7 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
     delete [] edges;
     *num_ccs = u->num_sets();
     
-    Mat retMat = Mat::zeros(height, width, CV_8UC1);
+    Mat retMat = Mat::zeros(height, width, CV_16UC1);
     tool_print_mat_info(retMat);
     map<int, int> index_map;
     map<int, int>::iterator it;
@@ -143,8 +143,8 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
                 cur_color = index_map[comp_index];
             }
             //TODO : has Problem here?
-//            retMat.at<uint>(y,x) = (uint)cur_color;
-            *(retMat.data + (y * width + x)) = cur_color;
+            retMat.at<unsigned short>(y,x) = cur_color;
+//            *(retMat.data + (y * width + x)) = cur_color;
         }
     }
     
