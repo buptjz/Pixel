@@ -20,7 +20,8 @@
 #include <iostream>
 #include "surfMatch.h"
 #include "jsonHelper.h"
-#include "egbis_wrapper.h"
+#include "egbis_segment_image.h"
+
 using namespace std;
 using namespace cv;
 
@@ -35,13 +36,14 @@ int main(int agrc, char **agrv){
     int number = 0;
     
     float sigma=0.5;
-    float k=2000;
+    float k = 10000;
     int min_size=20;
-    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
-    
-//    cout << cimg_seged;
+//    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
+    Mat cimg_seged = egbis_segment_image(ori,&number, sigma,k,min_size);
+    cout << "Find " << number << " segments" << endl;
+    cout << cimg_seged;
     tool_show_mat(cimg_seged, "segment");
-//    
+//
 //    for (int i = 1; i < 4; i++) {
 //        string c_image_name = root + to_string(i) + "cc.jpg ";
 //        string b_image_name = root + to_string(i) + ".jpg";
