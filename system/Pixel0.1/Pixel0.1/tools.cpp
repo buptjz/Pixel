@@ -9,7 +9,20 @@
 
 #include "tools.h"
 #include "params.h"
+#include <time.h>
 #include <ctime>
+
+//cout Mat info
+void tool_print_mat_info(Mat M){
+    cout << "---------- Mat Info ----------" << endl;
+    cout << "[Cols ] " << M.cols << endl;
+    cout << "[Rows ] " << M.rows << endl;
+    cout << "[eSize] " << M.elemSize() << endl;
+    cout << "[Chann] " << M.channels() << endl;
+    cout << "[Depth] " << M.depth() << endl;
+    cout << "------------------------------" << endl;
+}
+
 
 void tool_show_patch(Patch *image, string name){
     cv::namedWindow(name);

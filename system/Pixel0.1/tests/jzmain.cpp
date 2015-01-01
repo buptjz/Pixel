@@ -30,9 +30,7 @@ int main(int agrc, char **agrv){
     vector<ImagePatch*> all_patch;
     string root = "/Volumes/BigData/Pixel/data/ordered/";
     Mat ori = imread(root+"demo.jpg",CV_LOAD_IMAGE_COLOR);
-    cout << ori.channels() << endl;
-    cout << ori.depth() << endl;
-    cout << ori.elemSize() << endl;
+    tool_print_mat_info(ori);
 //    cvtColor(ori, img, );
     int number = 0;
     Mat cimg_seged = runEgbisOnMat(&number,&ori);
