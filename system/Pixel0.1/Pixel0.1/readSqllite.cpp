@@ -142,8 +142,6 @@ vector<Patch*> readAllSuperImagePatches()
 	string featuresStr;
 	string imagePatchIdList;
 
-	Mat *binaryImagePatch = new Mat;
-	Mat *originalImagePatch = new Mat;
 	map<string, string> features;
 	vector<string> patchIdList;
 
@@ -163,6 +161,9 @@ vector<Patch*> readAllSuperImagePatches()
 			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
 			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
 			imagePatchIdList = ((char*)sqlite3_column_text(pstmt, 4));
+
+			Mat *binaryImagePatch = new Mat;
+			Mat *originalImagePatch = new Mat;
 
 			jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
 			jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);

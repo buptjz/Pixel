@@ -71,7 +71,7 @@ std::vector<std::string> split(std::string str, std::string pattern)
 {
 	std::string::size_type pos;
 	std::vector<std::string> result;
-	str += pattern;//扩展字符串以方便操作
+	//str += pattern;//扩展字符串以方便操作
 	int size = str.size();
 
 	for (int i = 0; i<size; i++)
@@ -100,7 +100,7 @@ void drawPatch(Mat& image, const Rect &position)
 	//rectangle(image, Point(x, y), Point(x + height, y + width), Scalar(0, 255, 255), 1, 8);
 	rectangle(image, Point(x, y), Point(x+ width, y + height), Scalar(0, 0, 255), 1, 8);
 	namedWindow("image", WINDOW_KEEPRATIO);
-	
 	imshow("image", image);
+
 	waitKey(0);
 }
