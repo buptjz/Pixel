@@ -37,6 +37,10 @@ public:
     //surf
     static int surf_dimensions;
     static double surf_min_ratio;
+
+
+	static string  featureType;//featureType used 
+	static size_t top_k;//return the top_k simplar superImagePatches
 };
 
 

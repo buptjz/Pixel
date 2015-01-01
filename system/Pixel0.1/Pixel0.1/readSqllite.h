@@ -5,4 +5,6 @@
 OriginalImage* readOriginalImage(const string &originalImageId);
 ImagePatch* readImagePatch(string imagePatchId);
 SuperImagePatch* readSuperImagePatch(string superImagePatchId);
+vector<Patch*> readAllSuperImagePatches();
+int updateImagePatchTable(SuperImagePatch & sip);
 #endif

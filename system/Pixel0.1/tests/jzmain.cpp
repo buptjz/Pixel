@@ -20,28 +20,29 @@
 #include <iostream>
 #include "surfMatch.h"
 #include "jsonHelper.h"
-
+#include "egbis_wrapper.h"
 using namespace std;
 using namespace cv;
 
 int main(int agrc, char **agrv){
-    test_surf_match_func();
-    
-//    SuperImagePatch sip;
-//    giveVGeAPatch("/Volumes/BigData/Pixel/data/ordered/2.jpg",sip);
+//    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;
     string root = "/Volumes/BigData/Pixel/data/ordered/";
-    
+    Mat ori = imread(root+"demo.jpg",CV_LOAD_IMAGE_COLOR);
+    tool_print_mat_info(ori);
+//    cvtColor(ori, img, );
+    int number = 0;
+    Mat cimg_seged = runEgbisOnMat(&number,&ori);
+//    cout << cimg_seged;
+    tool_show_mat(cimg_seged, "segment");
+//    
 //    for (int i = 1; i < 4; i++) {
-//        string c_image_name = root + to_string(i) + "c.jpg ";
+//        string c_image_name = root + to_string(i) + "cc.jpg ";
 //        string b_image_name = root + to_string(i) + ".jpg";
-//        Mat cimg = imread(c_image_name,CV_8UC3);//32-bit RGB image
-//        Mat bimg = imread(b_image_name,CV_LOAD_IMAGE_COLOR);//8-bit Black-White image
-////        Mat bimg;
-////        cimg.convertTo(bimg, CV_8UC3);
+//        Mat cimg = imread(c_image_name);
+//        Mat bimg = imread(b_image_name);
 //        
-////        Mat aaa;
 ////        generate_surf_descriptors(cimg,aaa);
 ////        cout<<surf_match_score_with_mat(cimg,bimg)<<endl;
 //    

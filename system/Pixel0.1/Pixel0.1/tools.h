@@ -9,13 +9,13 @@
 #ifndef __Xcode_Pixel_Proj__tools__
 #define __Xcode_Pixel_Proj__tools__
 
-#include <stdio.h>
-#include <highgui.h>
 #include <opencv.hpp>
 #include <string>
 #include <time.h>
-
 #include "patch.h"
+
+//cout Mat info
+void tool_print_mat_info(Mat);
 
 //show patch tool function
 void tool_show_patch(Patch *image, string name);
@@ -41,4 +41,6 @@ Mat imread_and_preprocess(const string& filename);
 //split string
 std::vector<std::string> split(std::string str, std::string pattern);
 
+//draw patch in originalImage
+void drawPatch(Mat& image, const Rect &position);
 #endif /* defined(__Xcode_Pixel_Proj__tools__) */

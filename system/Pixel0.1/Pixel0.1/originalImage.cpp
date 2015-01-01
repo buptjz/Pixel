@@ -1,6 +1,7 @@
 #include"originalImage.h"
 #include "sqlliteHelper.h"
 #include "params.h"
+#include "tools.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
@@ -149,6 +150,7 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	//
 	vector<ImagePatch*> result;
 	ImagePatch * imgPatch;
+	string name = "image patch";//window name for show
 	for (int index = 1; index <= coupreImgnt; ++index)
 	{
 		Rect * rect = rects.at(index - 1);
@@ -160,6 +162,15 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		ss >> str;
 		string id = originalImageId + "_imagePatch_" + str;
 		Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
+		Mat mask =( (*regImage)(*rect) == index);
+		//Mat *oip = new Mat(*bip);
+		*oip & mask;
+		//tool_show_mat(*oip, "ImagePatch"); 
+		/*
+		cv::namedWindow(name);
+		cv::imshow(name, *oip);
+		waitKey(1000); 
+		*/
 		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
 		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
 		//std::cout<< "bip channels:" << bip->channels();
@@ -168,6 +179,8 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
 		result.push_back(imgPatch);
 	}
+	//cv::destroyAllWindows();
+
 	for (vector<Rect *>::iterator it = rects.begin(); it != rects.end(); ++it)
 		delete *it;
 	return result;
