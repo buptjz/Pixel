@@ -29,24 +29,29 @@ int main(int agrc, char **agrv){
 //    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;
-    string root = "/Volumes/BigData/Pixel/data/ordered/";
-    string image = "man_made.jpg";
-//    string image = "demo.jpg";
+    string root = "/Volumes/BigData/Pixel/data/pure/";
+//    string image = "1/3.TIF";//4000
+//    string image = "1/2.TIF";//3000
+//    string image = "1/1.TIF";//2000
+//    string image = "2/3.jpg";//2000
+//    string image = "2/1.jpg";//2000
+    string image = "2/2.jpg";//500
+//    string image = "3/3.jpg";//2000
     Mat ori = imread(root+image,CV_LOAD_IMAGE_COLOR);
-    tool_print_mat_info(ori);
+//    tool_print_mat_info(ori);
 //    cvtColor(ori, img, );
     int number = 0;
     
     float sigma=0.5;
-    float k = 100;
-    int min_size=20;
+    float k = 500;
+    int min_size=200;
 //    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
     Mat color_seged;
     Mat cimg_seged = egbis_segment_image(ori,color_seged,&number, sigma,k,min_size);
     cout << "Find " << number << " segments" << endl;
     tool_show_mat(color_seged, "segment");
-    tool_print_mat_info(color_seged);
-    tool_show_mat(cimg_seged, "seged");
+//    tool_print_mat_info(color_seged);
+//    tool_show_mat(cimg_seged, "seged");
 //    cout << cimg_seged << endl;
 //
 //    for (int i = 1; i < 4; i++) {
