@@ -19,11 +19,11 @@ int Params::grey_image_channels = 1;
 int Params::connect_map_type = CV_16UC1;
 
 //segment
-int Params::patch_pixal_least = 100;
-
+int Params::patch_pixal_least = 300;
 //params for match
 int Params::shape_context_sample_point_num = 100;
 float Params::shape_context_bending_weight = 0;
+
 float Params::shape_context_match_weight = 1;
 float Params::shape_context_appearance_weight = 0;
 bool Params::shape_context_use_rotation = false;

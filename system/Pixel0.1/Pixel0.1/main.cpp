@@ -13,6 +13,7 @@
 #include<io.h>
 #include "readSqllite.h"
 #include "tools.h"
+#include "surfMatch.h"
 using namespace std;
 using namespace cv;
 
@@ -20,6 +21,7 @@ using namespace cv;
 //vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
 
 int main(int agrc, char **agrv){
+	/*
 	fstream _file;
 	_file.open("Pixel.db3", ios::in);
 	if (!_file)
@@ -30,7 +32,7 @@ int main(int agrc, char **agrv){
 		vector<const char*> tables;
 		tables.push_back("originalImage(originalImageId varchar, path varchar)");
 		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
-		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
+		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text, imagePatchIdList text)");
 		res = SQLiteHelper::CreateTables(tables);
 	}
 	else
@@ -39,30 +41,11 @@ int main(int agrc, char **agrv){
 		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 	}
 
-	/*//基本测试用例
-	//函数cvLoadImage()的第1 个参数是图像文件的路径. 第2 个参数是读取图像的方式:-1 表示按照图像本身的类型来读取,1 表示强制彩色化,0 表示强制灰值化.
-	IplImage* image = cvLoadImage("D:\\demo.jpg", -1);
-	if (image == NULL)
-	{
-	cout << "无法读取图像数据!" << endl;
-	return -1;
-	}
-	//该函数的功能是按照指定方式创建一个窗口,用于显示图像。第1 个参数是窗口的名称,自己可以任意设置，第2 个参数表示窗口的大小会自动根据图像尺寸而变化
-	cvNamedWindow("图像显示", CV_WINDOW_AUTOSIZE);
-	//该函数的功能是在指定的窗口上显示图像。第1 个参数是显示图像窗口的名称,第2 个参数是要显示的图像
-	cvShowImage("图像显示", image);
-	//该函数的功能是将图像另存为，第1 个参数是保存的路径,自己可以设置其它路径;第2 个参数是要保存的图像
-	cvSaveImage("D:\\saveImage.jpg", image);
-	cvWaitKey(0);//一直等待按键没有这句的话图像不能正常显示
-	cvReleaseImage(&image);//释放图像内存
-	cvDestroyWindow("图像显示");//销毁窗口资源
-	*/
 
-	/*
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path;//图像文件路径
-	string fileName = "colorimage";//放原图片的文件夹名
-	string fileAddress = "C:/Users/catking/Documents/images_data/data/" + fileName;//文件夹路径
+	string fileName = "all";//放原图片的文件夹名
+	string fileAddress = "C:/Users/xzw/Desktop/" + fileName;//文件夹路径
 	//string fileName = "TestImage";//放原图片的文件夹名
 	//string fileAddress = "D:/" + fileName;//文件夹路径
 
@@ -126,8 +109,8 @@ int main(int agrc, char **agrv){
 		//
 		itor++;
 	}
-	
 	*/
+	/*
 	SuperImagePatch sip;
 	giveVGeAPatch("D:/TestImage/demoLittle.jpg",sip);
    // giveVGeAPatch("/Users/wangjz/Desktop",sip);
@@ -136,6 +119,10 @@ int main(int agrc, char **agrv){
 
 	SuperImagePatch *psip = readSuperImagePatch(superImageId);
 	tool_show_mat(*(psip->getOriginalImagePatch()), "sip");
+	*/
+
+test_surf_match_func();
+	
 	return 0;
 }
 

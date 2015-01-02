@@ -20,7 +20,8 @@
 #include <iostream>
 #include "surfMatch.h"
 #include "jsonHelper.h"
-#include "egbis_wrapper.h"
+#include "egbis_segment_image.h"
+
 using namespace std;
 using namespace cv;
 
@@ -29,14 +30,25 @@ int main(int agrc, char **agrv){
 
     vector<ImagePatch*> all_patch;
     string root = "/Volumes/BigData/Pixel/data/ordered/";
-    Mat ori = imread(root+"demo.jpg",CV_LOAD_IMAGE_COLOR);
+    string image = "man_made.jpg";
+//    string image = "demo.jpg";
+    Mat ori = imread(root+image,CV_LOAD_IMAGE_COLOR);
     tool_print_mat_info(ori);
 //    cvtColor(ori, img, );
     int number = 0;
-    Mat cimg_seged = runEgbisOnMat(&number,&ori);
-//    cout << cimg_seged;
-    tool_show_mat(cimg_seged, "segment");
-//    
+    
+    float sigma=0.5;
+    float k = 100;
+    int min_size=20;
+//    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
+    Mat color_seged;
+    Mat cimg_seged = egbis_segment_image(ori,color_seged,&number, sigma,k,min_size);
+    cout << "Find " << number << " segments" << endl;
+    tool_show_mat(color_seged, "segment");
+    tool_print_mat_info(color_seged);
+    tool_show_mat(cimg_seged, "seged");
+//    cout << cimg_seged << endl;
+//
 //    for (int i = 1; i < 4; i++) {
 //        string c_image_name = root + to_string(i) + "cc.jpg ";
 //        string b_image_name = root + to_string(i) + ".jpg";

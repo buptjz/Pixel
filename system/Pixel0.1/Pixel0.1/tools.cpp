@@ -20,7 +20,10 @@ void tool_print_mat_info(Mat M){
     cout << "[eSize] " << M.elemSize() << endl;
     cout << "[Chann] " << M.channels() << endl;
     cout << "[Depth] " << M.depth() << endl;
+    cout << "[Conti] " << M.isContinuous() << endl;
+    cout << "[lengt] " << M.dataend - M.datastart << endl;
     cout << "------------------------------" << endl;
+
 }
 
 
@@ -68,7 +71,7 @@ std::vector<std::string> split(std::string str, std::string pattern)
 {
 	std::string::size_type pos;
 	std::vector<std::string> result;
-	str += pattern;//扩展字符串以方便操作
+	//str += pattern;//扩展字符串以方便操作
 	int size = str.size();
 
 	for (int i = 0; i<size; i++)
@@ -95,9 +98,9 @@ void drawPatch(Mat& image, const Rect &position)
 	int width = position.width;
 
 	//rectangle(image, Point(x, y), Point(x + height, y + width), Scalar(0, 255, 255), 1, 8);
-	rectangle(image, Point(x, y), Point(x+ width, y + height), Scalar(0, 0, 255), 1, 8);
+	rectangle(image, Point(x, y), Point(x+ width, y + height), Scalar(0, 0, 255), 3, 8);
 	namedWindow("image", WINDOW_KEEPRATIO);
-	
 	imshow("image", image);
+
 	waitKey(0);
 }

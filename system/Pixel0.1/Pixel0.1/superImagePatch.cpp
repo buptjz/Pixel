@@ -27,11 +27,11 @@ void SuperImagePatch::savePatch() const{
     map<string, string> tmp = getFeatures();
 	map2JsonString(tmp, featuresStr);
 	//子图元id列表，用“,”分隔
-	string imagePatchIdList;
+	string imagePatchIdList = "";
 	vector<string> patchIdList = getPatchIdList();
-	for (int i = 0; i < patchList.size(); i++)
+	for (int i = 0; i < patchIdList.size(); i++)
 	{
-		imagePatchIdList = "" + patchIdList[i] + ",";
+		imagePatchIdList = imagePatchIdList + patchIdList[i] + ",";
 	}
 	str_sql << "insert into superImagePatch values(";
 	str_sql << "'"<<superImagePatchIdStr <<"'"<<  "," << "?" << "," << "?" << "," << "?";
