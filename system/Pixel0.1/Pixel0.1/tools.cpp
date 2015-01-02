@@ -98,7 +98,7 @@ void drawPatch(Mat& image, const Rect &position)
 	int width = position.width;
 
 	//rectangle(image, Point(x, y), Point(x + height, y + width), Scalar(0, 255, 255), 1, 8);
-	rectangle(image, Point(x, y), Point(x+ width, y + height), Scalar(0, 0, 255), 1, 8);
+	rectangle(image, Point(x, y), Point(x+ width, y + height), Scalar(0, 0, 255), 3, 8);
 	namedWindow("image", WINDOW_KEEPRATIO);
 	imshow("image", image);
 
