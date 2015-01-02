@@ -12,10 +12,20 @@ static void find_nearest(vector<double> &scores, double *score,int *index){
     *score = scores[0];
     *index = 0;
     for(int i = 1; i < (int)scores.size(); i++){
-        if (scores[i] < *score){
-            *score = scores[i];
-            *index = i;
-        }
+		if (Params::featureType == Params::SHAPE_CONTEXT)
+		{
+			if (scores[i] < *score){
+				*score = scores[i];
+				*index = i;
+			}
+		}
+		else if (Params::featureType == Params::SURF)
+		{
+			if (scores[i] > *score){
+				*score = scores[i];
+				*index = i;
+			}
+		}
     }
 }
 
@@ -52,6 +62,35 @@ static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
 }
 
 /*
+decide if two patches should be merged
+*/
+bool should_merge1(double val)
+{
+	if (Params::featureType == Params::SHAPE_CONTEXT)
+	{
+		return val < Params::shape_context_compare_1_thres;
+		
+	}
+	else if (Params::featureType == Params::SURF)
+	{
+		return val > Params::surf_compare_1_thres;
+	}
+}
+
+bool should_merge2(double val)
+{
+	if (Params::featureType == Params::SHAPE_CONTEXT)
+	{
+		return val < Params::shape_context_compare_2_thres;
+
+	}
+	else if (Params::featureType == Params::SURF)
+	{
+		return val > Params::surf_compare_2_thres;
+	}
+}
+
+/*
  Strategy [1]: 1 to many
  */
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
@@ -73,12 +112,13 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         cout<<"[Patch="<<one_patch->getImagePatchId()<<"] start searching same"<<endl;
         //convert first ,use second
         vector<Patch *> base_patch_vec = convert_verctor<Patch,SuperImagePatch>(supers);
-        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, Params::SHAPE_CONTEXT);
+        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, Params::featureType);
         
         find_nearest(scores, &nearest_score, &nearest_index);
         cout<<"nearest_score = "<<nearest_score;
         //(1) has similar 'SP', insert 'P' to 'SP'
-        if (nearest_score <= Params::shape_context_compare_1_thres) {
+		
+        if (should_merge1(nearest_score)) {
             cout<<",merge! "<<endl;
             cout<<"The same SuperPatch= "<<supers[nearest_index]->getSuperImagePatchId()<<endl;
             
@@ -113,10 +153,10 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         ImagePatch *one_patch = patch_vec[i];
         for (size_t j = 0; j < result.size(); j++) {
             SuperImagePatch *tmp_sp = result[j];
-            double score = one_patch->patchCompareWith(tmp_sp, Params::SHAPE_CONTEXT);
+            double score = one_patch->patchCompareWith(tmp_sp, Params::featureType);
             // (1) has similar 'SP', insert
             cout<<score<<endl;
-            if(score <= Params::shape_context_compare_1_thres){
+            if(should_merge1(score)){
                 //set pointer
                 vector<Patch *> patch_vec = tmp_sp->getPatchList();
                 patch_vec.push_back(one_patch);
@@ -190,12 +230,12 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         cout<<"----------------------------->"<<endl;
         cout<<"[SuperPatch="<<candi_sp->getSuperImagePatchId()<<"] start [Filtering]"<<endl;
         vector<Patch *> base = convert_verctor<Patch,SuperImagePatch>(final_sps);
-        vector<double> scores = candi_sp->patchCompareWith(base, Params::SHAPE_CONTEXT);
+        vector<double> scores = candi_sp->patchCompareWith(base, Params::featureType);
 
         find_nearest(scores, &nearest_score, &nearest_index);
         //(1) has similar 'SP', merge two 'SP's
         cout<<"nearest_score = "<<nearest_score<<endl;
-        if (nearest_score <= Params::shape_context_compare_2_thres) {
+        if (should_merge2(nearest_score)) {
             //set pointers
             cout<<"Merge ! Same SuperImagePatch = " <<final_sps[nearest_index]->getSuperImagePatchId()<<endl;
             vector<Patch *>v1 = final_sps[nearest_index]->getPatchList();

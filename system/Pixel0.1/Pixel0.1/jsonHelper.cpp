@@ -118,6 +118,11 @@ int mat2jsonString(const Mat&  M, string &jsonString)
 //json×Ö·û´®ÐòÁÐ»¯ÎªMat
 int jsonString2Mat(const string &jsonString, Mat& M)
 {
+	if (jsonString.empty())
+	{
+		M = Mat();
+		return 0;
+	}
 	try
 	{
 		bool bRet = false;

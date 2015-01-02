@@ -12,12 +12,14 @@ public:
 	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
+	static const string SURF;
 	
 	//params for images
 	static int color_image_type;
 	static int color_image_channels;
 	static int grey_image_type;
 	static int grey_image_channels;
+	static int connect_map_type;
 
 	//params for segment
 	static int patch_pixal_least;
@@ -28,11 +30,14 @@ public:
 	static float shape_context_match_weight;
 	static float shape_context_appearance_weight;
 	static bool shape_context_use_rotation;
+	static int surf_descriptor_min;
     
     //shape context compare
     //similar score <= this threshold will be regarded as the same images
     static double shape_context_compare_1_thres;
     static double shape_context_compare_2_thres;
+	static double surf_compare_1_thres;
+	static double surf_compare_2_thres;
     
     //surf
     static int surf_dimensions;

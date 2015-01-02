@@ -54,6 +54,7 @@ public:
 		originalImagePatch = oip; 
 	}
 	void setFeatures(map<string, string > f){ features = f; }
+	void addFeature(pair<string, string> f){ features.insert(f); }
 	Mat* getBinaryImagePatch() const { return binaryImagePatch; }
 	Mat* getOriginalImagePatch() const { return originalImagePatch; }
 	map<string, string > getFeatures() const { return features; }

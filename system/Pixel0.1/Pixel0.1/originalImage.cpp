@@ -136,7 +136,7 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	preImg = prePareImage(preImg, SimplePre);
 	//double low, high;
 	//AdaptiveFindThreshold(medianImg, low, high);
-	Mat t = Mat::zeros(pOImage->size(), Params::grey_image_type);
+	Mat t = Mat::zeros(pOImage->size(), Params::connect_map_type);
 	regImage = &t;
 	//namedWindow("s");
 	//imshow("s", morphImg);

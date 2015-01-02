@@ -7,6 +7,9 @@
 #include <opencv2/highgui.hpp>
 #include <algorithm>
 #include "sqlliteHelper.h"
+#include "surfMatch.h"
+#include "jsonHelper.h"
+#include <map>
 /*和当前图元进行比较
 *输入：待比较的图元，比较时使用的特征种类
 *输出：本图元和待比较的图元的相似度
@@ -74,14 +77,56 @@ static void _compare_sc(Patch *query, const vector<Patch *>& images, vector<doub
 	
 }
 
+static void _compare_surf(Patch *query, const vector<Patch *>& images, vector<double> &ret)
+{
+	ret.clear();
+	map<string, string > query_featuremap = query->getFeatures();
+	Mat query_feature,image_feature;
+	if (query_featuremap.size() == 0 || query_featuremap.count(Params::SURF) == 0)
+	{
+		string feature_str;
+		generate_surf_descriptors(*query->getOriginalImagePatch(),query_feature);
+		if (query_feature.rows < Params::surf_descriptor_min)
+			query_feature = Mat();
+		mat2jsonString(query_feature, feature_str);
+		query->addFeature(make_pair(Params::SURF, feature_str));
+	}
+	else
+	{
+		jsonString2Mat(query_featuremap[Params::SURF], query_feature);
+	}
+	for (size_t i = 0; i < images.size(); ++i)
+	{
+		Patch* patch_ptr = images[i];
+		Mat image_feature;
+		map<string, string> image_featuremap = patch_ptr->getFeatures();
+		if (image_featuremap.size() == 0 || image_featuremap.count(Params::SURF) == 0)
+		{
+			string feature_str;
+			generate_surf_descriptors(*patch_ptr->getOriginalImagePatch(), image_feature);
+			if (image_feature.rows < Params::surf_descriptor_min)
+				image_feature = Mat();
+			mat2jsonString(image_feature, feature_str);
+			patch_ptr->addFeature(make_pair(Params::SURF, feature_str));
+		}
+		else
+			jsonString2Mat(image_featuremap[Params::SURF], image_feature);
+		if (image_feature.data == NULL || query_feature.data == NULL)
+			ret.push_back(0);
+		else
+			ret.push_back(surf_match_score_with_descriptor(query_feature, image_feature));
+	}
+}
+
 vector<double> Patch::patchCompareWith(const vector<Patch*> &images, const string featureType)
 {
 	vector<double> ret;
 	if(featureType == Params::SHAPE_CONTEXT)
 		_compare_sc(this,images,ret);
-	else if(featureType == Params::SIFT)
-		_compare_sift(this,images,ret);
-
+	else if (featureType == Params::SIFT)
+		_compare_sift(this, images, ret);
+	else if (featureType == Params::SURF)
+		_compare_surf(this, images, ret);
 	return ret;
 }
 
@@ -96,19 +141,53 @@ double Patch::patchCompareWith(Patch *pPatch, const string featureType)
 		return ret[0];
 }
 
+struct sc_cmp_func 
+{
+	bool operator()(pair<double, Patch*> left, pair<double, Patch*> right)
+	{
+		return left.first > right.first;
+	}
+};
+
+struct surf_cmp_func
+{
+	bool operator()(pair<double, Patch*> left, pair<double, Patch*> right)
+	{
+		return right.first > left.first;
+	}
+};
+
 vector<pair<double,Patch*> > Patch::patchCompareWith(const vector<Patch*>& images, const string featureType, size_t top_k)
 {
 	vector<double> score(patchCompareWith(images,featureType));
-	priority_queue<pair<double, Patch *>, vector<pair<double, Patch*> >, greater<pair<double,Patch*> > > heap;
-	for(size_t i = 0;i < score.size();++i)
+	vector<pair<double, Patch*> > ret;
+
+	if (featureType == Params::SHAPE_CONTEXT)
 	{
-		heap.push(make_pair(score[i],images[i]));
+		priority_queue<pair<double, Patch *>, vector<pair<double, Patch*> >, sc_cmp_func > heap;
+		for (size_t i = 0; i < score.size(); ++i)
+		{
+			heap.push(make_pair(score[i], images[i]));
+		}
+		for (size_t i = 0; i < top_k; ++i)
+		{
+			ret.push_back(heap.top());
+			heap.pop();
+		}
 	}
-	vector<pair<double,Patch*> > ret;
-	for(size_t i = 0;i < top_k; ++i)
+	else if (featureType == Params::SURF)
 	{
-		ret.push_back(heap.top());
-		heap.pop();
+		priority_queue<pair<double, Patch *>, vector<pair<double, Patch*> >, surf_cmp_func > heap;
+		for (size_t i = 0; i < score.size(); ++i)
+		{
+			heap.push(make_pair(score[i], images[i]));
+		}
+		for (size_t i = 0; i < top_k; ++i)
+		{
+			ret.push_back(heap.top());
+			heap.pop();
+		}
 	}
+	
 	return ret;
 }
