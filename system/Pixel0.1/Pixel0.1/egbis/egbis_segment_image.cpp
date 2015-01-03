@@ -33,14 +33,6 @@ Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma,
 
 /*
  * Segment an image
- *
- * Returns a color image representing the segmentation.
- *
- * im: image to segment.
- * sigma: to smooth the image.
- * c: constant for treshold function.
- * min_size: minimum component size (enforced by post-processing stage).
- * num_ccs: number of connected components in the segmentation.
  */
 
 
@@ -119,7 +111,7 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
     *num_ccs = u->num_sets();
     
     Mat retMat = Mat::zeros(height, width, CV_16UC1);
-    tool_print_mat_info(retMat);
+//    tool_print_mat_info(retMat);
     map<int, int> index_map;
     map<int, int>::iterator it;
     int comp_index,color_index = 0;
