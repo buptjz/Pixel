@@ -15,15 +15,6 @@
 #include "image_convert.h"
 #include "tools.h"
 
-// random color
-rgb random_rgb(){
-    rgb c;
-    c.r = (uchar)random();
-    c.g = (uchar)random();
-    c.b = (uchar)random();
-    return c;
-}
-
 
 // dissimilarity measure between pixels
 static inline float diff(image<float> *r, image<float> *g, image<float> *b,

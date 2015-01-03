@@ -13,6 +13,13 @@
 #include <string>
 #include <time.h>
 #include "patch.h"
+#include "misc.h"
+
+//convert connected component to color image (for showing while debug)
+void connected_component2color_image(const Mat &cc, Mat ret_color_image);
+
+//generate random rgb color
+rgb random_rgb();
 
 //cout Mat info
 void tool_print_mat_info(Mat);

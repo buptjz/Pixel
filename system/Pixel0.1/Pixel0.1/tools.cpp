@@ -12,6 +12,16 @@
 #include <time.h>
 #include <ctime>
 
+// random color
+rgb random_rgb(){
+    static RNG rng;
+    rgb c;
+    c.r = (uchar)rng.uniform(0, 255);
+    c.g = (uchar)rng.uniform(0, 255);
+    c.b = (uchar)rng.uniform(0, 255);
+    return c;
+}
+
 //cout Mat info
 void tool_print_mat_info(Mat M){
     cout << "---------- Mat Info ----------" << endl;
