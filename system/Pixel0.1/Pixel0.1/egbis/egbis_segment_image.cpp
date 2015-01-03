@@ -136,7 +136,7 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
             //TODO : has Problem here?No right now!
             // y is row index and x is col index
             //http://stackoverflow.com/questions/22668409/accessing-elements-of-opencv-mat-cv-16uc1
-            retMat.at<unsigned short>(y,x) = cur_color;
+            retMat.at<ushort>(y,x) = cur_color;
 //            *(retMat.data + (y * width + x)) = cur_color;
         }
     }

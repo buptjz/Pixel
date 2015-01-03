@@ -16,7 +16,7 @@
 #include "misc.h"
 
 //convert connected component to color image (for showing while debug)
-void connected_component2color_image(const Mat &cc, Mat ret_color_image);
+void connected_component2color_image(const Mat &cc,const int number_of_component, Mat &ret_color_image);
 
 //generate random rgb color
 rgb random_rgb();

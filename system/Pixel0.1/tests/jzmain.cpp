@@ -42,14 +42,18 @@ int main(int agrc, char **agrv){
 //    cvtColor(ori, img, );
     int number = 0;
     
-    float sigma=0.5;
+    float sigma = 0.5;
     float k = 500;
-    int min_size=200;
+    int min_size = 200;
 //    Mat cimg_seged = runEgbisOnMat(&number,&ori,sigma,k,min_size);
     Mat color_seged;
     Mat cimg_seged = egbis_segment_image(ori,color_seged,&number, sigma,k,min_size);
     cout << "Find " << number << " segments" << endl;
+    Mat color;
+    connected_component2color_image(cimg_seged, number, color);
+    
     tool_show_mat(color_seged, "segment");
+    tool_show_mat(color, "segment2");
 //    tool_print_mat_info(color_seged);
 //    tool_show_mat(cimg_seged, "seged");
 //    cout << cimg_seged << endl;
