@@ -21,10 +21,17 @@ int Params::grey_image_channels = 1;
 int Params::connect_map_type = CV_16UC1;
 
 //segment
+int Params::retry_max = 10;
+float Params::segment_expect_upboard = 5.0;
+float Params::segment_expect_lowboard = 0.3;
+int Params::segment_expect = 0;
+float Params::segment_step = 0.2;
+
 float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
+float Params::morph_min = 0.4;
 float Params::egbis_sigma = 0.5;
-float Params::egbis_c = 500;
+float Params::egbis_c = 5000;
 int Params::egbis_min_size = 20;
 
 //params for match

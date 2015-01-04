@@ -139,26 +139,32 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		preImg = pOImage->clone();
 	else
 		return vector<ImagePatch*>();
-	//double low, high;
-	//AdaptiveFindThreshold(medianImg, low, high);
+
 	Mat t = Mat::zeros(pOImage->size(), Params::connect_map_type);
 	regImage = &t;
-	//namedWindow("s");
-	//imshow("s", morphImg);
-	//waitKey(10);
-	int coupreImgnt;
-	if (Params::segment_type == Params::MORPH_BASIC)
-		coupreImgnt = segAlgorithm(preImg, CannyAndMorphing);
-	else if (Params::segment_type == Params::EGBIS)
-		coupreImgnt = segAlgorithm(preImg, egbis);
-	else
-		return vector<ImagePatch*>();
-	//
-	//vector<vector<Point>> contours;
-	//findContours(preImg, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+	int coupreImgnt = 0;
+	for (int i = 0; i < Params::retry_max; ++i)
+	{
+		if (Params::segment_type == Params::MORPH_BASIC)
+			coupreImgnt = segAlgorithm(preImg, CannyAndMorphing);
+		else if (Params::segment_type == Params::EGBIS)
+			coupreImgnt = segAlgorithm(preImg, egbis);
+		else
+			return vector<ImagePatch*>();
+		if (Params::segment_expect <= 0)
+			break;
+		else if (coupreImgnt < Params::segment_expect_lowboard * Params::segment_expect)
+			param_adaptor(Params::segment_type, false);
+		else if (coupreImgnt > Params::segment_expect_upboard * Params::segment_expect)
+			param_adaptor(Params::segment_type, true);
+		else
+			break;
+	}
+	
+	
 	vector<Rect *> rects;
 	rects = getMetaInfos(rects, coupreImgnt);
-	//
+
 	vector<ImagePatch*> result;
 	ImagePatch * imgPatch;
 	string name = "image patch";//window name for show
@@ -173,9 +179,7 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		ss << index;
 		ss >> str;
 		string id = originalImageId + "_imagePatch_" + str;
-		//Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
 		Mat mask =( (*regImage)(*rect) == index);
-		//Mat *oip = new Mat(*bip);
 		Mat org = Mat(*pOImage, *rect).clone();
 		vector<Mat> masks;
 		for (size_t i = 0; i < org.channels(); ++i)
@@ -183,9 +187,7 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		Mat mask_multichannel;
 		merge(masks, mask_multichannel);
 		Mat *oip = new Mat(org);
-		//tool_show_mat(org, "ImagePatch1");
 		bitwise_and(org, mask_multichannel, *oip);
-		//tool_show_mat(*oip, "ImagePatch2"); 
 		
 		cv::namedWindow(name);
 		cv::imshow(name, *oip);
@@ -193,13 +195,10 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		cv::destroyAllWindows();
 		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
 		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
-		//std::cout<< "bip channels:" << bip->channels();
-		//Mat *oip = new Mat(*bip == index);
-		//Mat *oip = new Mat(*bip);
+
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
 		result.push_back(imgPatch);
 	}
-	//cv::destroyAllWindows();
 
 	for (vector<Rect *>::iterator it = rects.begin(); it != rects.end(); ++it)
 		delete *it;

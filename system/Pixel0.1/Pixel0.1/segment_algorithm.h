@@ -8,6 +8,6 @@ using namespace std;
 Mat & SimplePre(Mat &, Mat &);
 int CannyAndMorphing(Mat &, Mat &);
 int egbis(Mat &, Mat &);
-
+void param_adaptor(string segment_type, bool too_many);
 
 #endif

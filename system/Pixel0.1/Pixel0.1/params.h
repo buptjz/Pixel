@@ -26,8 +26,15 @@ public:
 	static int connect_map_type;
 
 	//params for segment
+	static int retry_max;//if segment failed, the max times algorithm can retry.
+	static float segment_expect_upboard;
+	static float segment_expect_lowboard;
+	static int segment_expect;
+	static float segment_step;
+
 	static float patch_pixel_min;
 	static float patch_pixel_max;
+	static float morph_min;
 	static float egbis_sigma;
 	static float egbis_c;
 	static int egbis_min_size;
@@ -38,7 +45,7 @@ public:
 	static float shape_context_match_weight;
 	static float shape_context_appearance_weight;
 	static bool shape_context_use_rotation;
-	static int surf_descriptor_min;
+	static int surf_descriptor_min; //min number of surf descriptors
     
     //shape context compare
     //similar score <= this threshold will be regarded as the same images
