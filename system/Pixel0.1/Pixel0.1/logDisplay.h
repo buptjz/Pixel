@@ -2,18 +2,19 @@
 #define LOGDISPLAY_H
 #include <string>
 #include <iostream>
+#include <QtCore/QThread>
 
 using namespace std;
 
-class LogDisplay
+class LogDisplay : public QThread
 {
+    Q_OBJECT
 public:
-	LogDisplay(){};
-	~LogDisplay(){};
-	string logQstr;
+    LogDisplay(){};
+    ~LogDisplay(){};
+    QString logQstr;
 public:
-	void logDisplay(string logstr);
-	void sig(string);
+    void logDisplay(string logstr);
+signals:
+    void sig(QString);
 };
-
-#endif
