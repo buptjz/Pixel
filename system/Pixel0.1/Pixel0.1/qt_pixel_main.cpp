@@ -9,6 +9,8 @@
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
 Ui::MainWindow qt_Pixel_Main::ui;
+LogDisplay* logDisplay = new LogDisplay();
+
 qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -49,6 +51,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.MatchType->addItem(QWidget::tr(type3.c_str()));
 
 	//设置connect 槽
+	//receive log messge
+	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
@@ -85,6 +89,12 @@ qt_Pixel_Main::~qt_Pixel_Main()
 	//delete ImagePatch;
 }
 
+//打印日志信息
+void qt_Pixel_Main::on_logDisplay(QString logQstr)
+{
+	qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
+	qt_Pixel_Main::ui.LogDisplay->moveCursor(QTextCursor::End);
+}
 /*打开图像库*/
 void qt_Pixel_Main::on_ImageLibBtn_clicked()
 {
@@ -99,7 +109,7 @@ void qt_Pixel_Main::on_ImageLibBtn_clicked()
 void qt_Pixel_Main::on_Add2ImageLib_clicked()
 {
 	//ui.LogDisplay->setText("many images are training!");
-	logDisplay("images are training ... ... ");
+	logDisplay->logDisplay("images are training ... ... ");
 	imageLibThread = new ImageLibThread(dirPath);
 	imageLibThread->start();
 
@@ -115,7 +125,7 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 	if (fileName != "")
 	{
 		QString logQstr = QString("Load sample image ").append(fileName);
-		logDisplay(logQstr.toStdString());
+		logDisplay->logDisplay(logQstr.toStdString());
 		if (image->load(fileName))
 		{
 			//建立场景

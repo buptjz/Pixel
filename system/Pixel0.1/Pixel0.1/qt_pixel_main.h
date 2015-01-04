@@ -9,6 +9,7 @@
 #include <qtextcodec.h>
 #include "qtThread.h"
 #include "imagePatch.h"
+
 class qt_Pixel_Main : public QMainWindow
 {
 	Q_OBJECT
@@ -22,6 +23,7 @@ public:
 	ImagePatchItemclickedThread* imagePatchItemclickedThread = NULL;
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;
+	
 
 	vector<pair<double, Patch*> >  similarPatches;
 	vector<ImagePatch*> imagePatchList;
@@ -37,6 +39,9 @@ private:
 	//viewerDialog viewerDlg;
 
 	public slots:
+	//display log
+	void on_logDisplay(QString logQstr);
+
 	void on_ImageLibBtn_clicked();  //µã»÷Í¼Ïñ¿â
 	void on_Add2ImageLib_clicked();//add new images to library,  running in the background 
 

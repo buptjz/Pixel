@@ -6,6 +6,8 @@
 #include "readSqllite.h"
 #include "params.h"
 #include "logDisplay.h"
+#include "qt_pixel_main.h"
+extern LogDisplay* logDisplay;
 ImageLibThread::ImageLibThread(QString dirPath) : QThread()
 {
 	this->dirPath = dirPath;
@@ -31,7 +33,7 @@ void ImageLibThread::run()
 		OriginalImage *ori = new OriginalImage(filename, originalImageId);
 		
 		Mat *pImage = new Mat(imread_and_preprocess(filename.c_str()));
-		logDisplay("Segmenting " + filename + "  бнбн");
+		logDisplay->logDisplay("Segmenting " + filename + "... ...");
 		ori->setImage(pImage);
 
 		//save originalImage into database 
@@ -39,24 +41,24 @@ void ImageLibThread::run()
 		//segment OriginalImage object ori into patchs
    		vector<ImagePatch*> patchs = ori->segmentImage();
 
-		logDisplay("Segment " + filename + " finished");
+		logDisplay->logDisplay("Segment " + filename + " finished");
 		for (int i = 0; i < patchs.size(); i++)
 		{
 			patchs[i]->savePatch();
 		}
-		logDisplay(filename + "saved in to database");
-		logDisplay("Removing duplicate image patches in image: " + filename + "  бнбн");
+		logDisplay->logDisplay(filename + "saved in to database");
+		logDisplay->logDisplay("Removing duplicate image patches in image: " + filename + " ... ...");
 		//removeDuplicateImagePatchs  first time, just in one originalImage, return  vector of SuperImagePatch object
  		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
-		logDisplay("Remove duplicate image patches in image: " + filename + " finished");
+		logDisplay->logDisplay("Remove duplicate image patches in image: " + filename + " finished");
 		//save the patchs which has been removed duplicate once, wait for the next time of removing duplicate operation
 		vector<SuperImagePatch*>::iterator  itor = sip.begin();
-		logDisplay("Removing duplicate image patches in all super image patches  бнбн");
+		
 		while (itor != sip.end())
 		{
 			allSuperImagePatchs.push_back(*itor++);
 		}
-		logDisplay("Removing duplicate image patches in all super image patches  finished");
+		
 		//release vector<ImagePatch*> patchs
 		for (int i = 0; i < patchs.size(); i++)
 		{
@@ -68,9 +70,10 @@ void ImageLibThread::run()
 	}
 	_findclose(handle);
 
-
+	logDisplay->logDisplay("Removing duplicate image patches in all super image patches  ... ...");
 	//the second time of duplicate removal, finally obtain the collection of superImagePatch
 	vector<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs);
+	logDisplay->logDisplay("Removing duplicate image patches in all super image patches  finished");
 	//save superImagePatches into the database && update the superImagePatchId of table imagePatch in database
 	vector<SuperImagePatch*>::iterator  itor = fsip.begin();
 	while (itor != fsip.end())
@@ -82,12 +85,12 @@ void ImageLibThread::run()
 		int res = updateImagePatchTable(*sip);
 		if (res == -1)
 		{
-			cout << "error: update the superImagePatchId of table imagePatch in database!" << endl;
+			logDisplay->logDisplay("error: update the superImagePatchId of table imagePatch in database!");
 		}
 		itor++;
 
 	}
-	logDisplay(" All super image patches have saved in to database.");
+	logDisplay->logDisplay(" All super image patches have saved in to database.");
 }
 
 
