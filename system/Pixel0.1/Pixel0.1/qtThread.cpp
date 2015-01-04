@@ -85,12 +85,12 @@ void ImageLibThread::run()
 		int res = updateImagePatchTable(*sip);
 		if (res == -1)
 		{
-			logDisplay->logDisplay("error: update the superImagePatchId of table imagePatch in database!");
+			logDisplay->logDisplay("Error: update the superImagePatchId of table imagePatch in database!");
 		}
 		itor++;
 
 	}
-	logDisplay->logDisplay(" All super image patches have saved in to database.");
+	logDisplay->logDisplay("All super image patches have saved in to database.");
 }
 
 

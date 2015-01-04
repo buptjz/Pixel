@@ -92,7 +92,8 @@ qt_Pixel_Main::~qt_Pixel_Main()
 //打印日志信息
 void qt_Pixel_Main::on_logDisplay(QString logQstr)
 {
-	qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
+	qt_Pixel_Main::ui.LogDisplay->append(logQstr);
+	//qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
 	qt_Pixel_Main::ui.LogDisplay->moveCursor(QTextCursor::End);
 }
 /*打开图像库*/
@@ -164,6 +165,7 @@ void qt_Pixel_Main::on_searchBtn_clicked()
 	Params::featureType = (ui.MatchType->currentText()).toStdString();
 	similarPatches.clear();
 	searchBtnThread = new SearchBtnThread(&similarPatches, patchCompared);
+	logDisplay->logDisplay("Searching similar super image patches in database ... ...");
 	//here main thread wait for searchBtnThread excute 
 	connect(searchBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatch()));
 	searchBtnThread->start();
@@ -191,6 +193,7 @@ void qt_Pixel_Main::setsuperImagePatch()
 		QPixmap qp = QPixmap::fromImage(showImage);
 		ui.SuperImagePatchView->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
+	logDisplay->logDisplay("Search similar super image patches in database finished");
 }
 /*点击超图元，查看相应子图元*/
 void qt_Pixel_Main::on_superImagePatch_Itemclicked(QListWidgetItem *item)
