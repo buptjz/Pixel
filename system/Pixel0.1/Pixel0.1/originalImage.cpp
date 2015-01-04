@@ -169,8 +169,8 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 		
 		cv::namedWindow(name);
 		cv::imshow(name, *oip);
-		waitKey(1000); 
-		
+		waitKey(500); 
+		cv::destroyAllWindows();
 		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
 		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
 		//std::cout<< "bip channels:" << bip->channels();

@@ -24,7 +24,7 @@ void tool_show_mat(Mat mat,string name);
 //generate an unique id by current timestamp
 
 string super_patch_id_from_timestamp();
-
+string getTime();
 template<class base_type,class child_type>
 vector<base_type*> convert_verctor(vector<child_type*> src)
 {

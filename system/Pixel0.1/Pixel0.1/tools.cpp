@@ -57,6 +57,20 @@ string super_patch_id_from_timestamp(){
     return str;
 }
 
+string getTime()
+{
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer, 80, "%Y-%m-%d %I:%M:%S", timeinfo);
+	string str(buffer);
+	return str;
+}
+
 Mat imread_and_preprocess(const string& filename)
 {
 	Mat tmp = imread(filename);
