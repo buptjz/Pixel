@@ -6,6 +6,8 @@
 #include <string>
 using namespace std;
 
+#define __DEBUG__
+
 class Params
 {
 public:
@@ -13,6 +15,8 @@ public:
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
 	static const string SURF;
+	static const string MORPH_BASIC;
+	static const string EGBIS;
 	
 	//params for images
 	static int color_image_type;
@@ -22,7 +26,11 @@ public:
 	static int connect_map_type;
 
 	//params for segment
-	static int patch_pixal_least;
+	static float patch_pixel_min;
+	static float patch_pixel_max;
+	static float egbis_sigma;
+	static float egbis_c;
+	static int egbis_min_size;
 
 	//params for match
 	static int shape_context_sample_point_num;
@@ -44,7 +52,8 @@ public:
     static double surf_min_ratio;
 
 
-	static string  featureType;//featureType used 
+	static string featureType;//featureType used 
+	static string segment_type;
 	static size_t top_k;//return the top_k simplar superImagePatches
 };
 
