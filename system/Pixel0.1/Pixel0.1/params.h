@@ -55,6 +55,8 @@ public:
 	static string featureType;//featureType used 
 	static string segment_type;
 	static size_t top_k;//return the top_k simplar superImagePatches
+
+	static bool isdebug;
 };
 
 

@@ -98,7 +98,8 @@ void qt_Pixel_Main::on_ImageLibBtn_clicked()
 
 void qt_Pixel_Main::on_Add2ImageLib_clicked()
 {
-	ui.LogDisplay->setText("many images are training!");
+	//ui.LogDisplay->setText("many images are training!");
+	logDisplay("images are training ... ... ");
 	imageLibThread = new ImageLibThread(dirPath);
 	imageLibThread->start();
 
@@ -114,7 +115,7 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 	if (fileName != "")
 	{
 		QString logQstr = QString("Load sample image ").append(fileName);
-		logDisplay(logQstr.toStdString(), true);
+		logDisplay(logQstr.toStdString());
 		if (image->load(fileName))
 		{
 			//½¨Á¢³¡¾°

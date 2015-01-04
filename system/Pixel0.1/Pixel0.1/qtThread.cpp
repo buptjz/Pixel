@@ -5,7 +5,7 @@
 #include "removeDuplicatePatchs.h"
 #include "readSqllite.h"
 #include "params.h"
-
+#include "logDisplay.h"
 ImageLibThread::ImageLibThread(QString dirPath) : QThread()
 {
 	this->dirPath = dirPath;
@@ -29,8 +29,9 @@ void ImageLibThread::run()
 		string filename = path + "/" + fileinfo.name;
 		string originalImageId = fileName + "_" + fileinfo.name;
 		OriginalImage *ori = new OriginalImage(filename, originalImageId);
-
+		
 		Mat *pImage = new Mat(imread_and_preprocess(filename.c_str()));
+		logDisplay("Segmenting " + filename + "  бнбн");
 		ori->setImage(pImage);
 
 		//save originalImage into database 
@@ -38,21 +39,24 @@ void ImageLibThread::run()
 		//segment OriginalImage object ori into patchs
    		vector<ImagePatch*> patchs = ori->segmentImage();
 
+		logDisplay("Segment " + filename + " finished");
 		for (int i = 0; i < patchs.size(); i++)
 		{
 			patchs[i]->savePatch();
 		}
-
+		logDisplay(filename + "saved in to database");
+		logDisplay("Removing duplicate image patches in image: " + filename + "  бнбн");
 		//removeDuplicateImagePatchs  first time, just in one originalImage, return  vector of SuperImagePatch object
  		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
-
+		logDisplay("Remove duplicate image patches in image: " + filename + " finished");
 		//save the patchs which has been removed duplicate once, wait for the next time of removing duplicate operation
 		vector<SuperImagePatch*>::iterator  itor = sip.begin();
+		logDisplay("Removing duplicate image patches in all super image patches  бнбн");
 		while (itor != sip.end())
 		{
 			allSuperImagePatchs.push_back(*itor++);
 		}
-
+		logDisplay("Removing duplicate image patches in all super image patches  finished");
 		//release vector<ImagePatch*> patchs
 		for (int i = 0; i < patchs.size(); i++)
 		{
@@ -83,6 +87,7 @@ void ImageLibThread::run()
 		itor++;
 
 	}
+	logDisplay(" All super image patches have saved in to database.");
 }
 
 

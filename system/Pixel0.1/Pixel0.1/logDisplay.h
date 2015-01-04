@@ -3,6 +3,6 @@
 #include <string>
 #include <iostream>
 using namespace std;
-void logDisplay(string logstr, bool debug);
+void logDisplay(string logstr);
 
 #endif
