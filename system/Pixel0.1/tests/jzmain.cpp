@@ -21,11 +21,17 @@
 #include "surfMatch.h"
 #include "jsonHelper.h"
 #include "egbis_segment_image.h"
+#include "xmlHelper.h"
 
 using namespace std;
 using namespace cv;
 
 int main(int agrc, char **agrv){
+    string file_name = "params.xml";
+    save_params(file_name);
+    load_params(file_name);
+    save_params("Paras_com.xml");
+
 //    test_surf_match_func();
 
     vector<ImagePatch*> all_patch;
