@@ -6,26 +6,22 @@
 //  Copyright (c) 2015年 WangJZ. All rights reserved.
 //
 
-#include "egbis_segment_image.h"
 #include <cstdlib>
 #include <map>
-
+#include "egbis_segment_image.h"
 #include "filter.h"
 #include "segment-graph.h"
 #include "image_convert.h"
 #include "tools.h"
 
-// random color
-rgb random_rgb(){
-    rgb c;
-    c.r = (uchar)random();
-    c.g = (uchar)random();
-    c.b = (uchar)random();
-    return c;
-}
+/*
+ * EGBIS algorithm with an image<rgb>
+ */
+static Mat egbis_segment_image(image<rgb> *im,Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=3000, int min_size=100);
 
-
-// dissimilarity measure between pixels
+/*
+ * Dissimilarity measure between pixels
+ */
 static inline float diff(image<float> *r, image<float> *g, image<float> *b,
                          int x1, int y1, int x2, int y2) {
     return sqrt(square(imRef(r, x1, y1)-imRef(r, x2, y2)) +
@@ -33,6 +29,9 @@ static inline float diff(image<float> *r, image<float> *g, image<float> *b,
                 square(imRef(b, x1, y1)-imRef(b, x2, y2)));
 }
 
+/*
+ * EGBIS algorithm with an Mat image
+ */
 Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
     image<rgb> *nativeImage = convertMatToNativeImage(&m);
     Mat retMat = egbis_segment_image(nativeImage, retColorMat, num_ccs,sigma,c,min_size);
@@ -40,20 +39,7 @@ Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma,
     return retMat;
 }
 
-/*
- * Segment an image
- *
- * Returns a color image representing the segmentation.
- *
- * im: image to segment.
- * sigma: to smooth the image.
- * c: constant for treshold function.
- * min_size: minimum component size (enforced by post-processing stage).
- * num_ccs: number of connected components in the segmentation.
- */
-
-
-Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
+static Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
     int width = im->width();//cols number
     int height = im->height();//rows number
     
@@ -128,7 +114,9 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
     *num_ccs = u->num_sets();
     
     Mat retMat = Mat::zeros(height, width, CV_16UC1);
+#ifdef __DEBUG__
     tool_print_mat_info(retMat);
+#endif
     map<int, int> index_map;
     map<int, int>::iterator it;
     int comp_index,color_index = 0;
@@ -145,7 +133,7 @@ Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sig
             //TODO : has Problem here?No right now!
             // y is row index and x is col index
             //http://stackoverflow.com/questions/22668409/accessing-elements-of-opencv-mat-cv-16uc1
-            retMat.at<unsigned short>(y,x) = cur_color;
+            retMat.at<ushort>(y,x) = cur_color;
 //            *(retMat.data + (y * width + x)) = cur_color;
         }
     }

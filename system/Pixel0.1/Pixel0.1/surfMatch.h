@@ -12,19 +12,35 @@
 #include <stdio.h>
 #include "imagePatch.h"
 
-/*
- Surf Interfaces: Maintenance by JZ
+/*--------------------------------------
+ Surf Interfaces: Supported by JZ
  match two patches using surf algorithm
- */
+ --------------------------------------*/
 
-//get surf descriptors from an image mat
+/*
+ * Get surf descriptors from an image mat
+ * img: input image
+ * ret_descriptors : surf descriptors (each descriptor a row, 64 cols)
+ */
 void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors);
 
-//Return matching score by surf algorithm with two Images Mats
-double surf_match_score_with_mat(const Mat &,const Mat&);
+/*
+ * Return matching score by surf algorithm with two Images Mats
+ * img1 : input image 1
+ * img2 : input image 2
+ * return double as the matching score
+ * matching score is s, 0 <= s <=1, s = number of matching / number of desp1
+ */
+double surf_match_score_with_mat(const Mat &img1,const Mat &img2);
 
-//Return matching score by surf algorithm with two descriptors' vectors
-double surf_match_score_with_descriptor(const Mat&, const Mat&);
+/*
+ * Return matching score by surf algorithm with two descriptors' vectors
+ * desp1 : image 1 descriptors
+ * desp2 : iamge 2 descriptors
+ * return double as the matching score
+ * matching score is s, 0 <= s <=1, s = number of matching / number of desp1
+ */
+double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2);
 
 //test function
 void test_surf_match_func();

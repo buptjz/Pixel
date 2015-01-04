@@ -1,5 +1,6 @@
 #include "tools.h"
 #include "removeDuplicatePatchs.h"
+#include "params.h"
 
 /*
  find the smallest element(with its index) in vectors
@@ -75,6 +76,7 @@ bool should_merge1(double val)
 	{
 		return val > Params::surf_compare_1_thres;
 	}
+    return true;
 }
 
 bool should_merge2(double val)
@@ -88,6 +90,7 @@ bool should_merge2(double val)
 	{
 		return val > Params::surf_compare_2_thres;
 	}
+    return true;
 }
 
 /*

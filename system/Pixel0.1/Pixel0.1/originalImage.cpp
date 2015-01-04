@@ -2,14 +2,13 @@
 #include "sqlliteHelper.h"
 #include "params.h"
 #include "tools.h"
+#include "segment_algorithm.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
 图像名（originalImageId）、图像路径(path)
 */
-static Mat & SimplePre(Mat &, Mat &);
 static void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_size = 3);
-static int CannyAndMorphing(Mat &, Mat &);
 /* Mat必须是单通道的*/
 static int FindRegFromEdge(Mat &);
 
@@ -88,6 +87,7 @@ vector<Rect *> & OriginalImage::getMetaInfos(vector<vector<Point>> & list, vecto
 	int count = list.size();
 	int ** markRange = new int *[4];
 	int * temp = new int[4 * count];
+	memset(temp, 0, 4 * count * sizeof(int));
 	for (int t = 0; t < 4; ++t)
 		markRange[t] = temp + t*count;
 	//
@@ -133,7 +133,12 @@ vector<Rect *> & OriginalImage::getMetaInfos(vector<vector<Point>> & list, vecto
 vector<ImagePatch*> OriginalImage::segmentImage()
 {	
 	Mat preImg;
-	preImg = prePareImage(preImg, SimplePre);
+	if (Params::segment_type == Params::MORPH_BASIC)
+		preImg = prePareImage(preImg, SimplePre);
+	else if (Params::segment_type == Params::EGBIS)
+		preImg = pOImage->clone();
+	else
+		return vector<ImagePatch*>();
 	//double low, high;
 	//AdaptiveFindThreshold(medianImg, low, high);
 	Mat t = Mat::zeros(pOImage->size(), Params::connect_map_type);
@@ -141,7 +146,13 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	//namedWindow("s");
 	//imshow("s", morphImg);
 	//waitKey(10);
-	int coupreImgnt = segAlgorithm(preImg, CannyAndMorphing);
+	int coupreImgnt;
+	if (Params::segment_type == Params::MORPH_BASIC)
+		coupreImgnt = segAlgorithm(preImg, CannyAndMorphing);
+	else if (Params::segment_type == Params::EGBIS)
+		coupreImgnt = segAlgorithm(preImg, egbis);
+	else
+		return vector<ImagePatch*>();
 	//
 	//vector<vector<Point>> contours;
 	//findContours(preImg, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
@@ -154,18 +165,27 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	for (int index = 1; index <= coupreImgnt; ++index)
 	{
 		Rect * rect = rects.at(index - 1);
-		if(rect->width * rect->height < Params::patch_pixal_least)
+		int org_size = pOImage->rows * pOImage->cols, rect_size = rect->width * rect->height;
+		if( rect_size < org_size * Params::patch_pixel_min || rect_size > org_size * Params::patch_pixel_max)
 			continue;
 		stringstream ss;
 		string str;
 		ss << index;
 		ss >> str;
 		string id = originalImageId + "_imagePatch_" + str;
-		Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
+		//Mat *oip = new Mat(Mat(*pOImage,*rect).clone());
 		Mat mask =( (*regImage)(*rect) == index);
 		//Mat *oip = new Mat(*bip);
-		*oip & mask;
-		//tool_show_mat(*oip, "ImagePatch"); 
+		Mat org = Mat(*pOImage, *rect).clone();
+		vector<Mat> masks;
+		for (size_t i = 0; i < org.channels(); ++i)
+			masks.push_back(mask);
+		Mat mask_multichannel;
+		merge(masks, mask_multichannel);
+		Mat *oip = new Mat(org);
+		//tool_show_mat(org, "ImagePatch1");
+		bitwise_and(org, mask_multichannel, *oip);
+		//tool_show_mat(*oip, "ImagePatch2"); 
 		
 		cv::namedWindow(name);
 		cv::imshow(name, *oip);
@@ -217,40 +237,6 @@ void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_
 	// 计算高低门限                                                          
 	high = (i + 1) * histSizeMax;
 	low = high * 0.4;
-}
-
-Mat & SimplePre(Mat & org, Mat & result)
-{
-	if (org.channels() > Params::grey_image_channels)
-		cvtColor(org, result, CV_BGR2GRAY,Params::grey_image_channels);
-	else
-		result = org.clone();
-	result.convertTo(result,Params::grey_image_type);
-	medianBlur(result, result, 3);
-	resize(result, result, Size(3 * org.rows, 3 * org.cols));
-	return result;
-}
-
-int CannyAndMorphing(Mat & input, Mat & result)
-{
-	Mat temp = Mat(input.size(), CV_8UC1);
-	Canny(input, temp, 50, 150);
-	dilate(temp, temp, noArray());
-	Mat element5(5, 5, CV_8U, Scalar(1));
-	morphologyEx(temp, temp, MORPH_CLOSE, element5);
-	resize(temp, temp, Size(input.rows / 3, input.cols / 3), .0f, .0f, INTER_LINEAR);
-	temp=temp >= .4;
-	//temp.convertTo(temp, CV_8UC1);
-	//
-	// return FindRegFromEdge(result);
-	vector<vector<Point>> edges;
-	vector<Vec4i> hierarchy;
-	findContours(temp, edges, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-	int index = 1;
-	for (int idx = 0; idx >= 0; idx = hierarchy[idx][0])
-		//drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
-		drawContours(result, edges, idx, Scalar(index++));
-	return index-=1;
 }
 
 //bug ! marked by JZ

@@ -12,6 +12,62 @@
 #include <time.h>
 #include <ctime>
 
+/*
+ Statastic of Running Time
+ */
+static int64 work_begin = 0;
+static int64 work_end = 0;
+
+//calling before running algorithm
+void tool_work_begin(){
+    work_begin = getTickCount();
+}
+
+//calling after running algorithm
+void tool_work_end(){
+    work_end = getTickCount() - work_begin;
+}
+
+//calling after too_work_end to get running time
+double tool_get_work_time(){
+    return work_end /((double)getTickFrequency() )* 1000.;
+}
+
+/*
+ convert connected component to color image (for showing while debug)
+ */
+void connected_component2color_image(const Mat &cc,const int number_of_component, Mat &ret_color_image){
+    //generate random colors
+    rgb *colors = new rgb[number_of_component];
+    for (int i = 0; i < number_of_component; i++)
+        colors[i] = random_rgb();
+    
+    //generate color image
+    int height = cc.rows;
+    int width = cc.cols;
+    ret_color_image = Mat::zeros(height,width, CV_8UC3);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int color_index = cc.at<ushort>(y,x);
+            ret_color_image.at<Vec3b>(y,x)[0] = colors[color_index].b;
+            ret_color_image.at<Vec3b>(y,x)[1] = colors[color_index].g;
+            ret_color_image.at<Vec3b>(y,x)[2] = colors[color_index].r;
+        }
+    }
+    delete [] colors;
+}
+
+// generate random RGB color
+rgb random_rgb(){
+    //http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/core/doc/operations_on_arrays.html?highlight=rng#RNG
+    static RNG rng;
+    rgb c;
+    c.r = (uchar)rng.uniform(0, 255);
+    c.g = (uchar)rng.uniform(0, 255);
+    c.b = (uchar)rng.uniform(0, 255);
+    return c;
+}
+
 //cout Mat info
 void tool_print_mat_info(Mat M){
     cout << "---------- Mat Info ----------" << endl;
