@@ -20,6 +20,9 @@
 #include "surfMatch.h"
 #include "params.h"
 
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
+
 using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
@@ -321,12 +324,11 @@ void test_surf_match_func(){
         Mat l_img = imread(root + left_image_name,CV_8UC1);//32-bit RGB image
         Mat r_img = imread(root + right_image_name,CV_8UC1);//8-bit Black-White image
         
-        cout<<surf_match_score_with_mat(l_img,r_img)<<"--";
-        cout<<left_image_name<<":";
-        cout<<right_image_name<<".."<<endl;
-
+#ifdef __DEBUG__
+        logDisplay->logDisplay(to_string(surf_match_score_with_mat(l_img,r_img)) + "--");
+        logDisplay->logDisplay(left_image_name + ":" + right_image_name + "..\n");
+#endif
     }
-
 }
 
 

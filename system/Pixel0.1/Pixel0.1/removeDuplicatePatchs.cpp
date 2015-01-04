@@ -2,6 +2,9 @@
 #include "removeDuplicatePatchs.h"
 #include "params.h"
 
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
+
 /*
  find the smallest element(with its index) in vectors
  */
@@ -97,7 +100,9 @@ bool should_merge2(double val)
  Strategy [1]: 1 to many
  */
 vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
-    cout<<"***********************[Start] Remove Duplicate Image patchs***********************"<<endl;
+#ifdef __DEBUG__
+    logDisplay->logDisplay("***********************[Start] Remove Duplicate Image patchs***********************");
+#endif
     vector<SuperImagePatch *> supers;
     if (patch_vec.empty()) {
         return supers;
@@ -122,9 +127,11 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         //(1) has similar 'SP', insert 'P' to 'SP'
 		
         if (should_merge1(nearest_score)) {
-            cout<<",merge! "<<endl;
-            cout<<"The same SuperPatch= "<<supers[nearest_index]->getSuperImagePatchId()<<endl;
-            
+
+#ifdef __DEBUG__
+            logDisplay->logDisplay("Merge!");
+            logDisplay->logDisplay("The same SuperPatch = " + supers[nearest_index]->getSuperImagePatchId());
+#endif
             //set pointer
             vector<Patch *> patch_vec = supers[nearest_index]->getPatchList();
             patch_vec.push_back(one_patch);
@@ -137,11 +144,13 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             
         }else{
         // (2) no similar 'SP', generate a new one
-            cout<<",generate new one"<<endl;
+            logDisplay->logDisplay(",generate new one.");
             supers.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
-    cout<<"***********************[End] Remove Duplicate Image patchs***********************"<<endl;
+#ifdef __DEBUG__
+    logDisplay->logDisplay("***********************[End] Remove Duplicate Image patchs***********************");
+#endif
     return supers;
 }
 
