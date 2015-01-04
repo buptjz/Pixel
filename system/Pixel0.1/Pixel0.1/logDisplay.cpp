@@ -8,7 +8,7 @@
 void LogDisplay::logDisplay(string logstr)
 {
 #ifdef __DEBUG__
-		logstr = getTime() + "  " + logstr;
+		logstr = getTime() + " " + logstr;
 		logQstr = QString::fromStdString(logstr);
 
 		//QString existStr = qt_Pixel_Main::ui.LogDisplay->toPlainText();

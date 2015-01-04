@@ -46,7 +46,7 @@ void ImageLibThread::run()
 		{
 			patchs[i]->savePatch();
 		}
-		logDisplay->logDisplay(filename + "saved in to database");
+		logDisplay->logDisplay(filename + " saved in to database");
 		logDisplay->logDisplay("Removing duplicate image patches in image: " + filename + " ... ...");
 		//removeDuplicateImagePatchs  first time, just in one originalImage, return  vector of SuperImagePatch object
  		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);

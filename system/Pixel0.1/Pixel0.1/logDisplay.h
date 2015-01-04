@@ -10,7 +10,7 @@ class LogDisplay
 public:
 	LogDisplay(){};
 	~LogDisplay(){};
-	string logQstr;
+	QString logQstr;
 public:
 	void logDisplay(string logstr);
 	void sig(string);
