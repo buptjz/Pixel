@@ -50,7 +50,11 @@ int main(int agrc, char **agrv){
     Mat cimg_seged = egbis_segment_image(ori,color_seged,&number, sigma,k,min_size);
     cout << "Find " << number << " segments" << endl;
     Mat color;
+    
+    tool_work_begin();
     connected_component2color_image(cimg_seged, number, color);
+    tool_work_end();
+    cout<<tool_get_work_time()<<" ms"<<endl;
     
     tool_show_mat(color_seged, "segment");
     tool_show_mat(color, "segment2");

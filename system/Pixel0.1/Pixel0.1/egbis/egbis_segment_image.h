@@ -15,21 +15,25 @@
 #include "misc.h"
 
 using namespace cv;
-using namespace std;
 
-Mat egbis_segment_image(image<rgb> *im,Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
+/*--------------------------------------
+ Interfaces of EGBIS
+ Efficient graph-base image segmentation
+ Supported by JZ
+ --------------------------------------*/
 
 /*
  * Segment an image
  *
- * Returns a color image representing the segmentation.
+ * Returns a connected component image representing the segmentation.(each component with a particular number)
  *
- * im: image to segment.
- * sigma: to smooth the image.
- * c: constant for treshold function.
- * min_size: minimum component size (enforced by post-processing stage).
+ * m: Mat image to segment.(This Mat should be CV_8UC3)
+ * retColorMat : a CV_8UC3 image,each component with a random color!(For debug)
  * num_ccs: number of connected components in the segmentation.
+ * sigma: to smooth the image.
+ * c: constant for treshold function.(The bigger c is,the larger each component is.)
+ * min_size: minimum component size (enforced by post-processing stage).
  */
-Mat egbis_segment_image(const Mat &m, Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=500, int min_size=20);
+Mat egbis_segment_image(const Mat &m, Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=3000, int min_size=100);
 
 #endif /* defined(__Xcode_Pixel_Proj__jz_segment_image__) */

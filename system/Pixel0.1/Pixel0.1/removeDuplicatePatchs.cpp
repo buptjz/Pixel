@@ -1,5 +1,6 @@
 #include "tools.h"
 #include "removeDuplicatePatchs.h"
+#include "params.h"
 
 /*
  find the smallest element(with its index) in vectors

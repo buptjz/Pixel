@@ -13,6 +13,27 @@
 #include <ctime>
 
 /*
+ Statastic of Running Time
+ */
+static int64 work_begin = 0;
+static int64 work_end = 0;
+
+//calling before running algorithm
+void tool_work_begin(){
+    work_begin = getTickCount();
+}
+
+//calling after running algorithm
+void tool_work_end(){
+    work_end = getTickCount() - work_begin;
+}
+
+//calling after too_work_end to get running time
+double tool_get_work_time(){
+    return work_end /((double)getTickFrequency() )* 1000.;
+}
+
+/*
  convert connected component to color image (for showing while debug)
  */
 void connected_component2color_image(const Mat &cc,const int number_of_component, Mat &ret_color_image){
@@ -36,7 +57,7 @@ void connected_component2color_image(const Mat &cc,const int number_of_component
     delete [] colors;
 }
 
-// random color
+// generate random RGB color
 rgb random_rgb(){
     //http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/core/doc/operations_on_arrays.html?highlight=rng#RNG
     static RNG rng;
