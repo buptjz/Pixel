@@ -15,6 +15,11 @@
 #include "patch.h"
 #include "misc.h"
 
+//Statastic of Running Time
+void tool_work_begin();//calling before algorithm
+void tool_work_end();//calling after algorithm
+double tool_get_work_time();//calling after work_end to get time (ms)
+            
 //convert connected component to color image (for showing while debug)
 void connected_component2color_image(const Mat &cc,const int number_of_component, Mat &ret_color_image);
 
