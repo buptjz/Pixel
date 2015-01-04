@@ -23,7 +23,7 @@ double tool_get_work_time();//calling after work_end to get time (ms)
 //convert connected component to color image (for showing while debug)
 void connected_component2color_image(const Mat &cc,const int number_of_component, Mat &ret_color_image);
 
-//generate random rgb color
+//generate random RGB color
 rgb random_rgb();
 
 //cout Mat info
@@ -34,7 +34,6 @@ void tool_show_patch(Patch *image, string name);
 void tool_show_mat(Mat mat,string name);
 
 //generate an unique id by current timestamp
-
 string super_patch_id_from_timestamp();
 
 template<class base_type,class child_type>

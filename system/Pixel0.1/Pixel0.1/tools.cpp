@@ -57,7 +57,7 @@ void connected_component2color_image(const Mat &cc,const int number_of_component
     delete [] colors;
 }
 
-// random color
+// generate random RGB color
 rgb random_rgb(){
     //http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/core/doc/operations_on_arrays.html?highlight=rng#RNG
     static RNG rng;

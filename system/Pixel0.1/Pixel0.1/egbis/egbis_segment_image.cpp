@@ -6,17 +6,22 @@
 //  Copyright (c) 2015年 WangJZ. All rights reserved.
 //
 
-#include "egbis_segment_image.h"
 #include <cstdlib>
 #include <map>
-
+#include "egbis_segment_image.h"
 #include "filter.h"
 #include "segment-graph.h"
 #include "image_convert.h"
 #include "tools.h"
 
+/*
+ * EGBIS algorithm with an image<rgb>
+ */
+static Mat egbis_segment_image(image<rgb> *im,Mat &retColorMat,int *num_ccs, float sigma=0.5, float c=3000, int min_size=100);
 
-// dissimilarity measure between pixels
+/*
+ * Dissimilarity measure between pixels
+ */
 static inline float diff(image<float> *r, image<float> *g, image<float> *b,
                          int x1, int y1, int x2, int y2) {
     return sqrt(square(imRef(r, x1, y1)-imRef(r, x2, y2)) +
@@ -24,6 +29,9 @@ static inline float diff(image<float> *r, image<float> *g, image<float> *b,
                 square(imRef(b, x1, y1)-imRef(b, x2, y2)));
 }
 
+/*
+ * EGBIS algorithm with an Mat image
+ */
 Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
     image<rgb> *nativeImage = convertMatToNativeImage(&m);
     Mat retMat = egbis_segment_image(nativeImage, retColorMat, num_ccs,sigma,c,min_size);
@@ -31,12 +39,7 @@ Mat egbis_segment_image(const Mat &m,Mat &retColorMat,int *num_ccs, float sigma,
     return retMat;
 }
 
-/*
- * Segment an image
- */
-
-
-Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
+static Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, float sigma, float c, int min_size){
     int width = im->width();//cols number
     int height = im->height();//rows number
     
