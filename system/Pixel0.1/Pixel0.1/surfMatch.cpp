@@ -20,6 +20,11 @@
 #include "surfMatch.h"
 #include "params.h"
 
+#ifdef __DEBUG__
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
+#endif
+
 using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
@@ -54,7 +59,6 @@ struct SURFDetector{
 //        double* tmp = (double *)ret_M.data + i;
 //        *tmp = vec[ind++];
 //    }
-//    cout<<ret_M.elemSize();
 //    return ret_M;
 //}
 
@@ -77,7 +81,7 @@ struct SURFDetector{
 //        for (size_t i = 0; i < total_size; i += eSiz)
 //            ret_vec.push_back(double(*(M.data+i)));
 //    }else{
-//        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
+
 //    }
 //    return ret_vec;
 //}
@@ -321,12 +325,11 @@ void test_surf_match_func(){
         Mat l_img = imread(root + left_image_name,CV_8UC1);//32-bit RGB image
         Mat r_img = imread(root + right_image_name,CV_8UC1);//8-bit Black-White image
         
-        cout<<surf_match_score_with_mat(l_img,r_img)<<"--";
-        cout<<left_image_name<<":";
-        cout<<right_image_name<<".."<<endl;
-
+#ifdef __DEBUG__
+        logDisplay->logDisplay(to_string(surf_match_score_with_mat(l_img,r_img)) + "--");
+        logDisplay->logDisplay(left_image_name + ":" + right_image_name + "..\n");
+#endif
     }
-
 }
 
 

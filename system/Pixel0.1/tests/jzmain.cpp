@@ -22,9 +22,12 @@
 #include "jsonHelper.h"
 #include "egbis_segment_image.h"
 #include "xmlHelper.h"
+#include "logDisplay.h"
 
 using namespace std;
 using namespace cv;
+
+LogDisplay* logDisplay = new LogDisplay();
 
 int main(int agrc, char **agrv){
     string file_name = "params.xml";

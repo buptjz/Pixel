@@ -12,6 +12,12 @@
 #include <time.h>
 #include <ctime>
 
+#ifdef __DEBUG__
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
+#endif
+
+
 /*
  Statastic of Running Time
  */
@@ -68,18 +74,19 @@ rgb random_rgb(){
     return c;
 }
 
-//cout Mat info
+//log Mat info
 void tool_print_mat_info(Mat M){
-    cout << "---------- Mat Info ----------" << endl;
-    cout << "[Cols ] " << M.cols << endl;
-    cout << "[Rows ] " << M.rows << endl;
-    cout << "[eSize] " << M.elemSize() << endl;
-    cout << "[Chann] " << M.channels() << endl;
-    cout << "[Depth] " << M.depth() << endl;
-    cout << "[Conti] " << M.isContinuous() << endl;
-    cout << "[lengt] " << M.dataend - M.datastart << endl;
-    cout << "------------------------------" << endl;
-
+#ifdef __DEBUG__
+    logDisplay->logDisplay("---------- Mat Info ----------");
+    logDisplay->logDisplay("[Cols ] " + to_string(M.cols));
+    logDisplay->logDisplay("[Rows ] " + to_string(M.rows));
+    logDisplay->logDisplay("[eSize ] " + to_string(M.elemSize()));
+    logDisplay->logDisplay("[Chann ] " + to_string(M.channels()));
+    logDisplay->logDisplay("[depth ] " + to_string(M.depth()));
+    logDisplay->logDisplay("[Conti ] " + to_string(M.isContinuous()));
+    logDisplay->logDisplay("[lengt ] " + to_string( M.dataend - M.datastart));
+    logDisplay->logDisplay("------------------------------");
+#endif
 }
 
 
@@ -115,16 +122,15 @@ string super_patch_id_from_timestamp(){
 
 string getTime()
 {
-	//time_t rawtime;
-	//struct tm * timeinfo;
-	//char buffer[80];
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
 
-	//time(&rawtime);
-	//timeinfo = localtime(&rawtime);
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
 
-	//strftime(buffer, 80, "%Y-%m-%d %I:%M:%S", timeinfo);
-	//string str(buffer);
-	string str;
+	strftime(buffer, 80, "%Y-%m-%d %I:%M:%S", timeinfo);
+	string str(buffer);
 	return str;
 }
 
