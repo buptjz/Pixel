@@ -24,7 +24,6 @@ void load_params(const string &file){
         pElem=hDoc.FirstChildElement().Element();
         // should always have a valid root but handle gracefully if it does
         if (!pElem) return;
-        cout << pElem->Value();
         // save this for later
         hRoot=TiXmlHandle(pElem);
     }

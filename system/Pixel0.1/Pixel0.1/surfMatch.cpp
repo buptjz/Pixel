@@ -20,8 +20,10 @@
 #include "surfMatch.h"
 #include "params.h"
 
+#ifdef __DEBUG__
 #include "logDisplay.h"
 extern LogDisplay* logDisplay;
+#endif
 
 using namespace std;
 using namespace cv;
@@ -57,7 +59,6 @@ struct SURFDetector{
 //        double* tmp = (double *)ret_M.data + i;
 //        *tmp = vec[ind++];
 //    }
-//    cout<<ret_M.elemSize();
 //    return ret_M;
 //}
 
@@ -80,7 +81,7 @@ struct SURFDetector{
 //        for (size_t i = 0; i < total_size; i += eSiz)
 //            ret_vec.push_back(double(*(M.data+i)));
 //    }else{
-//        cout << "[surf_desp_mat2double_vec] Mat is not continuous!";
+
 //    }
 //    return ret_vec;
 //}

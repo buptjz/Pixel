@@ -26,7 +26,7 @@ void connected_component2color_image(const Mat &cc,const int number_of_component
 //generate random RGB color
 rgb random_rgb();
 
-//cout Mat info
+//logDisplay Mat info
 void tool_print_mat_info(Mat);
 
 //show patch tool function
