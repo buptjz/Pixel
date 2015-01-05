@@ -158,3 +158,17 @@ void SegmentBtnThread::run()
 	*segementedImagePatches = originalImageSegemented->segmentImage();
 	emit this->sig();
 }
+
+RemoveDuplicateBtnThread::RemoveDuplicateBtnThread(vector<ImagePatch*>* segementedImagePatches, vector<SuperImagePatch*> *segementedSupeImagePatches)
+{
+	this->segementedImagePatches = segementedImagePatches;
+	this->segementedSupeImagePatches = segementedSupeImagePatches;
+}
+
+void RemoveDuplicateBtnThread::run()
+{
+	logDisplay->logDisplay("Removing dupicate image patches ... ...");
+	*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
+	logDisplay->logDisplay("Remove duplicate image patches finished.");
+	emit this->sig();
+}

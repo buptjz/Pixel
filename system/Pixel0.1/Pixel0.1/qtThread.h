@@ -77,4 +77,18 @@ protected:
 signals:
 	void sig();
 };
+
+//segment an image read from temp path
+class RemoveDuplicateBtnThread : public QThread
+{
+	Q_OBJECT
+public:
+	RemoveDuplicateBtnThread(vector<ImagePatch*>* segementedImagePatches, vector<SuperImagePatch*> *segementedSupeImagePatches);
+	vector<SuperImagePatch*> *segementedSupeImagePatches = NULL;
+	vector<ImagePatch*> *segementedImagePatches = NULL;
+protected:
+	void run();
+signals:
+	void sig();
+};
 #endif
