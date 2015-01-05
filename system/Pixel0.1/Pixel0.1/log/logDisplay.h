@@ -18,4 +18,6 @@ public:
 signals:
     void sig(QString);
 };
+
 #endif
+

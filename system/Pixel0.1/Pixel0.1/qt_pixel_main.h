@@ -21,9 +21,13 @@ public:
 	SearchBtnThread *searchBtnThread = NULL;
 	SuperImagePatchItemclickedThread * superImagePatchItemclickedThread = NULL;
 	ImagePatchItemclickedThread* imagePatchItemclickedThread = NULL;
+
+	SegmentBtnThread *segmentBtnThread = NULL;
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;
-	
+	OriginalImage* originalImageSegemented = NULL;
+	vector<ImagePatch*> segementedImagePatches;
+	vector<SuperImagePatch*> segementedSupeImagePatches;
 
 	vector<pair<double, Patch*> >  similarPatches;
 	vector<ImagePatch*> imagePatchList;
@@ -33,6 +37,7 @@ public:
 
 private:
 	QImage *image = NULL;
+	QImage *originalImage = NULL;
 	//QImage *superImagePatch;
 	//QImage *imagePatch;
 
@@ -41,6 +46,10 @@ private:
 	public slots:
 	//display log
 	void on_logDisplay(QString logQstr);
+
+	void on_openOriginalImageBtn_clicked(); //打开待分割图像
+	void on_segmentBtn_clicked();//分割单幅图像
+	void setSegmentedImagePatch();//显示分割的图元
 
 	void on_ImageLibBtn_clicked();  //点击图像库
 	void on_Add2ImageLib_clicked();//add new images to library,  running in the background 

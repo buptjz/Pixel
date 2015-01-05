@@ -5,7 +5,7 @@
 #include "tools.h"
 #include "params.h"
 #include "logDisplay.h"
-
+extern LogDisplay* logDisplay;
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
 Ui::MainWindow qt_Pixel_Main::ui;
@@ -18,6 +18,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.tabWidget->setStyleSheet("{background-color: rgba(215,215,215,0) }");
 	
 	this->image = new QImage();
+	this->originalImage = new QImage();
 	//this->superImagePatch = new QImage();
 	//this->ImagePatch = new QImage();
 	//设置superImagePatch列表样式
@@ -42,17 +43,25 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.LogDisplay->setAlignment(Qt::AlignTop);
 
 	//MatchType style (QComboBox)
-	//ui.Match
-	string type1 = Params::SURF;
-	string type2 = Params::SHAPE_CONTEXT;
-	string type3 = Params::SIFT;
-	ui.MatchType->addItem(QWidget::tr(type1.c_str()));
-	ui.MatchType->addItem(QWidget::tr(type2.c_str()));
-	ui.MatchType->addItem(QWidget::tr(type3.c_str()));
+	//ui.MatchType
+	string matchType1 = Params::SURF;
+	string matchType2 = Params::SHAPE_CONTEXT;
+	string matchType3 = Params::SIFT;
+	ui.MatchType->addItem(QWidget::tr(matchType1.c_str()));
+	ui.MatchType->addItem(QWidget::tr(matchType2.c_str()));
+	ui.MatchType->addItem(QWidget::tr(matchType3.c_str()));
+
+	//SegmentType style (QComboBox)
+	//ui.SegmentType
+	string segmentType1 = Params::MORPH_BASIC;
+	string segmentType2 = Params::EGBIS;
+	ui.SegmentType->addItem(QWidget::tr(segmentType1.c_str()));
+	ui.SegmentType->addItem(QWidget::tr(segmentType2.c_str()));
 
 	//设置connect 槽
 	//receive log messge
 	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
+	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
@@ -61,6 +70,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.ImagePatchView, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(on_ImagePatch_Itemclicked(QListWidgetItem *)));
 
 	connect(ui.AddinLibBtn, SIGNAL(clicked()), this, SLOT(on_Add2ImageLib_clicked()));
+
+	connect(ui.SegmentBtn, SIGNAL(clicked()), this, SLOT(on_segmentBtn_clicked()) );
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -96,6 +107,9 @@ void qt_Pixel_Main::on_logDisplay(QString logQstr)
 	//qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
 	qt_Pixel_Main::ui.LogDisplay->moveCursor(QTextCursor::End);
 }
+
+
+
 /*打开图像库*/
 void qt_Pixel_Main::on_ImageLibBtn_clicked()
 {
@@ -110,12 +124,117 @@ void qt_Pixel_Main::on_ImageLibBtn_clicked()
 void qt_Pixel_Main::on_Add2ImageLib_clicked()
 {
 	//ui.LogDisplay->setText("many images are training!");
-	logDisplay->logDisplay("images are training ... ... ");
 	imageLibThread = new ImageLibThread(dirPath);
 	imageLibThread->start();
 
 
 }
+
+/*打开待分割图像*/
+void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
+{
+	QString fileName = QFileDialog::getOpenFileName(
+		this, "open image file",
+		".",
+		"Image files (*.bmp *.jpg *.pbm *.pgm *.png *.ppm *.xbm *.xpm);;All files (*.*)");
+	if (fileName != "")
+	{
+		QString logQstr = QString("Load image ").append(fileName);
+		logDisplay->logDisplay(logQstr.toStdString());
+		if (originalImage->load(fileName))
+		{
+			//建立场景
+			QGraphicsScene *scene = new QGraphicsScene;
+			//缩放图片
+			QSize size = ui.OriginalImageView->maximumViewportSize();
+			QImage scaledImg = originalImage->scaled(size, Qt::KeepAspectRatio);
+
+			//get the OriginalImageSegemented and change it to OriginalImage
+			Mat oipTemp = QImage2Mat(*originalImage);
+			oipTemp.convertTo(oipTemp, Params::color_image_type);
+			Mat *originalImage = new Mat(oipTemp);
+			//Mat *binaryImage = new Mat(originalImage->rows, originalImage->cols, Params::grey_image_type);
+			
+			//construct OriginalImageId
+			string path = fileName.toStdString();//the direction of originalImages
+			std::vector<std::string> splitpath = split(path, "/");
+			if (splitpath.size()<2)
+			{
+				return;
+			}
+			string originalImageId = splitpath[splitpath.size() - 2] + splitpath[splitpath.size() - 1];
+
+			if (originalImageSegemented != NULL)
+			{
+				delete originalImageSegemented;
+			}
+			originalImageSegemented = NULL;
+			originalImageSegemented = new OriginalImage(path, originalImageId, originalImage);
+		
+
+			//加载显示图片
+			scene->addPixmap(QPixmap::fromImage(scaledImg));
+			ui.OriginalImageView->setScene(scene);
+			ui.OriginalImageView->show();
+		}
+		else
+		{
+			QMessageBox::information(NULL, tr("Error"), tr("File format error!"));
+		}
+	}
+	else
+	{
+		QMessageBox::information(NULL, tr("Error"), tr("select a file!"));
+	}
+}
+
+/*分割单幅图像*/
+void qt_Pixel_Main::on_segmentBtn_clicked()
+{
+	Params::segment_type = (ui.SegmentType->currentText()).toStdString();
+	if (originalImageSegemented == NULL)
+	{
+		logDisplay->logDisplay("The image waiting for segmenting is not exist!");
+		return;
+	}
+	if (segementedImagePatches.size() != 0)
+	{
+		for (int i = 0; i < segementedImagePatches.size(); i++)
+		{
+			delete segementedImagePatches[i];
+		}
+	}
+	segementedImagePatches.clear();
+
+	segmentBtnThread = new SegmentBtnThread(originalImageSegemented, &segementedImagePatches);
+	//here main thread wait for segmentBtnThread excute 
+	connect(segmentBtnThread, SIGNAL(sig()), this, SLOT(setSegmentedImagePatch()));
+	segmentBtnThread->start();
+}
+
+//set segment ImagePatch	
+void qt_Pixel_Main::setSegmentedImagePatch()
+{
+	if (ui.ImagePatchViewInOneImage->count() != 0)
+	{
+		ui.ImagePatchViewInOneImage->clear();
+	}
+	for (int i = 0; i < segementedImagePatches.size(); i++)
+	{
+		Patch* sip = segementedImagePatches[i];
+		QImage showImage = Mat2QImage(*(sip->getOriginalImagePatch()));
+		//convert int to string, for mark QIcon
+		stringstream ss;
+		string str;
+		ss << (i + 1);
+		ss >> str;
+		//change QImage to QIcon and show 
+		QPixmap qp = QPixmap::fromImage(showImage);
+		ui.ImagePatchViewInOneImage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
+	}
+	logDisplay->logDisplay("Display image patches belong to the image " + originalImageSegemented->getPath() );
+}
+
 /*打开样本图像*/
 void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 {
@@ -140,7 +259,10 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 			oipTemp.convertTo(oipTemp, Params::color_image_type);
 			Mat *originalImagePatch = new Mat(oipTemp);
 			Mat *binaryImagePatch = new Mat(originalImagePatch->rows, originalImagePatch->cols, Params::grey_image_type);
-
+			if (patchCompared != NULL)
+			{
+				delete patchCompared;
+			}
 			patchCompared = new SuperImagePatch("patchCompared", originalImagePatch, binaryImagePatch);
 
 			//加载显示图片
@@ -163,6 +285,13 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 void qt_Pixel_Main::on_searchBtn_clicked()
 {
 	Params::featureType = (ui.MatchType->currentText()).toStdString();
+	if (similarPatches.size() != 0)
+	{
+		for (int i = 0; i < similarPatches.size(); i++)
+		{
+			delete similarPatches[i].second;
+		}
+	}
 	similarPatches.clear();
 	searchBtnThread = new SearchBtnThread(&similarPatches, patchCompared);
 	logDisplay->logDisplay("Searching similar super image patches in database ... ...");
@@ -185,9 +314,12 @@ void qt_Pixel_Main::setsuperImagePatch()
 		Patch* sip = similarPatches[i].second;
 		QImage showImage = Mat2QImage(*(sip->getOriginalImagePatch()));
 		//convert int to string, for mark QIcon
+		double similarity = similarPatches[i].first;
 		stringstream ss;
 		string str;
 		ss << (i + 1);
+		ss << ": ";
+		ss <<similarity;
 		ss >> str;
 		//change QImage to QIcon and show 
 		QPixmap qp = QPixmap::fromImage(showImage);
@@ -207,7 +339,15 @@ void qt_Pixel_Main::on_superImagePatch_Itemclicked(QListWidgetItem *item)
 		ui.ImagePatchView->clear();
 	}
 	int itemnum = ui.SuperImagePatchView->row(item);
+	if (imagePatchList.size() != 0)
+	{
+		for (int i = 0; i < imagePatchList.size(); i++)
+		{
+			delete imagePatchList[i];
+		}		
+	}
 	imagePatchList.clear();
+	logDisplay->logDisplay("Searching image patches belong to the super image patch clicked in database ... ...");
 	SuperImagePatch *superImagePatch = (SuperImagePatch *)similarPatches[itemnum].second;
 
 	superImagePatchItemclickedThread = new SuperImagePatchItemclickedThread(superImagePatch, &imagePatchList);
@@ -237,6 +377,7 @@ void qt_Pixel_Main::setImagePatch()
 		QPixmap qp = QPixmap::fromImage(showImage);
 		ui.ImagePatchView->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
+	logDisplay->logDisplay("Display image patches belong to the super image patch clicked.");
 }
 
 /*点击子图元查看原图*/
@@ -247,7 +388,7 @@ void qt_Pixel_Main::on_ImagePatch_Itemclicked(QListWidgetItem *item)
 	Rect position = iptemp->getPosition();
 	string originalImageId = iptemp->getOriginalImage()->getOriginalImageId();
 	String originalImagePath = readOriginalImage(originalImageId)->getPath();
-
+	logDisplay->logDisplay("Show image patch in original image.");
 	imagePatchItemclickedThread = new ImagePatchItemclickedThread(position, originalImagePath);
 	imagePatchItemclickedThread->start();
 }
