@@ -4,13 +4,24 @@
 //#include <iostream>
 
 #include <string>
+#include <map>
 using namespace std;
 
 #define __DEBUG__
 
+#define GET_PTR(pair) __GET_PTR(pair.first,pair.second)
+#define __GET_PTR(type,void_ptr) static_cast<type>(void_ptr)
+
 class Params
 {
 public:
+	//a map which contains all the non-constant attributs
+	static map<string, pair<string, void*> > __attr__;
+	static void push_attr()
+	{
+		__attr__["color_image_type"] = make_pair("int", static_cast<void*>(&color_image_type));
+	}
+
 	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;

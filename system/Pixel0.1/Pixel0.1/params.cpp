@@ -7,11 +7,14 @@
 //
 #include "params.h"
 #include <opencv2/imgproc.hpp>
+#include <map>
 const string Params::SIFT = "SIFT";
 const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
 const string Params::SURF = "SURF";
 const string Params::MORPH_BASIC = "MORPH_BASIC";
 const string Params::EGBIS = "EGBIS";
+
+map<string, pair<string, void*> > __attr__;
 
 //params for images
 int Params::color_image_type = CV_8UC3;
