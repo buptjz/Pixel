@@ -58,6 +58,12 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.SegmentType->addItem(QWidget::tr(segmentType1.c_str()));
 	ui.SegmentType->addItem(QWidget::tr(segmentType2.c_str()));
 
+	//设置ImagePatchViewInOneImage列表样式
+	ui.ImagePatchViewInOneImage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
+	ui.ImagePatchViewInOneImage->setResizeMode(QListView::Adjust);
+	ui.ImagePatchViewInOneImage->setViewMode(QListView::IconMode);
+	ui.ImagePatchViewInOneImage->setMovement(QListView::Static);
+	ui.ImagePatchViewInOneImage->setSpacing(10);
 	//设置connect 槽
 	//receive log messge
 	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
