@@ -22,8 +22,9 @@ public:
 	SuperImagePatchItemclickedThread * superImagePatchItemclickedThread = NULL;
 	ImagePatchItemclickedThread* imagePatchItemclickedThread = NULL;
 	RemoveDuplicateBtnThread*  removeDuplicateBtnThread = NULL;
-
+	SavePatches2DataBaseBtnThread * savePatches2DataBaseBtnThread = NULL;
 	SegmentBtnThread *segmentBtnThread = NULL;
+
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;
 	OriginalImage* originalImageSegemented = NULL;
@@ -54,6 +55,8 @@ private:
 
 	void on_removeDuplicateBtn_clicked();//单幅图像去重
 	void setRemoveDuplicateSuperImagePatch();//显示去重图像
+
+	void on_SavePatches2DataBaseBtn_clicked();//存储单幅图像及其图元、超图元入数据库
 
 	void on_ImageLibBtn_clicked();  //点击图像库
 	void on_Add2ImageLib_clicked();//add new images to library,  running in the background 

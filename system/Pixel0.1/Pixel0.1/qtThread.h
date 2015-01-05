@@ -91,4 +91,19 @@ protected:
 signals:
 	void sig();
 };
+
+//save an image and its imformation into database
+class SavePatches2DataBaseBtnThread : public QThread
+{
+	Q_OBJECT
+public:
+	SavePatches2DataBaseBtnThread(OriginalImage* originalImageSegemented, vector<ImagePatch*>* segementedImagePatches, vector<SuperImagePatch*> *segementedSupeImagePatches);
+	OriginalImage* originalImageSegemented = NULL;
+	vector<SuperImagePatch*> *segementedSupeImagePatches = NULL;
+	vector<ImagePatch*> *segementedImagePatches = NULL;
+protected:
+	void run();
+};
+
+
 #endif

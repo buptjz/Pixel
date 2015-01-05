@@ -75,8 +75,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
 	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
-
 	connect(ui.RemoveDuplicateBtn, SIGNAL(clicked()), this, SLOT(on_removeDuplicateBtn_clicked()));
+	connect(ui.SavePatches2DataBaseBtn, SIGNAL(clicked()), this, SLOT(on_SavePatches2DataBaseBtn_clicked()));
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
 	connect(ui.SearchBtn, SIGNAL(clicked()), this, SLOT(on_searchBtn_clicked()));
@@ -163,22 +163,18 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 			QSize size = ui.OriginalImageView->maximumViewportSize();
 			QImage scaledImg = originalImage->scaled(size, Qt::KeepAspectRatio);
 
-			//get the OriginalImageSegemented and change it to OriginalImage
-			Mat oipTemp = QImage2Mat(*originalImage);
-			oipTemp.convertTo(oipTemp, Params::color_image_type);
-			Mat *originalImage = new Mat(oipTemp);
-			//Mat *binaryImage = new Mat(originalImage->rows, originalImage->cols, Params::grey_image_type);
-			
-			//construct OriginalImageId
+			//get the OriginalImageSegemented 
 			string path = fileName.toStdString();//the direction of originalImages
+			//construct OriginalImageId
 			string originalImageId = path;
 
+			Mat *originalImagePatch = new  Mat(imread_and_preprocess(path));
 			if (originalImageSegemented != NULL)
 			{
 				delete originalImageSegemented;
 			}
 			originalImageSegemented = NULL;
-			originalImageSegemented = new OriginalImage(path, originalImageId, originalImage);
+			originalImageSegemented = new OriginalImage(path, originalImageId, originalImagePatch);
 		
 
 			//加载显示图片
@@ -244,7 +240,6 @@ void qt_Pixel_Main::setSegmentedImagePatch()
 	logDisplay->logDisplay("Display image patches belong to the image " + originalImageSegemented->getPath() );
 }
 
-
 /*
 对单幅图像中的图元去重
 */
@@ -284,6 +279,13 @@ void qt_Pixel_Main::setRemoveDuplicateSuperImagePatch()
 	logDisplay->logDisplay("Display super image patches of the input image.");
 }
 
+/*存储单幅图像及其图元、超图元入数据库*/
+void qt_Pixel_Main::on_SavePatches2DataBaseBtn_clicked()
+{
+	logDisplay->logDisplay("Saving the image and its patches into database .... ....");
+	savePatches2DataBaseBtnThread = new SavePatches2DataBaseBtnThread(originalImageSegemented, &segementedImagePatches, &segementedSupeImagePatches);
+	savePatches2DataBaseBtnThread->start();
+}
 /*打开样本图像*/
 void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 {

@@ -61,6 +61,8 @@ string Params::featureType = SHAPE_CONTEXT;//featureType used
 string Params::segment_type = Params::MORPH_BASIC;
 size_t Params::top_k = 5;//return the top_k simplar superImagePatches
 
+string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
+
 void Params::push_attr()
 {
 	__attr__["color_image_type"] = make_pair("int", static_cast<void*>(&color_image_type));
@@ -97,4 +99,6 @@ void Params::push_attr()
 	__attr__["featureType"] = make_pair("string", static_cast<void*>(&featureType));
 	__attr__["segment_type"] = make_pair("string", static_cast<void*>(&segment_type));
 	__attr__["top_k"] = make_pair("size_t", static_cast<void*>(&top_k));
+
+	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 }
