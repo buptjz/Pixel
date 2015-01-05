@@ -172,3 +172,43 @@ void RemoveDuplicateBtnThread::run()
 	logDisplay->logDisplay("Remove duplicate image patches finished.");
 	emit this->sig();
 }
+
+
+SavePatches2DataBaseBtnThread::SavePatches2DataBaseBtnThread(OriginalImage* originalImageSegemented, vector<ImagePatch*>* segementedImagePatches, vector<SuperImagePatch*> *segementedSupeImagePatches)
+{
+	this->originalImageSegemented = originalImageSegemented;
+	this->segementedImagePatches = segementedImagePatches;
+	this->segementedSupeImagePatches = segementedSupeImagePatches;
+}
+
+void SavePatches2DataBaseBtnThread::run()
+{
+	string path = originalImageSegemented->getPath();
+	string pattern = "/";
+	vector<std::string>  splitstr = split(path, pattern);
+	
+	string imageName = splitstr[splitstr.size() - 1];
+	string newPath = "./" + Params::defaultPath + "/" + imageName;
+	string originalImageId = Params::defaultPath + "_" + imageName;
+	originalImageSegemented->setOriginalImageId(originalImageId);
+	originalImageSegemented->setPath(newPath);
+	//creat file of newPath if not exist
+	
+	imwrite(newPath, *originalImageSegemented->getImage());
+	logDisplay->logDisplay("Saved " + path + " to " + newPath);
+
+	originalImageSegemented->saveOriginalImage();
+	for (int i = 0; i < segementedImagePatches->size(); i++)
+	{
+		(*segementedImagePatches)[i]->savePatch();
+	}
+	logDisplay->logDisplay("Saved segemented image patches");
+	for (int i = 0; i < segementedSupeImagePatches->size(); i++)
+	{
+		(*segementedSupeImagePatches)[i]->savePatch();
+	}
+	logDisplay->logDisplay("Saved segemented super image patches");
+	//*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
+	//logDisplay->logDisplay("Remove duplicate image patches finished.");
+
+}
