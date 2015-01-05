@@ -17,8 +17,12 @@ void ImageLibThread::run()
 {
 	vector<SuperImagePatch*> allSuperImagePatchs;
 	string path = dirPath.toStdString();//the file direction of originalImages
+	if (path.empty() || path == "")
+	{
+		return;
+	}
 	std::vector<std::string> splitpath = split(path, "/");
-
+	logDisplay->logDisplay("images are training ... ... ");
 	string fileName = splitpath[splitpath.size() - 1];//name of the file which contains originalImages
 	//traverse folder
 	_finddata_t fileinfo;
@@ -73,7 +77,7 @@ void ImageLibThread::run()
 	logDisplay->logDisplay("Removing duplicate image patches in all super image patches  ... ...");
 	//the second time of duplicate removal, finally obtain the collection of superImagePatch
 	vector<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs);
-	logDisplay->logDisplay("Removing duplicate image patches in all super image patches  finished");
+	logDisplay->logDisplay("Remove duplicate image patches in all super image patches  finished");
 	//save superImagePatches into the database && update the superImagePatchId of table imagePatch in database
 	vector<SuperImagePatch*>::iterator  itor = fsip.begin();
 	while (itor != fsip.end())
@@ -103,7 +107,6 @@ SearchBtnThread::SearchBtnThread(vector<pair<double, Patch*> >  *similarPatches,
 void SearchBtnThread::run()
 {
 	vector<Patch*> images = readAllSuperImagePatches();
-	
 	const string featureType = Params::featureType;
 	size_t top_k = Params::top_k;
 	*similarPatches = patchCompared-> patchCompareWith(images, featureType, top_k);
@@ -140,4 +143,18 @@ void ImagePatchItemclickedThread::run()
 {
 	Mat pImage = imread_and_preprocess(originalImagePath.c_str());
 	drawPatch(pImage, position);
+}
+
+
+SegmentBtnThread::SegmentBtnThread(OriginalImage* originalImageSegemented, vector<ImagePatch*>* segementedImagePatches) : QThread()
+{
+	this->originalImageSegemented = originalImageSegemented;
+	this->segementedImagePatches = segementedImagePatches;
+}
+
+void SegmentBtnThread::run()
+{
+	logDisplay->logDisplay("Begin to segment image " + originalImageSegemented->getPath());
+	*segementedImagePatches = originalImageSegemented->segmentImage();
+	emit this->sig();
 }
