@@ -18,6 +18,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #include "surfMatch.h"
+#include "tools.h"
 #include "params.h"
 
 #ifdef __DEBUG__

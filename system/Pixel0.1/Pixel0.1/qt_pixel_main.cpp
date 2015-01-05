@@ -5,6 +5,7 @@
 #include "tools.h"
 #include "params.h"
 #include "logDisplay.h"
+#include "tools.h"
 extern LogDisplay* logDisplay;
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
@@ -270,7 +271,6 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 				delete patchCompared;
 			}
 			patchCompared = new SuperImagePatch("patchCompared", originalImagePatch, binaryImagePatch);
-
 			//¼ÓÔØÏÔÊ¾Í¼Æ¬
 			scene->addPixmap(QPixmap::fromImage(scaledImg));
 			ui.SampleImageView->setScene(scene);

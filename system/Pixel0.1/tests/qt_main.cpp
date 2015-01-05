@@ -14,9 +14,9 @@
 using namespace cv;
 int main(int argc, char *argv[])
 {
-	/*
+	
 	Params::top_k =5;
-	Params::patch_pixal_least = 400;
+	Params::patch_pixel_min = 0.01;
 	Params::shape_context_compare_1_thres = 0.2;
 	Params::shape_context_compare_2_thres = 0.2;
 	Params::featureType = Params::SURF;//featureType used 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 		//open database
 		int res = SQLiteHelper::OpenDB("./Pixel.db3");
 	}
-	*/
+	
 
 	QApplication a(argc, argv);
 	qt_Pixel_Main w;
