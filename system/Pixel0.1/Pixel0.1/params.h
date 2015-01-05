@@ -4,6 +4,7 @@
 //#include <iostream>
 
 #include <string>
+#include <map>
 using namespace std;
 
 #define __DEBUG__
@@ -11,6 +12,10 @@ using namespace std;
 class Params
 {
 public:
+	//a map which contains all the non-constant attributs
+	static map<string, pair<string, void*> > __attr__;
+	static void push_attr();
+	
 	//some flages
 	static const string SIFT;
 	static const string SHAPE_CONTEXT;
