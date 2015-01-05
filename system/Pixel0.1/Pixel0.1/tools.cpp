@@ -79,7 +79,6 @@ void tool_print_mat_info(Mat M){
     cout << "[Conti] " << M.isContinuous() << endl;
     cout << "[lengt] " << M.dataend - M.datastart << endl;
     cout << "------------------------------" << endl;
-
 }
 
 
