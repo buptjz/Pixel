@@ -58,6 +58,12 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.SegmentType->addItem(QWidget::tr(segmentType1.c_str()));
 	ui.SegmentType->addItem(QWidget::tr(segmentType2.c_str()));
 
+
+	//ui.RemoveDuplicateType
+	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType1.c_str()));
+	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType2.c_str()));
+	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType3.c_str()));
+
 	//设置ImagePatchViewInOneImage列表样式
 	ui.ImagePatchViewInOneImage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
 	ui.ImagePatchViewInOneImage->setResizeMode(QListView::Adjust);
@@ -69,6 +75,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
 	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
+
+	connect(ui.RemoveDuplicateBtn, SIGNAL(clicked()), this, SLOT(on_removeDuplicateBtn_clicked()));
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
 	connect(ui.SearchBtn, SIGNAL(clicked()), this, SLOT(on_searchBtn_clicked()));
@@ -163,12 +171,7 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 			
 			//construct OriginalImageId
 			string path = fileName.toStdString();//the direction of originalImages
-			std::vector<std::string> splitpath = split(path, "/");
-			if (splitpath.size()<2)
-			{
-				return;
-			}
-			string originalImageId = splitpath[splitpath.size() - 2] + splitpath[splitpath.size() - 1];
+			string originalImageId = path;
 
 			if (originalImageSegemented != NULL)
 			{
@@ -241,6 +244,46 @@ void qt_Pixel_Main::setSegmentedImagePatch()
 	logDisplay->logDisplay("Display image patches belong to the image " + originalImageSegemented->getPath() );
 }
 
+
+/*
+对单幅图像中的图元去重
+*/
+void qt_Pixel_Main::on_removeDuplicateBtn_clicked()
+{
+	if (segementedImagePatches.empty() || segementedImagePatches.size() == 0)
+	{
+		logDisplay->logDisplay("There is no segemented image patches to remove duplicate! ");
+		return;
+	}
+	removeDuplicateBtnThread = new RemoveDuplicateBtnThread(&segementedImagePatches, &segementedSupeImagePatches);
+	//here main thread wait for segmentBtnThread excute 
+	connect(removeDuplicateBtnThread, SIGNAL(sig()), this, SLOT(setRemoveDuplicateSuperImagePatch()));
+	removeDuplicateBtnThread->start();
+}
+
+//remove duplicate image patches segmented for one image, then set acquired super Image Patches in ui.ImagePatchViewInOneImage 
+void qt_Pixel_Main::setRemoveDuplicateSuperImagePatch()
+{
+	if (ui.ImagePatchViewInOneImage->count() != 0)
+	{
+		ui.ImagePatchViewInOneImage->clear();
+	}
+
+	for (int i = 0; i < segementedSupeImagePatches.size(); i++)
+	{
+		Patch* sip = segementedSupeImagePatches[i];
+		QImage showImage = Mat2QImage(*(sip->getOriginalImagePatch()));
+		//change QImage to QIcon and show 
+		QPixmap qp = QPixmap::fromImage(showImage);
+		stringstream ss;
+		string str;
+		ss << (i + 1);
+		ss >> str;
+		ui.ImagePatchViewInOneImage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
+	}
+	logDisplay->logDisplay("Display super image patches of the input image.");
+}
+
 /*打开样本图像*/
 void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 {
@@ -261,15 +304,16 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 			QImage scaledImg = image->scaled(size, Qt::KeepAspectRatio);
 
 			//get the sampleImage and change it to patch, process later in searchBtn operation
-			Mat oipTemp = QImage2Mat(*image);
-			oipTemp.convertTo(oipTemp, Params::color_image_type);
-			Mat *originalImagePatch = new Mat(oipTemp);
+			string path = fileName.toStdString();
+			Mat *originalImagePatch = new  Mat(imread_and_preprocess(path));
+
 			Mat *binaryImagePatch = new Mat(originalImagePatch->rows, originalImagePatch->cols, Params::grey_image_type);
+			cvtColor(*originalImagePatch, *binaryImagePatch, CV_BGR2GRAY, Params::grey_image_channels);
 			if (patchCompared != NULL)
 			{
 				delete patchCompared;
 			}
-			patchCompared = new SuperImagePatch("patchCompared", originalImagePatch, binaryImagePatch);
+			patchCompared = new SuperImagePatch("patchCompared", binaryImagePatch, originalImagePatch);
 
 			//加载显示图片
 			scene->addPixmap(QPixmap::fromImage(scaledImg));
@@ -321,12 +365,8 @@ void qt_Pixel_Main::setsuperImagePatch()
 		QImage showImage = Mat2QImage(*(sip->getOriginalImagePatch()));
 		//convert int to string, for mark QIcon
 		double similarity = similarPatches[i].first;
-		stringstream ss;
 		string str;
-		ss << (i + 1);
-		ss << ": ";
-		ss <<similarity;
-		ss >> str;
+		str = to_string(i + 1) + ": " + to_string(similarity).substr(0, 4);
 		//change QImage to QIcon and show 
 		QPixmap qp = QPixmap::fromImage(showImage);
 		ui.SuperImagePatchView->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
