@@ -1,6 +1,7 @@
 #ifndef QT_PIXEL_MAIN_H
 #define QT_PIXEL_MAIN_H
 
+#include "dialog_matchParasAll.h"
 #include <QtWidgets/QMainWindow>
 #include "ui_qt_pixel_main.h"
 #include <qlistwidget.h>
@@ -9,6 +10,7 @@
 #include <qtextcodec.h>
 #include "qtThread.h"
 #include "imagePatch.h"
+
 
 class qt_Pixel_Main : public QMainWindow
 {
@@ -36,6 +38,7 @@ public:
 
 public:
 	static Ui::MainWindow ui;
+	DialogMatchParasAll  dialogMatchParasAll;
 
 private:
 	QImage *image = NULL;
@@ -45,7 +48,7 @@ private:
 
 	//viewerDialog viewerDlg;
 
-	public slots:
+public slots:
 	//display log
 	void on_logDisplay(QString logQstr);
 
@@ -70,6 +73,8 @@ private:
 	void setsuperImagePatch();
 	void setImagePatch();
 
+
+	void setMatchParasAll();//设置“批量入库”界面的匹配参数
 
 };
 
