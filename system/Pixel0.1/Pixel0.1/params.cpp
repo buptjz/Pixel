@@ -24,6 +24,7 @@ int Params::grey_image_channels = 1;
 int Params::connect_map_type = CV_16UC1;
 
 //segment
+double Params::pixel_rat_min = 0.00005;
 int Params::retry_max = 10;
 float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
@@ -105,6 +106,6 @@ void Params::push_attr()
 	__attr__["segment_type_for_one_image"] = make_pair("string", static_cast<void*>(&segment_type_for_one_image));
 	__attr__["segment_type_for_batch_image"] = make_pair("string", static_cast<void*>(&segment_type_for_batch_image));
 	__attr__["top_k"] = make_pair("int", static_cast<void*>(&top_k));
-
+	__attr__["pixel_rat_min"] = make_pair("double", static_cast<void*>(&pixel_rat_min));
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 }

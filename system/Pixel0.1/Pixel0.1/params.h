@@ -31,6 +31,7 @@ public:
 	static int connect_map_type;
 
 	//params for segment
+	static double pixel_rat_min;
 	static int retry_max;//if segment failed, the max times algorithm can retry.
 	static float segment_expect_upboard;
 	static float segment_expect_lowboard;
