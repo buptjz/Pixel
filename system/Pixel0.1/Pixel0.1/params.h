@@ -15,6 +15,9 @@ public:
 	//a map which contains all the non-constant attributs
 	static map<string, pair<string, void*> > __attr__;
 	static void push_attr();
+    
+    //set one of the parameters a value
+    static void set_attr(const char *name,const char * value);
 	
 	//some flages
 	static const string SIFT;

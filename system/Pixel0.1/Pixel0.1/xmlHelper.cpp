@@ -38,25 +38,7 @@ void load_params(const string &file){
         for(; pElem; pElem = pElem->NextSiblingElement()){
             const char *pKey = pElem->Value();
             const char *pText = pElem->GetText();
-            if (pKey && pText){
-                it = Params::__attr__.find(pKey);
-                if (it != Params::__attr__.end()) {
-                    p_type = (it->second).first;
-                    if (p_type == "float") {
-                        *((float *)((it->second).second)) = atof(pText);
-                    }else if(p_type == "double"){
-                        *((double *)((it->second).second)) = atof(pText);
-                    }else if(p_type == "int"){
-                        *((int *)((it->second).second)) = atoi(pText);
-                    }else if(p_type == "bool"){
-                        *((bool *)((it->second).second)) = (bool) atoi(pText);
-                    }else{
-                        *((string *)((it->second).second)) = string(pText);
-                    }
-                }
-            }else{
-                cout << "[Error] cannot figure the param "<< pKey <<endl;
-            }
+            Params::set_attr(pKey, pText);
         }
     }
 }

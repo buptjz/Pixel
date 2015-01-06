@@ -109,3 +109,30 @@ void Params::push_attr()
 	__attr__["pixel_rat_min"] = make_pair("double", static_cast<void*>(&pixel_rat_min));
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 }
+
+void Params::set_attr(const char *name,const char * value){
+    string p_type;
+    map<string, pair<string, void*> >::iterator it;
+    if (name && value){
+        it = Params::__attr__.find(name);
+        if (it != Params::__attr__.end()) {
+            p_type = (it->second).first;
+            if (p_type == "float") {
+                *((float *)((it->second).second)) = atof(value);
+            }else if(p_type == "double"){
+                *((double *)((it->second).second)) = atof(value);
+            }else if(p_type == "int"){
+                *((int *)((it->second).second)) = atoi(value);
+            }else if(p_type == "bool"){
+                *((bool *)((it->second).second)) = (bool) atoi(value);
+            }else if(p_type == "string"){
+                *((string *)((it->second).second)) = string(value);
+            }else{
+                //Error
+            }
+        }else{
+            //No such parameter: para_name
+        }
+    }
+}
+
