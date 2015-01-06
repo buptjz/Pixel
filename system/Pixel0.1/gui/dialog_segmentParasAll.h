@@ -17,7 +17,10 @@ private:
 
 
 public:
-	void setSegmentParas();
+	void setSegmentParas();//点击 dialog上的“OK”按钮， 设置修改的参数
+	void getSegmentParas();//进入dialog界面时，将当前参数显示在对应的界面项里
+public slots:
+	void on_OKbtn_segmentParasAll();
 };
 
 #endif

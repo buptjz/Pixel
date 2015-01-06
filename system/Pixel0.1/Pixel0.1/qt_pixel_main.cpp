@@ -464,7 +464,7 @@ void qt_Pixel_Main::setMatchParasAll()
 {
 	Params::featureType_for_batch_image = (ui.MatchTypeAll->currentText()).toStdString();
 	logDisplay->logDisplay("Setting match parameters of all images!");
-	dialogMatchParasAll.setMatchParas();
+	dialogMatchParasAll.getMatchParas();
 	dialogMatchParasAll.show();
 }
 
@@ -472,6 +472,6 @@ void qt_Pixel_Main::setSegmentParasAll()
 {
 	Params::segment_type_for_batch_image = (ui.SegmentTypeAll->currentText()).toStdString();
 	logDisplay->logDisplay("Setting segment parameters of all images!");
-	dialogSegmentParasAll.setSegmentParas();
+	dialogSegmentParasAll.getSegmentParas();
 	dialogSegmentParasAll.show();
 }

@@ -17,7 +17,13 @@ private:
 
 
 public:
-	void setMatchParas();
+	void setMatchParas();//点击 dialog上的“OK”按钮， 设置修改的参数
+	void getMatchParas();//进入dialog界面时，将当前参数显示在对应的界面项里
+
+public slots:
+	void on_OKbtn_matchParasAll();
+
 };
+
 
 #endif
