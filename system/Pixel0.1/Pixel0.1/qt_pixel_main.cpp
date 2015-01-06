@@ -166,8 +166,12 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 
 			//get the OriginalImageSegemented 
 			string path = fileName.toStdString();//the direction of originalImages
-			//construct OriginalImageId
-			string originalImageId = path;
+			//construct OriginalImageId and newPath
+			string pattern = "/";
+			vector<std::string>  splitstr = split(path, pattern);
+			string imageName = splitstr[splitstr.size() - 1];
+			string newPath = "./" + Params::defaultPath + "/" + imageName;
+			string originalImageId = Params::defaultPath + "_" + imageName;
 
 			Mat *originalImagePatch = new  Mat(imread_and_preprocess(path));
 			if (originalImageSegemented != NULL)
@@ -175,7 +179,7 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 				delete originalImageSegemented;
 			}
 			originalImageSegemented = NULL;
-			originalImageSegemented = new OriginalImage(path, originalImageId, originalImagePatch);
+			originalImageSegemented = new OriginalImage(originalImageId, newPath, originalImagePatch);
 		
 
 			//º”‘ÿœ‘ æÕº∆¨

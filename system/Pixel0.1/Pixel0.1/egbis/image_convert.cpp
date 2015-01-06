@@ -36,7 +36,6 @@ image<rgb>* convertMatToNativeImage(const Mat *input){
             curr.b = intensity.val[0];
             curr.g = intensity.val[1];
             curr.r = intensity.val[2];
-            //            cout<< i+j*w << " ";
             im->data[j+i*w] = curr;
             //            im->data[i * w +j] = curr;
         }
