@@ -107,6 +107,11 @@ void generate_surf_descriptors(const Mat &img, Mat &ret_descriptors){
  matching score is s, 0 <= s <=1, s = number of matching / number of desp1
  */
 double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
+    //To few descriptors ,return 0
+    if (desp1.rows == 0 || desp2.rows <= 1) {
+        return 0.0;
+    }
+    
     BFMatcher matcher;//Can also try FlannBasedMatcher
     vector< DMatch > matches;
     vector<vector<DMatch>> m_knnMatches;
@@ -123,10 +128,8 @@ double surf_match_score_with_descriptor(const Mat &desp1, const Mat &desp2){
         if (distanceRatio < Params::surf_min_ratio)
             matches.push_back(bestMatch);
     }
-    
-    int desp1_len = desp1.rows;
 
-    return matches.size() / (double)desp1_len;
+    return matches.size() / (double)desp1.rows;
 }
 
 /*
