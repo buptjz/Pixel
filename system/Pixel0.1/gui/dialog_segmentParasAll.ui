@@ -25,7 +25,7 @@
    <property name="title">
     <string>MORPH_BASIC</string>
    </property>
-   <widget class="QLineEdit" name="lineEdit_8">
+   <widget class="QLineEdit" name="lineEdit_morph_min">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -35,7 +35,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="morph_min">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -61,7 +61,7 @@
    <property name="title">
     <string>EGBIS</string>
    </property>
-   <widget class="QLabel" name="label_9">
+   <widget class="QLabel" name="egbis_sigma">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -74,7 +74,7 @@
      <string>egbis_sigma</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_9">
+   <widget class="QLineEdit" name="lineEdit_egbis_sigma">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -87,7 +87,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLabel" name="egbis_c">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -100,7 +100,7 @@
      <string>egbis_c</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_10">
+   <widget class="QLineEdit" name="lineEdit_egbis_c">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -113,7 +113,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="egbis_min_size">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -126,7 +126,7 @@
      <string>egbis_min_size</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_11">
+   <widget class="QLineEdit" name="lineEdit_egbis_min_size">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -149,7 +149,7 @@
    <property name="title">
     <string>公共参数</string>
    </property>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="retry_max">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -162,7 +162,7 @@
      <string>retry_max</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="segment_expect_upboard">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -175,7 +175,7 @@
      <string>segment_expect_upboard</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="segment_expect_lowboard">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -188,7 +188,7 @@
      <string>segment_expect_lowboard</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="segment_expect">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -201,7 +201,7 @@
      <string>segment_expect</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="segment_step">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -214,7 +214,7 @@
      <string>segment_step</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="patch_pixel_min">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -227,7 +227,7 @@
      <string>patch_pixel_min</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="patch_pixel_max">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -240,7 +240,7 @@
      <string>patch_pixel_max</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_retry_max">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -250,7 +250,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="lineEdit_segment_expect_upboard">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -260,7 +260,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="lineEdit_segment_expect_lowboard">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -270,7 +270,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="lineEdit_segment_expect">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -280,7 +280,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="lineEdit_patch_pixel_min">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -290,7 +290,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_6">
+   <widget class="QLineEdit" name="lineEdit_patch_pixel_max">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -300,7 +300,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_7">
+   <widget class="QLineEdit" name="lineEdit_segment_step">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -311,7 +311,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="OKbtn_segmentParasAll">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -324,7 +324,7 @@
     <string>ok</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="CancelBtn_segmentParasAll">
    <property name="geometry">
     <rect>
      <x>420</x>
