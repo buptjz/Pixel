@@ -9,7 +9,6 @@
 #ifndef __Xcode_Pixel_Proj__surfMatch__
 #define __Xcode_Pixel_Proj__surfMatch__
 
-#include <stdio.h>
 #include "imagePatch.h"
 
 /*--------------------------------------

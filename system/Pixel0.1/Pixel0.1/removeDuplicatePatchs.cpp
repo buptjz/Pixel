@@ -2,8 +2,10 @@
 #include "removeDuplicatePatchs.h"
 #include "params.h"
 
+#ifdef __DEBUG__
 #include "logDisplay.h"
 extern LogDisplay* logDisplay;
+#endif
 
 /*
  find the smallest element(with its index) in vectors

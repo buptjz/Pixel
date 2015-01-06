@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -400,7 +400,7 @@
      <attribute name="title">
       <string>批量入库</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="SetMatchParasAllBtn">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -413,7 +413,7 @@
        <string>匹配参数设置</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="SetSegmentParasAllBtn">
       <property name="geometry">
        <rect>
         <x>30</x>

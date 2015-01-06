@@ -87,6 +87,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.AddinLibBtn, SIGNAL(clicked()), this, SLOT(on_Add2ImageLib_clicked()));
 
 	connect(ui.SegmentBtn, SIGNAL(clicked()), this, SLOT(on_segmentBtn_clicked()) );
+
+	connect(ui.SetMatchParasAllBtn, SIGNAL(clicked()), this, SLOT(setMatchParasAll()));
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -445,3 +447,9 @@ void qt_Pixel_Main::on_ImagePatch_Itemclicked(QListWidgetItem *item)
 	imagePatchItemclickedThread->start();
 }
 
+void qt_Pixel_Main::setMatchParasAll()
+{
+	logDisplay->logDisplay("Setting match parameters of all images!");
+	dialogMatchParasAll.setMatchParas();
+	dialogMatchParasAll.show();
+}
