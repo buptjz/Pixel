@@ -69,7 +69,7 @@ public:
 	static string featureType_for_search;
 	static string segment_type_for_one_image;
 	static string segment_type_for_batch_image;
-	static size_t top_k;//return the top_k simplar superImagePatches
+	static int top_k;//return the top_k simplar superImagePatches
 
 	static string defaultPath;
 };

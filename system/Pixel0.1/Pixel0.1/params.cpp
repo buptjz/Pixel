@@ -62,7 +62,7 @@ string Params::featureType_for_batch_image = SHAPE_CONTEXT;
 string Params::featureType_for_search = SHAPE_CONTEXT;
 string Params::segment_type_for_one_image = Params::MORPH_BASIC;
 string Params::segment_type_for_batch_image = Params::MORPH_BASIC;
-size_t Params::top_k = 5;//return the top_k simplar superImagePatches
+int Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
 
@@ -104,7 +104,7 @@ void Params::push_attr()
 	__attr__["featureType_for_search"] = make_pair("string", static_cast<void*>(&featureType_for_search));
 	__attr__["segment_type_for_one_image"] = make_pair("string", static_cast<void*>(&segment_type_for_one_image));
 	__attr__["segment_type_for_batch_image"] = make_pair("string", static_cast<void*>(&segment_type_for_batch_image));
-	__attr__["top_k"] = make_pair("size_t", static_cast<void*>(&top_k));
+	__attr__["top_k"] = make_pair("int", static_cast<void*>(&top_k));
 
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 }
