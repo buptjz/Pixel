@@ -25,7 +25,7 @@
    <property name="title">
     <string>SURF</string>
    </property>
-   <widget class="QLineEdit" name="lineEdit_8">
+   <widget class="QLineEdit" name="lineEdit_surf_descriptor_min">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -35,7 +35,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="surf_descriptor_min">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -48,7 +48,7 @@
      <string>surf_descriptor_min</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_9">
+   <widget class="QLineEdit" name="lineEdit_surf_compare_1_thres">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -58,7 +58,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
+   <widget class="QLabel" name="surf_compare_1_thres">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -71,7 +71,7 @@
      <string>surf_compare_1_thres</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_10">
+   <widget class="QLineEdit" name="lineEdit_surf_compare_2_thres">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -81,7 +81,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLabel" name="surf_compare_2_thres">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -94,7 +94,7 @@
      <string>surf_compare_2_thres</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="surf_min_ratio">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -107,7 +107,7 @@
      <string>surf_min_ratio</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_11">
+   <widget class="QLineEdit" name="lineEdit_surf_dimensions">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -117,7 +117,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_12">
+   <widget class="QLabel" name="surf_dimensions">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -130,7 +130,7 @@
      <string>surf_dimensions</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_12">
+   <widget class="QLineEdit" name="lineEdit_surf_min_ratio">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -153,7 +153,7 @@
    <property name="title">
     <string>SHAPE_CONTEXT</string>
    </property>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="shape_context_sample_point_num">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -166,7 +166,7 @@
      <string>shape_context_sample_point_num</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="shape_context_bending_weight">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -179,7 +179,7 @@
      <string>shape_context_bending_weight</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="shape_context_match_weight">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -192,7 +192,7 @@
      <string>shape_context_match_weight</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="shape_context_appearance_weight">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -205,7 +205,7 @@
      <string>shape_context_appearance_weight</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="shape_context_compare_2_thres">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -218,7 +218,7 @@
      <string>shape_context_compare_2_thres</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="shape_context_use_rotation">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -231,7 +231,7 @@
      <string>shape_context_use_rotation</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="shape_context_compare_1_thres">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -244,7 +244,7 @@
      <string>shape_context_compare_1_thres</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_shape_context_sample_point_num">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -254,7 +254,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="lineEdit_shape_context_bending_weight">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -264,7 +264,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="lineEdit_shape_context_match_weight">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -274,7 +274,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="lineEdit_shape_context_appearance_weight">
     <property name="geometry">
      <rect>
       <x>155</x>
@@ -284,7 +284,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="lineEdit_shape_context_use_rotation">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -294,7 +294,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_6">
+   <widget class="QLineEdit" name="lineEdit_shape_context_compare_1_thres">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -304,7 +304,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_7">
+   <widget class="QLineEdit" name="lineEdit_shape_context_compare_2_thres">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -315,7 +315,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="CancelBtn_matchParasAll">
    <property name="geometry">
     <rect>
      <x>415</x>
@@ -328,7 +328,7 @@
     <string>cancel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="OKbtn_matchParasAll">
    <property name="geometry">
     <rect>
      <x>315</x>

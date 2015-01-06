@@ -65,6 +65,18 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType2.c_str()));
 	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType3.c_str()));
 
+
+	//MatchType All style (QComboBox)
+	//ui.MatchTypeAll
+	ui.MatchTypeAll->addItem(QWidget::tr(matchType1.c_str()));
+	ui.MatchTypeAll->addItem(QWidget::tr(matchType2.c_str()));
+	ui.MatchTypeAll->addItem(QWidget::tr(matchType3.c_str()));
+
+	//SegmentType style  All(QComboBox)
+	//ui.SegmentTypeAll
+	ui.SegmentTypeAll->addItem(QWidget::tr(segmentType1.c_str()));
+	ui.SegmentTypeAll->addItem(QWidget::tr(segmentType2.c_str()));
+
 	//设置ImagePatchViewInOneImage列表样式
 	ui.ImagePatchViewInOneImage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
 	ui.ImagePatchViewInOneImage->setResizeMode(QListView::Adjust);
@@ -89,6 +101,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.SegmentBtn, SIGNAL(clicked()), this, SLOT(on_segmentBtn_clicked()) );
 
 	connect(ui.SetMatchParasAllBtn, SIGNAL(clicked()), this, SLOT(setMatchParasAll()));
+	connect(ui.SetSegmentParasAllBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasAll()));
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -143,7 +156,7 @@ void qt_Pixel_Main::on_Add2ImageLib_clicked()
 	//ui.LogDisplay->setText("many images are training!");
 	imageLibThread = new ImageLibThread(dirPath);
 	imageLibThread->start();
-
+	
 
 }
 
@@ -449,7 +462,16 @@ void qt_Pixel_Main::on_ImagePatch_Itemclicked(QListWidgetItem *item)
 
 void qt_Pixel_Main::setMatchParasAll()
 {
+	Params::featureType_for_batch_image = (ui.MatchTypeAll->currentText()).toStdString();
 	logDisplay->logDisplay("Setting match parameters of all images!");
 	dialogMatchParasAll.setMatchParas();
 	dialogMatchParasAll.show();
+}
+
+void qt_Pixel_Main::setSegmentParasAll()
+{
+	Params::segment_type_for_batch_image = (ui.SegmentTypeAll->currentText()).toStdString();
+	logDisplay->logDisplay("Setting segment parameters of all images!");
+	dialogSegmentParasAll.setSegmentParas();
+	dialogSegmentParasAll.show();
 }
