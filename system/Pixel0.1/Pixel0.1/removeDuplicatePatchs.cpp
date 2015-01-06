@@ -130,7 +130,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
         
         find_nearest(scores, &nearest_score, &nearest_index,featureType);
 #ifdef __DEBUG__
-        logDisplay->logDisplay("nearest_score = " + to_string(nearest_score));
+        logDisplay->logDisplay("Nearest_score = " + to_string(nearest_score));
 #endif
         //(1) has similar 'SP', insert 'P' to 'SP'
         if (should_merge1(nearest_score,featureType)) {
@@ -151,7 +151,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
             
         }else{
         // (2) no similar 'SP', generate a new one
-            logDisplay->logDisplay(",generate new one.");
+            logDisplay->logDisplay("No similar 'SP',Generate new one!");
             supers.push_back(generate_super_from_imagepatch(one_patch));
         }
     }
@@ -260,7 +260,7 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         find_nearest(scores, &nearest_score, &nearest_index, featureType);
         //(1) has similar 'SP', merge two 'SP's
 #ifdef __DEBUG__
-        logDisplay->logDisplay("nearest_score = " + to_string(nearest_score));
+        logDisplay->logDisplay("Nearest score = " + to_string(nearest_score));
         logDisplay->logDisplay("[SuperPatch = " + candi_sp->getSuperImagePatchId() + "] start [Filtering]");
 #endif
         if (should_merge2(nearest_score, featureType)) {
