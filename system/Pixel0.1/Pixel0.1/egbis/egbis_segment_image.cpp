@@ -114,9 +114,9 @@ static Mat egbis_segment_image(image<rgb> *im, Mat &retColorMat,int *num_ccs, fl
     *num_ccs = u->num_sets();
     
     Mat retMat = Mat::zeros(height, width, CV_16UC1);
-#ifdef __DEBUG__
-    tool_print_mat_info(retMat);
-#endif
+//#ifdef __DEBUG__
+//    tool_print_mat_info(retMat);
+//#endif
     map<int, int> index_map;
     map<int, int>::iterator it;
     int comp_index,color_index = 0;
