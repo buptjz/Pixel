@@ -130,12 +130,12 @@ vector<Rect *> & OriginalImage::getMetaInfos(vector<vector<Point>> & list, vecto
 分割一幅大图像为众多小图元，大图像为类OriginalImage的私有变量
 小图元以对象指针的list形式返回
 */
-vector<ImagePatch*> OriginalImage::segmentImage()
+vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 {	
 	Mat preImg;
-	if (Params::segment_type == Params::MORPH_BASIC)
+	if (segment_type == Params::MORPH_BASIC)
 		preImg = prePareImage(preImg, SimplePre);
-	else if (Params::segment_type == Params::EGBIS)
+	else if (segment_type == Params::EGBIS)
 		preImg = pOImage->clone();
 	else
 		return vector<ImagePatch*>();
@@ -145,18 +145,18 @@ vector<ImagePatch*> OriginalImage::segmentImage()
 	int coupreImgnt = 0;
 	for (int i = 0; i < Params::retry_max; ++i)
 	{
-		if (Params::segment_type == Params::MORPH_BASIC)
+		if (segment_type == Params::MORPH_BASIC)
 			coupreImgnt = segAlgorithm(preImg, CannyAndMorphing);
-		else if (Params::segment_type == Params::EGBIS)
+		else if (segment_type == Params::EGBIS)
 			coupreImgnt = segAlgorithm(preImg, egbis);
 		else
 			return vector<ImagePatch*>();
 		if (Params::segment_expect <= 0)
 			break;
 		else if (coupreImgnt < Params::segment_expect_lowboard * Params::segment_expect)
-			param_adaptor(Params::segment_type, false);
+			param_adaptor(segment_type, false);
 		else if (coupreImgnt > Params::segment_expect_upboard * Params::segment_expect)
-			param_adaptor(Params::segment_type, true);
+			param_adaptor(segment_type, true);
 		else
 			break;
 	}

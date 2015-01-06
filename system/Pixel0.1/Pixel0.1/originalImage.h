@@ -42,7 +42,7 @@ public:
 	void setPath(const string & s){ path = s; }
 	void setImage(Mat *pImage){ pOImage = pImage; }
 	/*分割图片，返回小图元的集合*/
-	vector<ImagePatch *> segmentImage();
+	vector<ImagePatch *> segmentImage(string segment_type);
 	//将图片信息存入数据库中
 	void saveOriginalImage()const;
 	/* 显示不同区域*/

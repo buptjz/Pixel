@@ -8,7 +8,7 @@ extern LogDisplay* logDisplay;
 /*
  find the smallest element(with its index) in vectors
  */
-static void find_nearest(vector<double> &scores, double *score,int *index){
+static void find_nearest(vector<double> &scores, double *score,int *index, string featureType){
     if (scores.empty()) {
         return;
     }
@@ -16,14 +16,14 @@ static void find_nearest(vector<double> &scores, double *score,int *index){
     *score = scores[0];
     *index = 0;
     for(int i = 1; i < (int)scores.size(); i++){
-		if (Params::featureType == Params::SHAPE_CONTEXT)
+		if (featureType == Params::SHAPE_CONTEXT)
 		{
 			if (scores[i] < *score){
 				*score = scores[i];
 				*index = i;
 			}
 		}
-		else if (Params::featureType == Params::SURF)
+		else if (featureType == Params::SURF)
 		{
 			if (scores[i] > *score){
 				*score = scores[i];
@@ -70,28 +70,28 @@ static SuperImagePatch* generate_super_from_imagepatch(ImagePatch *patch){
 /*
 decide if two patches should be merged
 */
-bool should_merge1(double val)
+bool should_merge1(double val,string featureType)
 {
-	if (Params::featureType == Params::SHAPE_CONTEXT)
+	if (featureType == Params::SHAPE_CONTEXT)
 	{
 		return val < Params::shape_context_compare_1_thres;
 		
 	}
-	else if (Params::featureType == Params::SURF)
+	else if (featureType == Params::SURF)
 	{
 		return val > Params::surf_compare_1_thres;
 	}
     return true;
 }
 
-bool should_merge2(double val)
+bool should_merge2(double val, string featureType)
 {
-	if (Params::featureType == Params::SHAPE_CONTEXT)
+	if (featureType == Params::SHAPE_CONTEXT)
 	{
 		return val < Params::shape_context_compare_2_thres;
 
 	}
-	else if (Params::featureType == Params::SURF)
+	else if (featureType == Params::SURF)
 	{
 		return val > Params::surf_compare_2_thres;
 	}
@@ -101,7 +101,7 @@ bool should_merge2(double val)
 /*
  Strategy [1]: 1 to many
  */
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec){
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec, string featureType){
 #ifdef __DEBUG__
     logDisplay->logDisplay("***********************[Start] Remove Duplicate Image patchs***********************");
 #endif
@@ -124,14 +124,14 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
 #endif
         //convert first ,use second
         vector<Patch *> base_patch_vec = convert_verctor<Patch,SuperImagePatch>(supers);
-        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, Params::featureType);
+        vector<double> scores = one_patch->patchCompareWith(base_patch_vec, featureType);
         
-        find_nearest(scores, &nearest_score, &nearest_index);
+        find_nearest(scores, &nearest_score, &nearest_index,featureType);
 #ifdef __DEBUG__
         logDisplay->logDisplay("nearest_score = " + to_string(nearest_score));
 #endif
         //(1) has similar 'SP', insert 'P' to 'SP'
-        if (should_merge1(nearest_score)) {
+        if (should_merge1(nearest_score,featureType)) {
 
 #ifdef __DEBUG__
             logDisplay->logDisplay("Merge!");
@@ -162,7 +162,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
 /*
  Strategy 2: 1 to 1 comparison
  */
-vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& patch_vec){
+vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& patch_vec, string featureType){
     vector<SuperImagePatch *> result;
     bool find_similar ;
     for (size_t i = 0 ; i < patch_vec.size(); i++) {
@@ -170,12 +170,12 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
         ImagePatch *one_patch = patch_vec[i];
         for (size_t j = 0; j < result.size(); j++) {
             SuperImagePatch *tmp_sp = result[j];
-            double score = one_patch->patchCompareWith(tmp_sp, Params::featureType);
+            double score = one_patch->patchCompareWith(tmp_sp, featureType);
             // (1) has similar 'SP', insert
 #ifdef __DEBUG__
             logDisplay->logDisplay(to_string(score));
 #endif
-            if(should_merge1(score)){
+            if(should_merge1(score,featureType)){
                 //set pointer
                 vector<Patch *> patch_vec = tmp_sp->getPatchList();
                 patch_vec.push_back(one_patch);
@@ -213,11 +213,11 @@ vector<SuperImagePatch*> removeDuplicateImagePatch1To1(vector<ImagePatch* >& pat
  [2] 1 To 1 Strategy:
  once find a pair of 'P' and 'SP' has similarity <= threshold, insert 'P' to 'SP'
  */
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec,bool use1To1){
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec,bool use1To1, string featureType){
     if (use1To1)
-        return removeDuplicateImagePatch1To1(patch_vec);
+        return removeDuplicateImagePatch1To1(patch_vec,featureType);
     else
-        return removeDuplicateImagePatchs(patch_vec);
+        return removeDuplicateImagePatchs(patch_vec,featureType);
 }
 
 
@@ -229,7 +229,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_
  Same idea as removeDuplicateImagePatchs
  */
 
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec){
+vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>& sp_vec, string featureType){
 #ifdef __DEBUG__
     logDisplay->logDisplay("********************[Start] Remove Duplicate SuperImage patchs********************");
 #endif
@@ -253,15 +253,15 @@ vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*
         logDisplay->logDisplay("[SuperPatch = " + candi_sp->getSuperImagePatchId() + "] start [Filtering]");
 #endif
         vector<Patch *> base = convert_verctor<Patch,SuperImagePatch>(final_sps);
-        vector<double> scores = candi_sp->patchCompareWith(base, Params::featureType);
+        vector<double> scores = candi_sp->patchCompareWith(base, featureType);
 
-        find_nearest(scores, &nearest_score, &nearest_index);
+        find_nearest(scores, &nearest_score, &nearest_index, featureType);
         //(1) has similar 'SP', merge two 'SP's
 #ifdef __DEBUG__
         logDisplay->logDisplay("nearest_score = " + to_string(nearest_score));
         logDisplay->logDisplay("[SuperPatch = " + candi_sp->getSuperImagePatchId() + "] start [Filtering]");
 #endif
-        if (should_merge2(nearest_score)) {
+        if (should_merge2(nearest_score, featureType)) {
             //set pointers
 #ifdef __DEBUG__
             logDisplay->logDisplay("Merge ! Same SuperImagePatch = " + final_sps[nearest_index]->getSuperImagePatchId());

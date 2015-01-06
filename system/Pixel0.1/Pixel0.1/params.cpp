@@ -57,8 +57,11 @@ double Params::surf_min_ratio = 1.0f / 1.5f;
 
 
 
-string Params::featureType = SHAPE_CONTEXT;//featureType used 
-string Params::segment_type = Params::MORPH_BASIC;
+string Params::featureType_for_one_image = SHAPE_CONTEXT;//featureType used 
+string Params::featureType_for_batch_image = SHAPE_CONTEXT;
+string Params::featureType_for_search = SHAPE_CONTEXT;
+string Params::segment_type_for_one_image = Params::MORPH_BASIC;
+string Params::segment_type_for_batch_image = Params::MORPH_BASIC;
 size_t Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
@@ -96,8 +99,11 @@ void Params::push_attr()
 	__attr__["surf_compare_2_thres"] = make_pair("double", static_cast<void*>(&surf_compare_2_thres));
 	__attr__["surf_dimensions"] = make_pair("int", static_cast<void*>(&surf_dimensions));
 	__attr__["surf_min_ratio"] = make_pair("double", static_cast<void*>(&surf_min_ratio));
-	__attr__["featureType"] = make_pair("string", static_cast<void*>(&featureType));
-	__attr__["segment_type"] = make_pair("string", static_cast<void*>(&segment_type));
+	__attr__["featureType_for_one_image"] = make_pair("string", static_cast<void*>(&featureType_for_one_image));
+	__attr__["featureType_for_batch_image"] = make_pair("string", static_cast<void*>(&featureType_for_batch_image));
+	__attr__["featureType_for_search"] = make_pair("string", static_cast<void*>(&featureType_for_search));
+	__attr__["segment_type_for_one_image"] = make_pair("string", static_cast<void*>(&segment_type_for_one_image));
+	__attr__["segment_type_for_batch_image"] = make_pair("string", static_cast<void*>(&segment_type_for_batch_image));
 	__attr__["top_k"] = make_pair("size_t", static_cast<void*>(&top_k));
 
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));

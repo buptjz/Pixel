@@ -43,7 +43,7 @@ void ImageLibThread::run()
 		//save originalImage into database 
 		ori->saveOriginalImage();
 		//segment OriginalImage object ori into patchs
-   		vector<ImagePatch*> patchs = ori->segmentImage();
+   		vector<ImagePatch*> patchs = ori->segmentImage(Params::segment_type_for_batch_image);
 
 		logDisplay->logDisplay("Segment " + filename + " finished");
 		for (int i = 0; i < patchs.size(); i++)
@@ -53,7 +53,7 @@ void ImageLibThread::run()
 		logDisplay->logDisplay(filename + " saved in to database");
 		logDisplay->logDisplay("Removing duplicate image patches in image: " + filename + " ... ...");
 		//removeDuplicateImagePatchs  first time, just in one originalImage, return  vector of SuperImagePatch object
- 		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs);
+ 		vector<SuperImagePatch*> sip = removeDuplicateImagePatchs(patchs,Params::featureType_for_batch_image);
 		logDisplay->logDisplay("Remove duplicate image patches in image: " + filename + " finished");
 		//save the patchs which has been removed duplicate once, wait for the next time of removing duplicate operation
 		vector<SuperImagePatch*>::iterator  itor = sip.begin();
@@ -76,7 +76,7 @@ void ImageLibThread::run()
 
 	logDisplay->logDisplay("Removing duplicate image patches in all super image patches  ... ...");
 	//the second time of duplicate removal, finally obtain the collection of superImagePatch
-	vector<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs);
+	vector<SuperImagePatch*> fsip = removeDuplicateSuperImagePatchs(allSuperImagePatchs,Params::featureType_for_batch_image);
 	logDisplay->logDisplay("Remove duplicate image patches in all super image patches  finished");
 	//save superImagePatches into the database && update the superImagePatchId of table imagePatch in database
 	vector<SuperImagePatch*>::iterator  itor = fsip.begin();
@@ -107,7 +107,7 @@ SearchBtnThread::SearchBtnThread(vector<pair<double, Patch*> >  *similarPatches,
 void SearchBtnThread::run()
 {
 	vector<Patch*> images = readAllSuperImagePatches();
-	const string featureType = Params::featureType;
+	const string featureType = Params::featureType_for_search;
 	size_t top_k = Params::top_k;
 	*similarPatches = patchCompared-> patchCompareWith(images, featureType, top_k);
 	emit sig();
@@ -155,7 +155,7 @@ SegmentBtnThread::SegmentBtnThread(OriginalImage* originalImageSegemented, vecto
 void SegmentBtnThread::run()
 {
 	logDisplay->logDisplay("Begin to segment image " + originalImageSegemented->getPath());
-	*segementedImagePatches = originalImageSegemented->segmentImage();
+	*segementedImagePatches = originalImageSegemented->segmentImage(Params::segment_type_for_one_image);
 	emit this->sig();
 }
 
@@ -168,7 +168,7 @@ RemoveDuplicateBtnThread::RemoveDuplicateBtnThread(vector<ImagePatch*>* segement
 void RemoveDuplicateBtnThread::run()
 {
 	logDisplay->logDisplay("Removing dupicate image patches ... ...");
-	*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
+	*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches,Params::featureType_for_one_image);
 	logDisplay->logDisplay("Remove duplicate image patches finished.");
 	emit this->sig();
 }
@@ -203,7 +203,7 @@ void SavePatches2DataBaseBtnThread::run()
 	logDisplay->logDisplay("Begining to save segemented image patches");
 	if (segementedImagePatches->empty() || segementedImagePatches->size() == 0)
 	{
-		*segementedImagePatches = originalImageSegemented->segmentImage();
+		*segementedImagePatches = originalImageSegemented->segmentImage(Params::segment_type_for_batch_image);
 	}
 	for (int i = 0; i < segementedImagePatches->size(); i++)
 	{
@@ -214,7 +214,7 @@ void SavePatches2DataBaseBtnThread::run()
 	logDisplay->logDisplay("Begining to save segemented super image patches");
 	if (segementedSupeImagePatches->empty() || segementedSupeImagePatches->size() == 0)
 	{
-		*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
+		*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches,Params::featureType_for_batch_image);
 	}
 	for (int i = 0; i < segementedSupeImagePatches->size(); i++)
 	{

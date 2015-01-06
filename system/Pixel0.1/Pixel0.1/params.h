@@ -64,8 +64,11 @@ public:
     static double surf_min_ratio;
 
 
-	static string featureType;//featureType used 
-	static string segment_type;
+	static string featureType_for_one_image;//featureType used 
+	static string featureType_for_batch_image;
+	static string featureType_for_search;
+	static string segment_type_for_one_image;
+	static string segment_type_for_batch_image;
 	static size_t top_k;//return the top_k simplar superImagePatches
 
 	static string defaultPath;

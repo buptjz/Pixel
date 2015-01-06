@@ -201,7 +201,7 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 /*·Ö¸îµ¥·ùÍ¼Ïñ*/
 void qt_Pixel_Main::on_segmentBtn_clicked()
 {
-	Params::segment_type = (ui.SegmentType->currentText()).toStdString();
+	Params::segment_type_for_one_image = (ui.SegmentType->currentText()).toStdString();
 	if (originalImageSegemented == NULL)
 	{
 		logDisplay->logDisplay("The image waiting for segmenting is not exist!");
@@ -340,7 +340,7 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 /*ËÑË÷*/
 void qt_Pixel_Main::on_searchBtn_clicked()
 {
-	Params::featureType = (ui.MatchType->currentText()).toStdString();
+	Params::featureType_for_search = (ui.MatchType->currentText()).toStdString();
 	if (similarPatches.size() != 0)
 	{
 		for (int i = 0; i < similarPatches.size(); i++)

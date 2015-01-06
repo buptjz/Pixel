@@ -36,13 +36,13 @@ using namespace std;
  [2] 1 To 1 Strategy:
  once find a pair of 'P' and 'SP' has similarity <= threshold, insert 'P' to 'SP'
  */
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec,bool use1To1);
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >& patch_vec,bool use1To1,string featureType);
 
 /*
  Default algorithm of removing duplicate imagePatches
  Strategy [1]: 1 to many
  */
-vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&);
+vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&,string featureType);
 
 /*
  Second loop of  remove duplcate (Remove duplicate super image patches)
@@ -50,7 +50,7 @@ vector<SuperImagePatch*> removeDuplicateImagePatchs(vector<ImagePatch* >&);
  input  : super patches
  output : final super patches
  */
-vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&);
+vector<SuperImagePatch*> removeDuplicateSuperImagePatchs(vector<SuperImagePatch*>&,string featureType);
 
 
 //for test

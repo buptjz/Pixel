@@ -19,7 +19,9 @@ int main(int argc, char *argv[])
 	Params::patch_pixel_min = 0.01;
 	Params::shape_context_compare_1_thres = 0.2;
 	Params::shape_context_compare_2_thres = 0.2;
-	Params::featureType = Params::SURF;//featureType used 
+	Params::featureType_for_one_image = Params::SURF;//featureType used 
+	Params::featureType_for_batch_image = Params::SURF;
+	Params::featureType_for_search = Params::SURF;
 	fstream _file;
 	_file.open("Pixel.db3", ios::in);
 	if (!_file)
