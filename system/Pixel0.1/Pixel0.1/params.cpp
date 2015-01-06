@@ -24,7 +24,7 @@ int Params::grey_image_channels = 1;
 int Params::connect_map_type = CV_16UC1;
 
 //segment
-double Params::pixel_rat_min = 0.00005;
+double Params::pixel_rat_min = 0.01;
 int Params::retry_max = 10;
 float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
