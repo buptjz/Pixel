@@ -80,6 +80,11 @@ public slots:
 	void setMatchParasAll();//设置“批量入库”界面的匹配参数
 	void setSegmentParasAll();//设置“批量入库”界面的分割参数
 
+	void setMatchParasSearch();//设置“检索”界面匹配参数
+
+	void setSegmentParasInOneImage();//设置“分割”界面的分割参数
+	void setMatchParasInOneImage();//设置“分割”界面去重参数
+
 };
 
 #endif

@@ -102,6 +102,13 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 
 	connect(ui.SetMatchParasAllBtn, SIGNAL(clicked()), this, SLOT(setMatchParasAll()));
 	connect(ui.SetSegmentParasAllBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasAll()));
+	connect(ui.SetMatchParasSearchBtn, SIGNAL(clicked()), this, SLOT(setMatchParasSearch()));
+
+	connect(ui.SetSegmentParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasInOneImage()));
+	connect(ui.SetMatchParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setMatchParasInOneImage()));
+
+	//connect(ui.ImagePatchViewInOneImage, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(on_superImagePatch_Itemclicked(QListWidgetItem *)));
+
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -156,8 +163,6 @@ void qt_Pixel_Main::on_Add2ImageLib_clicked()
 	//ui.LogDisplay->setText("many images are training!");
 	imageLibThread = new ImageLibThread(dirPath);
 	imageLibThread->start();
-	
-
 }
 
 /*´ò¿ª´ý·Ö¸îÍ¼Ïñ*/
@@ -474,4 +479,28 @@ void qt_Pixel_Main::setSegmentParasAll()
 	logDisplay->logDisplay("Setting segment parameters of all images!");
 	dialogSegmentParasAll.getSegmentParas();
 	dialogSegmentParasAll.show();
+}
+
+void qt_Pixel_Main::setMatchParasSearch()
+{
+	Params::featureType_for_search = (ui.MatchType->currentText()).toStdString();
+	logDisplay->logDisplay("Setting compare parameters while searching!");
+	dialogMatchParasAll.getMatchParas();
+	dialogMatchParasAll.show();
+}
+
+void qt_Pixel_Main::setSegmentParasInOneImage()
+{
+	Params::segment_type_for_one_image = (ui.SegmentType->currentText()).toStdString();
+	logDisplay->logDisplay("Setting segment parameters of one image!");
+	dialogSegmentParasAll.getSegmentParas();
+	dialogSegmentParasAll.show();
+}
+
+void qt_Pixel_Main::setMatchParasInOneImage()
+{
+	Params::featureType_for_one_image = (ui.RemoveDuplicateType->currentText()).toStdString();
+	logDisplay->logDisplay("Setting compare parameters of one image!");
+	dialogMatchParasAll.getMatchParas();
+	dialogMatchParasAll.show();
 }

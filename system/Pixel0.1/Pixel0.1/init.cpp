@@ -28,6 +28,6 @@ void init()
 		mkdir(fileName.c_str());//如果不存在就用mkdir函数来创建
 	}
 
-		
+	Params::push_attr();
 
 }
