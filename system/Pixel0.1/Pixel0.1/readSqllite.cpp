@@ -9,6 +9,8 @@
 #include<highgui.h>
 #include<iostream>
 #include "tools.h"
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
 using namespace cv;
 
 OriginalImage* readOriginalImage(const string &originalImageId)
@@ -20,12 +22,16 @@ OriginalImage* readOriginalImage(const string &originalImageId)
 	int nRow, nColumn;
 	//int result = sqlite3_get_table(SQLiteHelper::getSqlite3(), sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
 	int result = sqlite3_get_table(SQLiteHelper::sqlite_db_, sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
+	
 	//查询成功
 	int index = nColumn; //dbResult 前面第一行数据是字段名称，从 nColumn 索引开始才是真正的数据
 
 	string path = dbResult[1];// dbResult 的字段值是连续的，从第0索引到第 nColumn - 1索引都是字段名称，从第 nColumn 索引开始，后面都是字段值，它把一个二维的表（传统的行列表示法）用一个扁平的形式来表示
 	Mat pOImage = imread(path.c_str(), -1);
-	
+	if (pOImage.data == NULL)
+	{
+		logDisplay->logDisplay("Error in reading originalImage for database");
+	}
 	poi = new OriginalImage(originalImageId, path, &pOImage);
 
 	sqlite3_free_table(dbResult);//释放查询空间
@@ -73,6 +79,11 @@ ImagePatch* readImagePatch(string imagePatchId)
 	jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
 	jsonString2Map(featuresStr, features);
 	position = jsonString2Rect(positionStr);
+
+	if (originalImageId.empty())
+	{
+		logDisplay->logDisplay("Error in reading image patch from database!");
+	}
 	OriginalImage* ori = new OriginalImage(originalImageId);
 	pip = new ImagePatch(imagePatchId, ori, position, binaryImagePatch, originalImagePatch);
 
@@ -114,7 +125,7 @@ SuperImagePatch* readSuperImagePatch(string superImagePatchId)
 	}
 	else
 	{
-		cout << "error in reading SuperImagePatch form database" << endl;
+		logDisplay->logDisplay("Error in reading a SuperImagePatch form database.");
 	}
 	sqlite3_finalize(pstmt);
 	jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
@@ -178,7 +189,7 @@ vector<Patch*> readAllSuperImagePatches()
 	}
 	else
 	{
-		cout << "error in reading SuperImagePatch form database" << endl;
+		logDisplay->logDisplay("Error in reading AllSuperImagePatches form database.");
 	}
 	sqlite3_finalize(pstmt);
 	
@@ -187,9 +198,31 @@ vector<Patch*> readAllSuperImagePatches()
 
 
 /*
-read number of k superImagePatches in the database
+计算数据库中superImagePatch的条数
 */
-vector<Patch*> readAllSuperImagePatches(int k)
+int countRowsInSuperImagePatch()
+{
+	int rows;
+	string sql = "select count(*) from superImagePatch ";
+	//执行查询
+	char *errmsg = NULL;
+	char** dbResult = NULL;
+	int nRow, nColumn;
+	//int result = sqlite3_get_table(SQLiteHelper::getSqlite3(), sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
+	int result = sqlite3_get_table(SQLiteHelper::sqlite_db_, sql.c_str(), &dbResult, &nRow, &nColumn, &errmsg);
+
+	//查询成功
+	int index = nColumn; //dbResult 前面第一行数据是字段名称count，从 nColumn 索引开始才是真正的数据
+
+	string rowsStr = dbResult[1];// dbResult 的字段值是连续的，从第0索引到第 nColumn - 1索引都是字段名称，从第 nColumn 索引开始，后面都是字段值，它把一个二维的表（传统的行列表示法）用一个扁平的形式来表示
+	sqlite3_free_table(dbResult);//释放查询空间
+	rows = atoi(rowsStr.c_str());
+	return rows;
+}
+/*
+read superImagePatches from table superImagePatch from start to start+pageSize rows in the database
+*/
+vector<Patch*> readAllSuperImagePatches(int start, int pageSize)
 {
 	vector<Patch*> images;
 
@@ -203,7 +236,7 @@ vector<Patch*> readAllSuperImagePatches(int k)
 	map<string, string> features;
 	vector<string> patchIdList;
 
-	string sql = "select * from superImagePatch ";
+	string sql = "select * from superImagePatch limit " + to_string(start) + ","+ to_string(pageSize) + ";";
 	//执行查询
 	sqlite3_stmt *pstmt;
 	const char   *error = 0;
@@ -236,7 +269,7 @@ vector<Patch*> readAllSuperImagePatches(int k)
 	}
 	else
 	{
-		cout << "error in reading SuperImagePatch form database" << endl;
+		logDisplay->logDisplay("Error in reading the specified number of SuperImagePatches form database.");
 	}
 	sqlite3_finalize(pstmt);
 
@@ -257,6 +290,7 @@ int updateImagePatchTable(SuperImagePatch & sip)
 		string sql = "update imagePatch set superImagePatchId ='" + superImagePatchId + "' where imagePatchId = '" + imagePatchId + "';" ; 
 		int res =  SQLiteHelper::Update(sql.c_str());
 		if (res == -1){
+			logDisplay->logDisplay("Error in update imagePatch set superImagePatchId");
 			return -1;
 		}
 	}
