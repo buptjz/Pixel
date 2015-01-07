@@ -1,5 +1,6 @@
 #include "init.h"
-
+#include "xmlHelper.h"
+#include "params.h"
 void init()
 {
 	fstream _file;
@@ -29,5 +30,7 @@ void init()
 	}
 
 	Params::push_attr();
+
+	load_params(Params::xmlFileName);
 
 }

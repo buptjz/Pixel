@@ -16,8 +16,8 @@ extern LogDisplay* logDisplay;
 /*
 1. check database whether exists  and open database
 2. check the file in which users save an external image whether exist
-3. read params form xml when run the project
-4. exec push_attr() in params.cpp to built an dictionary of params
+3. exec push_attr() in params.cpp to built an dictionary of params
+4. read params form xml when run the project
 */
  void init();
 #endif

@@ -66,6 +66,7 @@ string Params::segment_type_for_batch_image = Params::MORPH_BASIC;
 int Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
+string Params::xmlFileName = "Params.xml";
 
 void Params::push_attr()
 {
@@ -108,6 +109,7 @@ void Params::push_attr()
 	__attr__["top_k"] = make_pair("int", static_cast<void*>(&top_k));
 	__attr__["pixel_rat_min"] = make_pair("double", static_cast<void*>(&pixel_rat_min));
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
+	__attr__["xmlFileName"] = make_pair("string", static_cast<void*>(&xmlFileName));
 }
 
 void Params::set_attr(const char *name,const char * value){

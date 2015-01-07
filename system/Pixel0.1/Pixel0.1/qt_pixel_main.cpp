@@ -6,6 +6,7 @@
 #include "params.h"
 #include "logDisplay.h"
 #include "tools.h"
+#include "xmlHelper.h"
 extern LogDisplay* logDisplay;
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
@@ -109,6 +110,10 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 
 	connect(ui.ImagePatchViewInOneImage, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem *)));
 
+	connect(ui.ShowAllSuperImagePatchesBtn, SIGNAL(clicked()), this, SLOT(showAllSuperImagePatches()));
+	connect(ui.PreviousPageBtn, SIGNAL(clicked()), this, SLOT(previousPage()));
+	connect(ui.NextPageBtn, SIGNAL(clicked()), this, SLOT(nextPage()));
+	
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -547,4 +552,29 @@ void qt_Pixel_Main::on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * it
 	ui.SampleImageView->setScene(scene);
 	ui.SampleImageView->show();
 	ui.tabWidget->setCurrentIndex(1);
+}
+
+
+//显示所有超图元
+void qt_Pixel_Main::showAllSuperImagePatches()
+{
+	logDisplay->logDisplay("Showing All super image patches.");
+}
+
+//显示超图元界面切换到前一页
+void qt_Pixel_Main::previousPage()
+{
+	logDisplay->logDisplay("Switch to previous page.");
+}
+
+//切换到下一页
+void qt_Pixel_Main::nextPage()
+{
+	logDisplay->logDisplay("Switch to next page.");
+}
+
+//关闭窗口时将配置参数写入配置文件
+void qt_Pixel_Main::closeEvent(QCloseEvent *event)
+{
+	save_params(Params::xmlFileName);
 }

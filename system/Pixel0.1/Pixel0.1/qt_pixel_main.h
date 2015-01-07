@@ -49,6 +49,11 @@ public:
 	DialogMatchParasAll  dialogMatchParasAll;
 	DialogSegmentParasAll dialogSegmentParasAll;
 
+
+public:
+	// 实现QWidget中的虚函数closeEvent(QCloseEvent*);  
+	void closeEvent(QCloseEvent *event);
+
 private:
 	QImage *image = NULL;
 	QImage *originalImage = NULL;
@@ -90,6 +95,10 @@ public slots:
 
 
 	void on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * item);//双击“分割”界面图元展示列表中的图元；将该图元传入下一个检索界面作为检索图像。
+
+	void showAllSuperImagePatches();//显示所有超图元
+	void previousPage();//显示超图元界面切换到前一页
+	void nextPage();//切换到下一页
 };
 
 #endif

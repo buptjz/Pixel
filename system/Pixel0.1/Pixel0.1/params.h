@@ -75,7 +75,8 @@ public:
 	static string segment_type_for_batch_image;
 	static int top_k;//return the top_k simplar superImagePatches
 
-	static string defaultPath;
+	static  string defaultPath;
+	static  string xmlFileName;
 };
 
 

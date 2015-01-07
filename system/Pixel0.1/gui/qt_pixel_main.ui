@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -548,6 +548,63 @@
       </property>
       <property name="text">
        <string>匹配方法</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>超图元</string>
+     </attribute>
+     <widget class="QListWidget" name="AllSuperImagePatchView">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>95</x>
+        <y>10</y>
+        <width>641</width>
+        <height>371</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ShowAllSuperImagePatchesBtn">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>45</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>显示图元</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="PreviousPageBtn">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>270</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>上一页</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="NextPageBtn">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>315</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>下一页</string>
       </property>
      </widget>
     </widget>
