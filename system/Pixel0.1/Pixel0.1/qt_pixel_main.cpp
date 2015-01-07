@@ -107,7 +107,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.SetSegmentParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasInOneImage()));
 	connect(ui.SetMatchParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setMatchParasInOneImage()));
 
-	//connect(ui.ImagePatchViewInOneImage, SIGNAL(), this, SLOT(on_superImagePatch_Itemclicked(QListWidgetItem *)));
+	connect(ui.ImagePatchViewInOneImage, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem *)));
 
 }
 
@@ -222,6 +222,7 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 void qt_Pixel_Main::on_segmentBtn_clicked()
 {
 	Params::segment_type_for_one_image = (ui.SegmentType->currentText()).toStdString();
+	buttonClicked = SEGMENT;
 	if (originalImageSegemented == NULL)
 	{
 		logDisplay->logDisplay("The image waiting for segmenting is not exist!");
@@ -275,6 +276,8 @@ void qt_Pixel_Main::on_removeDuplicateBtn_clicked()
 		logDisplay->logDisplay("There is no segemented image patches to remove duplicate! ");
 		return;
 	}
+	Params::featureType_for_one_image = (ui.RemoveDuplicateType->currentText()).toStdString();
+	buttonClicked = REMOVEDUPLICATE;
 	removeDuplicateBtnThread = new RemoveDuplicateBtnThread(&segementedImagePatches, &segementedSupeImagePatches);
 	//here main thread wait for segmentBtnThread excute 
 	connect(removeDuplicateBtnThread, SIGNAL(sig()), this, SLOT(setRemoveDuplicateSuperImagePatch()));
@@ -503,4 +506,45 @@ void qt_Pixel_Main::setMatchParasInOneImage()
 	logDisplay->logDisplay("Setting compare parameters of one image!");
 	dialogMatchParasAll.getMatchParas();
 	dialogMatchParasAll.show();
+}
+
+void qt_Pixel_Main::on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * item)
+{
+	if (!item)
+	{
+		return;
+	}
+	int itemnum = ui.ImagePatchViewInOneImage->row(item);
+	logDisplay->logDisplay("Transmit the patch double clicked to search interace as an sample image.");
+	//get the sampleImage and change it to patch, process later in searchBtn operation
+	if (patchCompared != NULL)
+	{
+		delete patchCompared;
+	}
+	
+	switch (buttonClicked)
+	{
+	case ButtonClicked::SEGMENT:
+		patchCompared = segementedImagePatches[itemnum];
+		break;
+	case ButtonClicked::REMOVEDUPLICATE:
+		patchCompared = segementedSupeImagePatches[itemnum];
+		break;
+	default :
+		break;
+	}
+	
+	*image = Mat2QImage(*patchCompared->getOriginalImagePatch());
+	//建立场景
+	QGraphicsScene *scene = new QGraphicsScene;
+	//缩放图片
+	QSize size = ui.SampleImageView->maximumViewportSize();
+	QImage scaledImg = image->scaled(size, Qt::KeepAspectRatio);
+
+	
+	//加载显示图片
+	scene->addPixmap(QPixmap::fromImage(scaledImg));
+	ui.SampleImageView->setScene(scene);
+	ui.SampleImageView->show();
+	ui.tabWidget->setCurrentIndex(1);
 }

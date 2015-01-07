@@ -13,6 +13,10 @@
 #include "imagePatch.h"
 
 
+enum ButtonClicked
+{
+	NOTCLICKED, SEGMENT, REMOVEDUPLICATE
+};
 
 class qt_Pixel_Main : public QMainWindow
 {
@@ -30,13 +34,15 @@ public:
 	SegmentBtnThread *segmentBtnThread = NULL;
 
 	QString dirPath;//ImageLibBtn open the dir
-	Patch* patchCompared = NULL;
-	OriginalImage* originalImageSegemented = NULL;
+	Patch* patchCompared = NULL;//"搜索"界面打开的图像
+
+	OriginalImage* originalImageSegemented = NULL;//“分割”界面读入的图像
 	vector<ImagePatch*> segementedImagePatches;
 	vector<SuperImagePatch*> segementedSupeImagePatches;
+	enum ButtonClicked buttonClicked = NOTCLICKED;//"分割"界面判断最后点击的是"分割"还是"去重"按钮
 
-	vector<pair<double, Patch*> >  similarPatches;
-	vector<ImagePatch*> imagePatchList;
+	vector<pair<double, Patch*> >  similarPatches;//"搜索"界面得到的相似超图元
+	vector<ImagePatch*> imagePatchList;//由超图元找到的图元
 
 public:
 	static Ui::MainWindow ui;
@@ -46,10 +52,7 @@ public:
 private:
 	QImage *image = NULL;
 	QImage *originalImage = NULL;
-	//QImage *superImagePatch;
-	//QImage *imagePatch;
 
-	//viewerDialog viewerDlg;
 
 public slots:
 	//display log
@@ -85,6 +88,8 @@ public slots:
 	void setSegmentParasInOneImage();//设置“分割”界面的分割参数
 	void setMatchParasInOneImage();//设置“分割”界面去重参数
 
+
+	void on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * item);//双击“分割”界面图元展示列表中的图元；将该图元传入下一个检索界面作为检索图像。
 };
 
 #endif
