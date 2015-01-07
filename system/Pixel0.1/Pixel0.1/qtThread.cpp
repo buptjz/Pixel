@@ -225,11 +225,13 @@ void SavePatches2DataBaseBtnThread::run()
 	{
 		*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches,Params::featureType_for_batch_image);
 	}
+	logDisplay->logDisplay("Saved segemented super image patches");
 	for (int i = 0; i < segementedSupeImagePatches->size(); i++)
 	{
 		(*segementedSupeImagePatches)[i]->savePatch();
+		updateImagePatchTable(*(*segementedSupeImagePatches)[i]);
+
 	}
-	logDisplay->logDisplay("Saved segemented super image patches");
 
 	logDisplay->logDisplay("Saved information into database successed!");
 	//*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
