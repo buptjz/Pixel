@@ -8,6 +8,8 @@
 #include "logDisplay.h"
 #include "qt_pixel_main.h"
 extern LogDisplay* logDisplay;
+
+#include <direct.h>
 ImageLibThread::ImageLibThread(QString dirPath) : QThread()
 {
 	this->dirPath = dirPath;
@@ -85,6 +87,13 @@ void ImageLibThread::run()
 		SuperImagePatch* sip = (SuperImagePatch*)*itor;
 		//here save superImagePatch
 		sip->savePatch();
+		//----------------------------------------------------------------------------------------------------------------------------------
+		//save all super image patches into a file 
+		string folder = "./superImagePatches";
+		mkdir(folder.c_str());
+		String filedir = folder + "/" + sip->getSuperImagePatchId() + ".jpg";
+		imwrite(filedir, *sip->getOriginalImagePatch());
+		//-----------------------------------------------------------------------------------------------------------------------------------
 		//here update imagePatch table
 		int res = updateImagePatchTable(*sip);
 		if (res == -1)

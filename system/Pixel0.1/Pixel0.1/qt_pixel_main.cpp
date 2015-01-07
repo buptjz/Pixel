@@ -107,7 +107,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.SetSegmentParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasInOneImage()));
 	connect(ui.SetMatchParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setMatchParasInOneImage()));
 
-	//connect(ui.ImagePatchViewInOneImage, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(on_superImagePatch_Itemclicked(QListWidgetItem *)));
+	//connect(ui.ImagePatchViewInOneImage, SIGNAL(), this, SLOT(on_superImagePatch_Itemclicked(QListWidgetItem *)));
 
 }
 
