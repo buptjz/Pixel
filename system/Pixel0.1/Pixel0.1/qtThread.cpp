@@ -39,6 +39,11 @@ void ImageLibThread::run()
 		OriginalImage *ori = new OriginalImage(filename, originalImageId);
 		
 		Mat *pImage = new Mat(imread_and_preprocess(filename.c_str()));
+		if (pImage->data == NULL)
+		{
+			logDisplay->logDisplay("Can't parse image "  + filename);
+			continue;
+		}
 		logDisplay->logDisplay("Segmenting " + filename + "... ...");
 		ori->setImage(pImage);
 

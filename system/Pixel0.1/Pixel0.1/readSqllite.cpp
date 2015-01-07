@@ -184,6 +184,64 @@ vector<Patch*> readAllSuperImagePatches()
 	
 	return images;
 }
+
+
+/*
+read number of k superImagePatches in the database
+*/
+vector<Patch*> readAllSuperImagePatches(int k)
+{
+	vector<Patch*> images;
+
+	SuperImagePatch* sip;
+	string superImagePatchId;
+	string binaryImagePatchBuffer;
+	string originalImagePatchBuffer;
+	string featuresStr;
+	string imagePatchIdList;
+
+	map<string, string> features;
+	vector<string> patchIdList;
+
+	string sql = "select * from superImagePatch ";
+	//执行查询
+	sqlite3_stmt *pstmt;
+	const char   *error = 0;
+	//if (sqlite3_prepare(SQLiteHelper::getSqlite3(), sql.c_str(), sql.size(), &pstmt, &error) == SQLITE_OK) {
+	if (sqlite3_prepare(SQLiteHelper::sqlite_db_, sql.c_str(), -1, &pstmt, &error) == SQLITE_OK) {
+		while (1)
+		{
+			int ret = sqlite3_step(pstmt);
+			if (ret != SQLITE_ROW)
+				break;
+			superImagePatchId = ((char*)sqlite3_column_text(pstmt, 0));
+			binaryImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 1));
+			originalImagePatchBuffer = ((char*)sqlite3_column_blob(pstmt, 2));
+			featuresStr = ((char*)sqlite3_column_text(pstmt, 3));
+			imagePatchIdList = ((char*)sqlite3_column_text(pstmt, 4));
+
+			Mat *binaryImagePatch = new Mat;
+			Mat *originalImagePatch = new Mat;
+
+			jsonString2Mat(binaryImagePatchBuffer, *binaryImagePatch);
+			jsonString2Mat(originalImagePatchBuffer, *originalImagePatch);
+			jsonString2Map(featuresStr, features);
+			string pattern = ",";
+			patchIdList = split(imagePatchIdList, pattern);
+			sip = new SuperImagePatch(superImagePatchId, binaryImagePatch, originalImagePatch);
+			sip->setFeatures(features);
+			sip->setPatchIdList(patchIdList);
+			images.push_back(sip);
+		}
+	}
+	else
+	{
+		cout << "error in reading SuperImagePatch form database" << endl;
+	}
+	sqlite3_finalize(pstmt);
+
+	return images;
+}
 /*
 生成superImagePatch后，由superImagePatch对象里的vector<string> patchIdList更新ImagePatch里的superImagePatchId
 */
