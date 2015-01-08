@@ -3,6 +3,7 @@
 #include "params.h"
 #include "tools.h"
 #include "segment_algorithm.h"
+#include "logDisplay.h"
 /*
 将图片信息存入数据库中
 会首先调用数据库的连接，向数据库中写入
@@ -11,7 +12,7 @@
 static void AdaptiveFindThreshold(Mat & ima, double & low, double & high, int aperture_size = 3);
 /* Mat必须是单通道的*/
 static int FindRegFromEdge(Mat &);
-
+extern LogDisplay *logDisplay;
 //void OriginalImage::saveOriginalImage(SQLiteHelper &sql_lite_helper) const{};
 void OriginalImage::saveOriginalImage()const
 {
@@ -185,8 +186,12 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 		else
 			break;
 	}
-	
-	
+#ifdef __DEBUG__
+	Mat color_ret;
+	connected_component2color_image(*regImage, coupreImgnt, color_ret);
+	imshow("color_ret", color_ret);
+	waitKey(-1);
+#endif
 	vector<Rect *> rects;
 	rects = getMetaInfos(rects, coupreImgnt);
 

@@ -176,7 +176,7 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 	QString fileName = QFileDialog::getOpenFileName(
 		this, "open image file",
 		".",
-		"Image files (*.bmp *.jpg *.pbm *.pgm *.png *.ppm *.xbm *.xpm);;All files (*.*)");
+		"Image files (*.bmp *.jpg *.pbm *.pgm *.png *.ppm *.xbm *.xpm *.tif);;All files (*.*)");
 	if (fileName != "")
 	{
 		QString logQstr = QString("Load image ").append(fileName);
@@ -325,7 +325,7 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 	QString fileName = QFileDialog::getOpenFileName(
 		this, "open image file",
 		".",
-		"Image files (*.bmp *.jpg *.pbm *.pgm *.png *.ppm *.xbm *.xpm);;All files (*.*)");
+		"Image files (*.bmp *.jpg *.pbm *.pgm *.png *.ppm *.xbm *.xpm *.tif);;All files (*.*)");
 	if (fileName != "")
 	{
 		QString logQstr = QString("Load sample image ").append(fileName);

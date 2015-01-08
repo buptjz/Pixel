@@ -65,14 +65,20 @@ static void _compare_sc(Patch *query, const vector<Patch *>& images, vector<doub
 {
 	refresh_sc_extractor_settings();
 	ret.clear();
+	ret.resize(images.size(), DBL_MAX);
 	vector<Point> contQuery = simpleContour(*query->getBinaryImagePatch(),Params::shape_context_sample_point_num);
-	for(vector<Patch *>::const_iterator itr = images.begin(); itr != images.end(); ++itr)
+	if (contQuery.size() < Params::shape_context_sample_point_num)
+		return;
+	size_t cnt = 0;
+	for(vector<Patch *>::const_iterator itr = images.begin(); itr != images.end(); ++itr,++cnt)
 	{
 		Patch* ptr = *itr;
 		vector<Point> contii = simpleContour(*ptr->getBinaryImagePatch(),Params::shape_context_sample_point_num);
+		if (contii.size() < Params::shape_context_sample_point_num)
+			return;
 		if(abs(Params::shape_context_appearance_weight) > 0.0001)
 			sc_extractor->setImages(*query->getOriginalImagePatch(),*ptr->getOriginalImagePatch());
-		ret.push_back(sc_extractor->computeDistance(contQuery,contii));
+		ret[cnt] = (sc_extractor->computeDistance(contQuery,contii));
 	}
 	
 }

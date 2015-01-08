@@ -59,7 +59,7 @@ int CannyAndMorphing(Mat & input, Mat & result)
 	findContours(temp, edges, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 	int index = 1;
 	for (int idx = 0; idx >= 0; idx = hierarchy[idx][0])
-		//drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
+		//drawContours(result, edges, idx, Scalar(index++));
 		drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
 	return index -= 1;
 }
@@ -69,8 +69,5 @@ int egbis(Mat & input, Mat & result)
 	int connect_sum = 0;
 	Mat color_ret;
 	result = egbis_segment_image(input, color_ret, &connect_sum,Params::egbis_sigma,Params::egbis_c,Params::egbis_min_size);
-#ifdef __DEBUG__
-	imshow("color_ret",color_ret);
-#endif
 	return connect_sum;
 }
