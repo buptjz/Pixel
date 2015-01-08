@@ -7,6 +7,7 @@
 #include "params.h"
 #include "logDisplay.h"
 #include "qt_pixel_main.h"
+#include "readSqllite.h"
 extern LogDisplay* logDisplay;
 
 #include <direct.h>
@@ -243,4 +244,19 @@ void SavePatches2DataBaseBtnThread::run()
 	//*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
 	//logDisplay->logDisplay("Remove duplicate image patches finished.");
 
+}
+
+ShowAllSuperImagePatchesBtnThread::ShowAllSuperImagePatchesBtnThread(vector<Patch*> * superImagePatchesInPageReadFromDatabase, int &startNumber, int &pageSize)
+{
+	this->superImagePatchesInPageReadFromDatabase = superImagePatchesInPageReadFromDatabase;
+	this->startNumber = startNumber;
+	this->pageSize = pageSize;
+}
+
+void ShowAllSuperImagePatchesBtnThread::run()
+{
+	logDisplay->logDisplay("Reading  a page of super image patches from database.");
+	*superImagePatchesInPageReadFromDatabase = readPartSuperImagePatches(startNumber, pageSize);
+	logDisplay->logDisplay("Read  a page of super image patches from database finished.");
+	emit this->sig();
 }

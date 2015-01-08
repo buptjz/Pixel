@@ -33,6 +33,8 @@ public:
 	SavePatches2DataBaseBtnThread * savePatches2DataBaseBtnThread = NULL;
 	SegmentBtnThread *segmentBtnThread = NULL;
 
+	ShowAllSuperImagePatchesBtnThread* showAllSuperImagePatchesBtnThread = NULL;
+
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;//"搜索"界面打开的图像
 
@@ -44,6 +46,7 @@ public:
 	vector<pair<double, Patch*> >  similarPatches;//"搜索"界面得到的相似超图元
 	vector<ImagePatch*> imagePatchList;//由超图元找到的图元
 
+	vector<Patch*>  superImagePatchesInPageReadFromDatabase; //分页显示所有超图元，一次加载的超图元
 public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
@@ -96,9 +99,10 @@ public slots:
 
 	void on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * item);//双击“分割”界面图元展示列表中的图元；将该图元传入下一个检索界面作为检索图像。
 
-	void showAllSuperImagePatches();//显示所有超图元
+	void showAllSuperImagePatchesInPage();//分页显示所有超图元
 	void previousPage();//显示超图元界面切换到前一页
 	void nextPage();//切换到下一页
+	void setsuperImagePatchInPage();
 };
 
 #endif

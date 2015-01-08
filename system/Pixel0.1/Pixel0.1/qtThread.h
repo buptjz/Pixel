@@ -105,5 +105,21 @@ protected:
 	void run();
 };
 
+//show all super image patches  in page
+class ShowAllSuperImagePatchesBtnThread : public QThread
+{
+	Q_OBJECT
+public:
+	ShowAllSuperImagePatchesBtnThread(vector<Patch*> * superImagePatchesInPageReadFromDatabase, int &startNumber, int &pageSize);
+	~ShowAllSuperImagePatchesBtnThread(){};
+	vector<Patch*> * superImagePatchesInPageReadFromDatabase = NULL;
+	int startNumber;
+	int pageSize;
+protected:
+	void run();
+signals:
+	void sig();
+};
 
 #endif
+

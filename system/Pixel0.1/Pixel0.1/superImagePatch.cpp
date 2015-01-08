@@ -51,35 +51,35 @@ void SuperImagePatch::savePatch() const{
 	}
 	
 	result = sqlite3_bind_blob(stat, 1, binarySuperImagePatchBuffer.c_str(), binarySuperImagePatchBuffer.size(), NULL);   //绑定blob类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_bind_blob(stat, 2, originalSuperImagePatchBuffer.c_str(), originalSuperImagePatchBuffer.size(), NULL);   //绑定blob类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_bind_text(stat, 3, featuresStr.c_str(), -1, NULL);           //绑定text类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_bind_text(stat, 4, imagePatchIdList.c_str(), -1, NULL);           //绑定text类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_step(stat);                              //执行sql语句，这样就把数据存到数据库里了
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);

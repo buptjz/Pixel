@@ -222,7 +222,7 @@ int countRowsInSuperImagePatch()
 /*
 read superImagePatches from table superImagePatch from start to start+pageSize rows in the database
 */
-vector<Patch*> readAllSuperImagePatches(int start, int pageSize)
+vector<Patch*> readPartSuperImagePatches(int start, int pageSize)
 {
 	vector<Patch*> images;
 

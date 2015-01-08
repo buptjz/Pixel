@@ -52,21 +52,21 @@ void ImagePatch::savePatch() const{
 		return;
 	}
 	result = sqlite3_bind_blob(stat, 1, binaryImagePatchBuffer.c_str(), binaryImagePatchBuffer.size(), NULL);   //绑定blob类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving imagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_bind_blob(stat, 2, originalImagePatchBuffer.c_str(), originalImagePatchBuffer.size(), NULL);   //绑定blob类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving imagePatch!");
 		sqlite3_finalize(stat);
 		return;
 	}
 	result = sqlite3_bind_text(stat, 3,featuresStr.c_str(), -1, NULL);           //绑定表的第一个字段，这里为text类型
-	if (result != SQLITE_DONE)
+	if (result != SQLITE_OK)
 	{
 		logDisplay->logDisplay("Error in saving imagePatch!");
 		sqlite3_finalize(stat);
