@@ -42,6 +42,7 @@ void ImageLibThread::run()
 		if (pImage->data == NULL)
 		{
 			logDisplay->logDisplay("Can't parse image "  + filename);
+			if (_findnext(handle, &fileinfo) == -1) break;
 			continue;
 		}
 		logDisplay->logDisplay("Segmenting " + filename + "... ...");

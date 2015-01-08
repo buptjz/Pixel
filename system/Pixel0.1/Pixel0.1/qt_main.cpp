@@ -11,13 +11,13 @@ using namespace cv;
 int main(int argc, char *argv[])
 {
 	
-	Params::top_k =5;
-	Params::patch_pixel_min=0.01;
-	Params::shape_context_compare_1_thres = 0.2;
-	Params::shape_context_compare_2_thres = 0.2;
-	Params::featureType_for_one_image = Params::SURF;//featureType used 
-	Params::featureType_for_batch_image = Params::SURF;
-	Params::featureType_for_search = Params::SURF;
+	//Params::top_k =5;
+	//Params::patch_pixel_min=0.01;
+	//Params::shape_context_compare_1_thres = 0.2;
+	//Params::shape_context_compare_2_thres = 0.2;
+	//Params::featureType_for_one_image = Params::SURF;//featureType used 
+	//Params::featureType_for_batch_image = Params::SURF;
+	//Params::featureType_for_search = Params::SURF;
 	
 	init();
 	QApplication a(argc, argv);
