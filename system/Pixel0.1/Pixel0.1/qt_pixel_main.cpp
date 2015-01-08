@@ -569,7 +569,7 @@ void qt_Pixel_Main::showAllSuperImagePatchesInPage()
 	logDisplay->logDisplay("Showing All super image patches.");
 	int count = countRowsInSuperImagePatch();
 	int startNumber = 0;
-	int pageSize = 10;
+	int pageSize = 100;
 	if (superImagePatchesInPageReadFromDatabase.size() != 0)
 	{
 		for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
