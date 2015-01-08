@@ -79,7 +79,7 @@ void SuperImagePatch::savePatch() const{
 		return;
 	}
 	result = sqlite3_step(stat);                              //执行sql语句，这样就把数据存到数据库里了
-	if (result != SQLITE_OK)
+	if (result != SQLITE_DONE)
 	{
 		logDisplay->logDisplay("Error in saving superImagePatch!");
 		sqlite3_finalize(stat);
