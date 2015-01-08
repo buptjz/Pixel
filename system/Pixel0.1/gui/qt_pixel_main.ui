@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -555,7 +555,7 @@
      <attribute name="title">
       <string>超图元</string>
      </attribute>
-     <widget class="QListWidget" name="AllSuperImagePatchView">
+     <widget class="QListWidget" name="AllSuperImagePatchViewInPage">
       <property name="enabled">
        <bool>true</bool>
       </property>

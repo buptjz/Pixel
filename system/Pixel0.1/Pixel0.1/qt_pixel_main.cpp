@@ -84,6 +84,14 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.ImagePatchViewInOneImage->setViewMode(QListView::IconMode);
 	ui.ImagePatchViewInOneImage->setMovement(QListView::Static);
 	ui.ImagePatchViewInOneImage->setSpacing(10);
+
+
+	//设置AllSuperImagePatchViewInPage列表样式
+	ui.AllSuperImagePatchViewInPage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
+	ui.AllSuperImagePatchViewInPage->setResizeMode(QListView::Adjust);
+	ui.AllSuperImagePatchViewInPage->setViewMode(QListView::IconMode);
+	ui.AllSuperImagePatchViewInPage->setMovement(QListView::Static);
+	ui.AllSuperImagePatchViewInPage->setSpacing(10);
 	//设置connect 槽
 	//receive log messge
 	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
@@ -110,7 +118,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 
 	connect(ui.ImagePatchViewInOneImage, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem *)));
 
-	connect(ui.ShowAllSuperImagePatchesBtn, SIGNAL(clicked()), this, SLOT(showAllSuperImagePatches()));
+	connect(ui.ShowAllSuperImagePatchesBtn, SIGNAL(clicked()), this, SLOT(showAllSuperImagePatchesInPage()));
 	connect(ui.PreviousPageBtn, SIGNAL(clicked()), this, SLOT(previousPage()));
 	connect(ui.NextPageBtn, SIGNAL(clicked()), this, SLOT(nextPage()));
 	
@@ -555,11 +563,49 @@ void qt_Pixel_Main::on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * it
 }
 
 
-//显示所有超图元
-void qt_Pixel_Main::showAllSuperImagePatches()
+//分页显示所有超图元
+void qt_Pixel_Main::showAllSuperImagePatchesInPage()
 {
 	logDisplay->logDisplay("Showing All super image patches.");
+	int count = countRowsInSuperImagePatch();
+	int startNumber = 0;
+	int pageSize = 10;
+	if (superImagePatchesInPageReadFromDatabase.size() != 0)
+	{
+		for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
+		{
+			delete superImagePatchesInPageReadFromDatabase[i];
+		}
+	}
+	superImagePatchesInPageReadFromDatabase.clear();
+	
+	showAllSuperImagePatchesBtnThread = new ShowAllSuperImagePatchesBtnThread(&superImagePatchesInPageReadFromDatabase, startNumber, pageSize);
+	connect(showAllSuperImagePatchesBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatchInPage()));
+	showAllSuperImagePatchesBtnThread->start();
 }
+
+//setsuperImagePatch in page
+void qt_Pixel_Main::setsuperImagePatchInPage()
+{
+	if (ui.AllSuperImagePatchViewInPage->count() != 0)
+	{
+		ui.AllSuperImagePatchViewInPage->clear();
+	}
+
+	for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
+	{
+		Patch* sip = superImagePatchesInPageReadFromDatabase[i];
+		QImage showImage = Mat2QImage(*(sip->getOriginalImagePatch()));
+		//convert int to string, for mark QIcon
+		string str;
+		str = to_string(i + 1);
+		//change QImage to QIcon and show 
+		QPixmap qp = QPixmap::fromImage(showImage);
+		ui.AllSuperImagePatchViewInPage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
+	}
+	logDisplay->logDisplay("Show all super image patches in page.");
+}
+
 
 //显示超图元界面切换到前一页
 void qt_Pixel_Main::previousPage()
