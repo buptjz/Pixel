@@ -175,7 +175,7 @@ vector<pair<double,Patch*> > Patch::patchCompareWith(const vector<Patch*>& image
 		{
 			heap.push(make_pair(score[i], images[i]));
 		}
-		for (size_t i = 0; i < top_k; ++i)
+		for (size_t i = 0; i < top_k && !heap.empty(); ++i)
 		{
 			ret.push_back(heap.top());
 			heap.pop();
@@ -188,7 +188,7 @@ vector<pair<double,Patch*> > Patch::patchCompareWith(const vector<Patch*>& image
 		{
 			heap.push(make_pair(score[i], images[i]));
 		}
-		for (size_t i = 0; i < top_k; ++i)
+		for (size_t i = 0; i < top_k && !heap.empty(); ++i)
 		{
 			ret.push_back(heap.top());
 			heap.pop();
