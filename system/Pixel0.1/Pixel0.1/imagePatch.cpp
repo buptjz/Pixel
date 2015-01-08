@@ -5,6 +5,8 @@
 #include "patch.h"
 #include<map>
 #include<vector>
+#include "logDisplay.h"
+extern LogDisplay* logDisplay;
 using namespace cv;
 using namespace std;
 /*
@@ -43,14 +45,39 @@ void ImagePatch::savePatch() const{
 	sqlite3_stmt * stat = NULL;  //预编译使用到的一个很重要的数据结构
 	//int result = sqlite3_prepare(SQLiteHelper::getSqlite3(), str.c_str(), -1, &stat, 0);  //预编译
 	int result = sqlite3_prepare(SQLiteHelper::sqlite_db_, str.c_str(), -1, &stat, 0);
-	
+	if (result != SQLITE_OK)
+	{
+		logDisplay->logDisplay("Error in saving imagePatch, sql sentence error!");
+		sqlite3_finalize(stat);
+		return;
+	}
 	result = sqlite3_bind_blob(stat, 1, binaryImagePatchBuffer.c_str(), binaryImagePatchBuffer.size(), NULL);   //绑定blob类型
+	if (result != SQLITE_DONE)
+	{
+		logDisplay->logDisplay("Error in saving imagePatch!");
+		sqlite3_finalize(stat);
+		return;
+	}
 	result = sqlite3_bind_blob(stat, 2, originalImagePatchBuffer.c_str(), originalImagePatchBuffer.size(), NULL);   //绑定blob类型
+	if (result != SQLITE_DONE)
+	{
+		logDisplay->logDisplay("Error in saving imagePatch!");
+		sqlite3_finalize(stat);
+		return;
+	}
 	result = sqlite3_bind_text(stat, 3,featuresStr.c_str(), -1, NULL);           //绑定表的第一个字段，这里为text类型
+	if (result != SQLITE_DONE)
+	{
+		logDisplay->logDisplay("Error in saving imagePatch!");
+		sqlite3_finalize(stat);
+		return;
+	}
 	result = sqlite3_step(stat);                              //执行sql语句，这样就把数据存到数据库里了
 	if (result != SQLITE_DONE)
 	{
-		printf("insert into blob value failure!");
+		logDisplay->logDisplay("Error in saving imagePatch!");
+		sqlite3_finalize(stat);
+		return;
 	}
 	sqlite3_finalize(stat);
 	//sql_lite_helper.Insert(str.c_str());
