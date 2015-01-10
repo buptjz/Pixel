@@ -567,9 +567,10 @@ void qt_Pixel_Main::on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem * it
 void qt_Pixel_Main::showAllSuperImagePatchesInPage()
 {
 	logDisplay->logDisplay("Showing All super image patches.");
-	int count = countRowsInSuperImagePatch();
+	quantityOfSuperImagePatchesInDatabase = countRowsInSuperImagePatch();
+	pageMax = ceil((double)quantityOfSuperImagePatchesInDatabase /(double) (Params::pageSize));
 	int startNumber = 0;
-	int pageSize = 100;
+	int pageSize = Params::pageSize;
 	if (superImagePatchesInPageReadFromDatabase.size() != 0)
 	{
 		for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
@@ -578,10 +579,16 @@ void qt_Pixel_Main::showAllSuperImagePatchesInPage()
 		}
 	}
 	superImagePatchesInPageReadFromDatabase.clear();
-	
+	if (showAllSuperImagePatchesBtnThread != NULL)
+	{
+		delete showAllSuperImagePatchesBtnThread;
+	}
 	showAllSuperImagePatchesBtnThread = new ShowAllSuperImagePatchesBtnThread(&superImagePatchesInPageReadFromDatabase, startNumber, pageSize);
 	connect(showAllSuperImagePatchesBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatchInPage()));
 	showAllSuperImagePatchesBtnThread->start();
+	currentPage = 1;
+	logDisplay->logDisplay("Show all super image patches in page.");
+	logDisplay->logDisplay("Current is page 1");
 }
 
 //setsuperImagePatch in page
@@ -603,20 +610,119 @@ void qt_Pixel_Main::setsuperImagePatchInPage()
 		QPixmap qp = QPixmap::fromImage(showImage);
 		ui.AllSuperImagePatchViewInPage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
-	logDisplay->logDisplay("Show all super image patches in page.");
 }
 
 
 //显示超图元界面切换到前一页
 void qt_Pixel_Main::previousPage()
 {
-	logDisplay->logDisplay("Switch to previous page.");
+
+	if (currentPage > 1)
+	{
+		if (ui.AllSuperImagePatchViewInPage->count() != 0)
+		{
+			ui.AllSuperImagePatchViewInPage->clear();
+		}
+		logDisplay->logDisplay("Switch to previous page.");
+		if (showAllSuperImagePatchesBtnThread != NULL)
+		{
+			delete showAllSuperImagePatchesBtnThread;
+		}
+
+		if (superImagePatchesInPageReadFromDatabase.size() != 0)
+		{
+			for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
+			{
+				delete superImagePatchesInPageReadFromDatabase[i];
+			}
+		}
+		superImagePatchesInPageReadFromDatabase.clear();
+
+		int startNumber = (currentPage-2)*(Params::pageSize);
+		showAllSuperImagePatchesBtnThread = new ShowAllSuperImagePatchesBtnThread(&superImagePatchesInPageReadFromDatabase, startNumber, Params::pageSize);
+		connect(showAllSuperImagePatchesBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatchInPage()));
+		showAllSuperImagePatchesBtnThread->start();
+		--currentPage;
+		logDisplay->logDisplay("Current is page " + to_string(currentPage));
+	}
+	else
+	{
+		logDisplay->logDisplay("Current is page " + to_string(currentPage) + ", can't turn to previous page!");
+	}
+	
 }
 
 //切换到下一页
 void qt_Pixel_Main::nextPage()
 {
+
 	logDisplay->logDisplay("Switch to next page.");
+	
+
+	if (currentPage>0 && currentPage < pageMax-1)
+	{
+		if (showAllSuperImagePatchesBtnThread != NULL)
+		{
+			delete showAllSuperImagePatchesBtnThread;
+		}
+		int startNumber = currentPage*(Params::pageSize);
+		if (ui.AllSuperImagePatchViewInPage->count() != 0)
+		{
+			ui.AllSuperImagePatchViewInPage->clear();
+		}
+
+		if (superImagePatchesInPageReadFromDatabase.size() != 0)
+		{
+			for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
+			{
+				delete superImagePatchesInPageReadFromDatabase[i];
+			}
+		}
+		superImagePatchesInPageReadFromDatabase.clear();
+
+		showAllSuperImagePatchesBtnThread = new ShowAllSuperImagePatchesBtnThread(&superImagePatchesInPageReadFromDatabase, startNumber, Params::pageSize);
+		connect(showAllSuperImagePatchesBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatchInPage()));
+		showAllSuperImagePatchesBtnThread->start();
+		++currentPage;
+		logDisplay->logDisplay("Current is page " + to_string(currentPage));
+	}
+	else if (currentPage == pageMax-1)
+	{
+		if (showAllSuperImagePatchesBtnThread != NULL)
+		{
+			delete showAllSuperImagePatchesBtnThread;
+		}
+		int startNumber = currentPage *(Params::pageSize);
+
+		if (ui.AllSuperImagePatchViewInPage->count() != 0)
+		{
+			ui.AllSuperImagePatchViewInPage->clear();
+		}
+
+		if (superImagePatchesInPageReadFromDatabase.size() != 0)
+		{
+			for (int i = 0; i < superImagePatchesInPageReadFromDatabase.size(); i++)
+			{
+				delete superImagePatchesInPageReadFromDatabase[i];
+			}
+		}
+		superImagePatchesInPageReadFromDatabase.clear();
+
+		int lastPageSize = quantityOfSuperImagePatchesInDatabase - (Params::pageSize)*currentPage;
+		showAllSuperImagePatchesBtnThread = new ShowAllSuperImagePatchesBtnThread(&superImagePatchesInPageReadFromDatabase, startNumber, lastPageSize);
+		connect(showAllSuperImagePatchesBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatchInPage()));
+		showAllSuperImagePatchesBtnThread->start();
+		++currentPage;
+		logDisplay->logDisplay("Current is page " + to_string(currentPage) + ", It is the last page.");
+	}
+	else if (currentPage == 0)
+	{
+		logDisplay->logDisplay("No image is shown, please click show image patch button first!");
+	}
+	else
+	{
+		logDisplay->logDisplay("Current is page " + to_string(currentPage) + ", It is the last page. You can't turn to next page!");
+	}
 }
 
 //关闭窗口时将配置参数写入配置文件

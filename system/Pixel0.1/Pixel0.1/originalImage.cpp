@@ -186,12 +186,12 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 		else
 			break;
 	}
-#ifdef __DEBUG__
-	Mat color_ret;
-	connected_component2color_image(*regImage, coupreImgnt, color_ret);
-	imshow("color_ret", color_ret);
-	waitKey(-1);
-#endif
+//#ifdef __DEBUG__
+//	Mat color_ret;
+//	connected_component2color_image(*regImage, coupreImgnt, color_ret);
+//	imshow("color_ret", color_ret);
+//	waitKey(-1);
+//#endif
 	vector<Rect *> rects;
 	rects = getMetaInfos(rects, coupreImgnt);
 

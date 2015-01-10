@@ -34,6 +34,9 @@ public:
 	SegmentBtnThread *segmentBtnThread = NULL;
 
 	ShowAllSuperImagePatchesBtnThread* showAllSuperImagePatchesBtnThread = NULL;
+	int currentPage = 0;//显示超图元界面，当前所在页数
+	int quantityOfSuperImagePatchesInDatabase = 0;//数据库中超图元个数
+	int pageMax = 0; //最大页数
 
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;//"搜索"界面打开的图像
