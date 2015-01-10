@@ -138,14 +138,15 @@ double get_pixel_rat(const Mat& input)
 		cvtColor(input, tmp, CV_BGR2GRAY, 1);
 	else
 		tmp = input;
-	tmp.convertTo(tmp, CV_8UC1);
+	tmp.convertTo(tmp, Params::grey_image_type);
 	int sum = tmp.rows * tmp.cols;
 	int cnt = 0;
+
 	for (size_t i = 0; i < tmp.rows; ++i)
 	{
 		for (size_t j = 0; j < tmp.cols; ++j)
 		{
-			if (tmp.at<char>(i,j) != 0)
+			if (tmp.at<uchar>(i,j) > Params::pixel_valid_thr*255)
 				++cnt;
 		}
 	}
@@ -218,7 +219,7 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 		merge(masks, mask_multichannel);
 		Mat *oip = new Mat(org);
 		bitwise_and(org, mask_multichannel, *oip);
-		if (get_pixel_rat(mask_multichannel) < Params::pixel_rat_min)
+		if (get_pixel_rat(*oip) < Params::pixel_rat_min)
 			continue;
 		cv::namedWindow(name);
 		cv::imshow(name, *oip);

@@ -24,13 +24,14 @@ int Params::grey_image_channels = 1;
 int Params::connect_map_type = CV_16UC1;
 
 //segment
-double Params::pixel_rat_min = 0.01;
+double Params::pixel_rat_min = 0.1;
+double Params::pixel_valid_thr = 0.2;
 int Params::retry_max = 10;
 float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
 int Params::segment_expect = 0;
 float Params::segment_step = 0.2;
-float Params::patch_pixel_min = 0.1;
+float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
 
 float Params::morph_min = 0.4;
@@ -110,6 +111,7 @@ void Params::push_attr()
 	__attr__["pixel_rat_min"] = make_pair("double", static_cast<void*>(&pixel_rat_min));
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 	__attr__["xmlFileName"] = make_pair("string", static_cast<void*>(&xmlFileName));
+	__attr__["pixel_valid_thr"] = make_pair("double", static_cast<void*>(&pixel_valid_thr));
 }
 
 void Params::set_attr(const char *name,const char * value){
