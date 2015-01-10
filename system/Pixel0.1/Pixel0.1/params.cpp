@@ -15,7 +15,7 @@ const string Params::MORPH_BASIC = "MORPH_BASIC";
 const string Params::EGBIS = "EGBIS";
 
 map<string, pair<string, void*> > Params::__attr__;
-
+//NOTE:attributes with 'non-user-set' means it should not be shown on GUI 
 //params for images
 int Params::color_image_type = CV_8UC3;
 int Params::color_image_channels = 3;
@@ -25,12 +25,12 @@ int Params::connect_map_type = CV_16UC1;
 
 //segment
 double Params::pixel_rat_min = 0.1;
-double Params::pixel_valid_thr = 0.2;
+double Params::pixel_valid_thr = 0.2;//non-user-set
 int Params::retry_max = 10;
 float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
 int Params::segment_expect = 0;
-float Params::segment_step = 0.2;
+float Params::segment_step = 0.2;//non-user-set
 float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
 
