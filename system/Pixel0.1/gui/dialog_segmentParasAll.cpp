@@ -23,6 +23,7 @@ void DialogSegmentParasAll::setSegmentParas()
 	string patch_pixel_min = (ui.lineEdit_patch_pixel_min->text()).toStdString();
 	string patch_pixel_max = (ui.lineEdit_patch_pixel_max->text()).toStdString();
 	string segment_step = (ui.lineEdit_segment_step->text()).toStdString();
+	string pixel_rat_min = (ui.lineEdit_pixel_rat_min->text()).toStdString();
 	Params::set_attr("retry_max", retry_max.c_str());
 	Params::set_attr("segment_expect_upboard", segment_expect_upboard.c_str());
 	Params::set_attr("segment_expect_lowboard", segment_expect_lowboard.c_str());
@@ -30,6 +31,7 @@ void DialogSegmentParasAll::setSegmentParas()
 	Params::set_attr("patch_pixel_min", patch_pixel_min.c_str());
 	Params::set_attr("patch_pixel_max", patch_pixel_max.c_str());
 	Params::set_attr("segment_step", segment_step.c_str());
+	Params::set_attr("pixel_rat_min", pixel_rat_min.c_str());
 
 	string morph_min = (ui.lineEdit_morph_min->text()).toStdString();
 	Params::set_attr("morph_min", morph_min.c_str());
@@ -57,6 +59,8 @@ void DialogSegmentParasAll::getSegmentParas()
 	ui.lineEdit_egbis_sigma->setText(QString::fromStdString(to_string(Params::egbis_sigma)));
 	ui.lineEdit_egbis_c->setText(QString::fromStdString(to_string(Params::egbis_c)));
 	ui.lineEdit_egbis_min_size->setText(QString::fromStdString(to_string(Params::egbis_min_size)));
+
+	ui.lineEdit_pixel_rat_min->setText(QString::fromStdString(to_string(Params::pixel_rat_min)));
 }
 
 

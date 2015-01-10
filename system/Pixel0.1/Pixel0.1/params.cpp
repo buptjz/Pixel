@@ -17,11 +17,11 @@ const string Params::EGBIS = "EGBIS";
 map<string, pair<string, void*> > Params::__attr__;
 //NOTE:attributes with 'non-user-set' means it should not be shown on GUI 
 //params for images
-int Params::color_image_type = CV_8UC3;
-int Params::color_image_channels = 3;
-int Params::grey_image_type = CV_8UC1;
-int Params::grey_image_channels = 1;
-int Params::connect_map_type = CV_16UC1;
+int Params::color_image_type = CV_8UC3;//non-user-set
+int Params::color_image_channels = 3;//non-user-set
+int Params::grey_image_type = CV_8UC1;//non-user-set
+int Params::grey_image_channels = 1;//non-user-set
+int Params::connect_map_type = CV_16UC1;//non-user-set
 
 //segment
 double Params::pixel_rat_min = 0.1;

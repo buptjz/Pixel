@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>507</width>
     <height>382</height>
    </rect>
   </property>
@@ -16,8 +16,8 @@
   <widget class="QGroupBox" name="MORPH_BASIC">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>170</y>
+     <x>5</x>
+     <y>190</y>
      <width>491</width>
      <height>121</height>
     </rect>
@@ -144,8 +144,8 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>15</y>
+     <x>5</x>
+     <y>35</y>
      <width>491</width>
      <height>136</height>
     </rect>
@@ -318,8 +318,8 @@
   <widget class="QPushButton" name="CancelBtn_matchParasAll">
    <property name="geometry">
     <rect>
-     <x>415</x>
-     <y>330</y>
+     <x>400</x>
+     <y>320</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -331,14 +331,40 @@
   <widget class="QPushButton" name="OKbtn_matchParasAll">
    <property name="geometry">
     <rect>
-     <x>315</x>
-     <y>330</y>
+     <x>300</x>
+     <y>320</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>ok</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_top_k">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>10</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="top_k">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>10</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>top_k</string>
    </property>
   </widget>
  </widget>
