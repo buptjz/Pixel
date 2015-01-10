@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>382</height>
+    <width>556</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QGroupBox" name="MORPH_BASIC">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>155</y>
-     <width>491</width>
-     <height>51</height>
+     <x>10</x>
+     <y>160</y>
+     <width>531</width>
+     <height>131</height>
     </rect>
    </property>
    <property name="title">
@@ -28,8 +28,8 @@
    <widget class="QLineEdit" name="lineEdit_morph_min">
     <property name="geometry">
      <rect>
-      <x>155</x>
-      <y>20</y>
+      <x>150</x>
+      <y>10</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -38,7 +38,7 @@
    <widget class="QLabel" name="morph_min">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>10</x>
       <y>20</y>
       <width>54</width>
       <height>12</height>
@@ -48,13 +48,151 @@
      <string>morph_min</string>
     </property>
    </widget>
+   <widget class="QLabel" name="morph_canny_low_thr">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_canny_low_thr</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_canny_low_thr">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>40</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="morph_canny_up_thr">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_canny_up_thr</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_canny_up_thr">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>70</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="morph_size">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_size</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_size">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>10</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="morph_scale">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>40</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_scale</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_scale">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>40</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_smooth_ksize">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>70</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="morph_smooth_ksize">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>70</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_smooth_ksize</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="morph_fill_all">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>morph_fill_all</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_morph_fill_all">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>100</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="EGBIS">
    <property name="geometry">
     <rect>
      <x>15</x>
-     <y>220</y>
-     <width>491</width>
+     <y>300</y>
+     <width>531</width>
      <height>81</height>
     </rect>
    </property>
@@ -77,8 +215,8 @@
    <widget class="QLineEdit" name="lineEdit_egbis_sigma">
     <property name="geometry">
      <rect>
-      <x>155</x>
-      <y>15</y>
+      <x>140</x>
+      <y>10</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -103,7 +241,7 @@
    <widget class="QLineEdit" name="lineEdit_egbis_c">
     <property name="geometry">
      <rect>
-      <x>155</x>
+      <x>140</x>
       <y>40</y>
       <width>113</width>
       <height>20</height>
@@ -129,8 +267,8 @@
    <widget class="QLineEdit" name="lineEdit_egbis_min_size">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>15</y>
+      <x>400</x>
+      <y>10</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -140,9 +278,9 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>15</y>
-     <width>491</width>
+     <x>10</x>
+     <y>20</y>
+     <width>531</width>
      <height>131</height>
     </rect>
    </property>
@@ -283,8 +421,8 @@
    <widget class="QLineEdit" name="lineEdit_patch_pixel_min">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>25</y>
+      <x>400</x>
+      <y>30</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -293,7 +431,7 @@
    <widget class="QLineEdit" name="lineEdit_patch_pixel_max">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>400</x>
       <y>50</y>
       <width>113</width>
       <height>20</height>
@@ -303,8 +441,8 @@
    <widget class="QLineEdit" name="lineEdit_segment_step">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>75</y>
+      <x>400</x>
+      <y>80</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -313,7 +451,7 @@
    <widget class="QLineEdit" name="lineEdit_pixel_rat_min">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>400</x>
       <y>100</y>
       <width>113</width>
       <height>20</height>
@@ -338,7 +476,7 @@
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>320</y>
+     <y>400</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -351,7 +489,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>320</y>
+     <y>400</y>
      <width>75</width>
      <height>23</height>
     </rect>

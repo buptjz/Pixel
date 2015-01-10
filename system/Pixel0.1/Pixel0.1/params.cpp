@@ -35,6 +35,13 @@ float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
 
 float Params::morph_min = 0.4;
+double Params::morph_canny_low_thr = 50;
+double Params::morph_canny_up_thr = 150;
+int Params::morph_size = 5;
+int Params::morph_scale = 3;
+int Params::morph_smooth_ksize = 3;
+bool Params::morph_fill_all = true;
+
 float Params::egbis_sigma = 0.5;
 float Params::egbis_c = 5000;
 int Params::egbis_min_size = 20;
@@ -84,6 +91,12 @@ void Params::push_attr()
 	__attr__["patch_pixel_min"] = make_pair("float", static_cast<void*>(&patch_pixel_min));
 	__attr__["patch_pixel_max"] = make_pair("float", static_cast<void*>(&patch_pixel_max));
 	__attr__["morph_min"] = make_pair("float", static_cast<void*>(&morph_min));
+	__attr__["morph_canny_low_thr"] = make_pair("double", static_cast<void*>(&morph_canny_low_thr));
+	__attr__["morph_canny_up_thr"] = make_pair("double", static_cast<void*>(&morph_canny_up_thr));
+	__attr__["morph_size"] = make_pair("int", static_cast<void*>(&morph_size));
+	__attr__["morph_scale"] = make_pair("int", static_cast<void*>(&morph_scale));
+	__attr__["morph_smooth_ksize"] = make_pair("int", static_cast<void*>(&morph_smooth_ksize));
+	__attr__["morph_fill_all"] = make_pair("bool", static_cast<void*>(&morph_fill_all));
 
 	__attr__["egbis_sigma"] = make_pair("float", static_cast<void*>(&egbis_sigma));
 	__attr__["egbis_c"] = make_pair("float", static_cast<void*>(&egbis_c));
