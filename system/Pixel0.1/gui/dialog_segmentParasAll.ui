@@ -40,12 +40,12 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>54</width>
-      <height>12</height>
+      <width>81</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>morph_min</string>
+     <string>有效像素阈值</string>
     </property>
    </widget>
    <widget class="QLabel" name="morph_canny_low_thr">
@@ -58,7 +58,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>morph_canny_low_thr</string>
+     <string>canny算子下界</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_morph_canny_low_thr">
@@ -81,7 +81,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>morph_canny_up_thr</string>
+     <string>canny算子上界</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_morph_canny_up_thr">
@@ -99,12 +99,12 @@
      <rect>
       <x>280</x>
       <y>10</y>
-      <width>71</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>morph_size</string>
+     <string>形态学模板尺寸</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_morph_size">
@@ -127,7 +127,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>morph_scale</string>
+     <string>原图缩放倍数</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_morph_scale">
@@ -160,7 +160,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>morph_smooth_ksize</string>
+     <string>平滑模板尺寸</string>
     </property>
    </widget>
    <widget class="QLabel" name="morph_fill_all">
@@ -173,7 +173,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>morph_fill_all</string>
+     <string>是否填充连通域</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_morph_fill_all">
@@ -297,7 +297,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>retry_max</string>
+     <string>重试次数</string>
     </property>
    </widget>
    <widget class="QLabel" name="segment_expect_upboard">
@@ -310,7 +310,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>segment_expect_upboard</string>
+     <string>允许期望偏差上限</string>
     </property>
    </widget>
    <widget class="QLabel" name="segment_expect_lowboard">
@@ -323,7 +323,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>segment_expect_lowboard</string>
+     <string>允许期望偏差下限</string>
     </property>
    </widget>
    <widget class="QLabel" name="segment_expect">
@@ -336,7 +336,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>segment_expect</string>
+     <string>期望分割图元数</string>
     </property>
    </widget>
    <widget class="QLabel" name="segment_step">
@@ -349,7 +349,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>segment_step</string>
+     <string>重试步长</string>
     </property>
    </widget>
    <widget class="QLabel" name="patch_pixel_min">
@@ -357,12 +357,12 @@
      <rect>
       <x>280</x>
       <y>25</y>
-      <width>101</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>patch_pixel_min</string>
+     <string>图元占整图最小占比</string>
     </property>
    </widget>
    <widget class="QLabel" name="patch_pixel_max">
@@ -370,12 +370,12 @@
      <rect>
       <x>280</x>
       <y>50</y>
-      <width>111</width>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>patch_pixel_max</string>
+     <string>图元占整图最大占比</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_retry_max">
@@ -463,12 +463,12 @@
      <rect>
       <x>280</x>
       <y>100</y>
-      <width>91</width>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>pixel_rat_min</string>
+     <string>图元非零像素最小占比</string>
     </property>
    </widget>
   </widget>
@@ -482,7 +482,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>ok</string>
+    <string>确定</string>
    </property>
   </widget>
   <widget class="QPushButton" name="CancelBtn_segmentParasAll">
@@ -495,7 +495,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>cancel</string>
+    <string>取消</string>
    </property>
   </widget>
  </widget>
