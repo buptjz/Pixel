@@ -86,6 +86,7 @@ public:
 
 	static  string defaultPath;
 	static  string xmlFileName;
+	static  int pageSize;
 };
 
 

@@ -49,7 +49,7 @@ vector<base_type*> convert_verctor(vector<child_type*> src)
 Mat imread_and_preprocess(const string& filename);
 
 
-//split string
+//split string by pattern
 std::vector<std::string> split(std::string str, std::string pattern);
 
 //draw patch in originalImage

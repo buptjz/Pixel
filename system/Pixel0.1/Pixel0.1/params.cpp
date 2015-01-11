@@ -31,6 +31,7 @@ float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
 int Params::segment_expect = 0;
 float Params::segment_step = 0.2;//non-user-set
+
 float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
 
@@ -59,7 +60,7 @@ int Params::surf_descriptor_min = 3;
 //shape context compare
 double Params::shape_context_compare_1_thres = 0.2;
 double Params::shape_context_compare_2_thres = 0.2;
-double Params::surf_compare_1_thres = 0.4;
+double Params::surf_compare_1_thres = 0.45;
 double Params::surf_compare_2_thres = 0.6;
 
 int Params::surf_dimensions = 64;
@@ -76,6 +77,7 @@ int Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
 string Params::xmlFileName = "Params.xml";
+int Params::pageSize = 10;
 
 void Params::push_attr()
 {
@@ -126,6 +128,7 @@ void Params::push_attr()
 	__attr__["pixel_rat_min"] = make_pair("double", static_cast<void*>(&pixel_rat_min));
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 	__attr__["xmlFileName"] = make_pair("string", static_cast<void*>(&xmlFileName));
+	__attr__["pageSize"] = make_pair("int", static_cast<void*>(&pageSize));
 	__attr__["pixel_valid_thr"] = make_pair("double", static_cast<void*>(&pixel_valid_thr));
 }
 

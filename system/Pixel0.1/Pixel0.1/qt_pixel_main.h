@@ -34,6 +34,9 @@ public:
 	SegmentBtnThread *segmentBtnThread = NULL;
 
 	ShowAllSuperImagePatchesBtnThread* showAllSuperImagePatchesBtnThread = NULL;
+	int currentPage = 0;//显示超图元界面，当前所在页数
+	int quantityOfSuperImagePatchesInDatabase = 0;//数据库中超图元个数
+	int pageMax = 0; //最大页数
 
 	QString dirPath;//ImageLibBtn open the dir
 	Patch* patchCompared = NULL;//"搜索"界面打开的图像
@@ -51,6 +54,7 @@ public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
 	DialogSegmentParasAll dialogSegmentParasAll;
+	QMenu *cmenu = NULL;//右键菜单项，全局变量，保证同时只存在一个menu，及时释放内存
 
 
 public:
@@ -103,6 +107,8 @@ public slots:
 	void previousPage();//显示超图元界面切换到前一页
 	void nextPage();//切换到下一页
 	void setsuperImagePatchInPage();
+
+	void showContextMenuForWidget(const QPoint &);//显示的超图元上右键弹出菜单项
 };
 
 #endif
