@@ -204,12 +204,12 @@
      <rect>
       <x>15</x>
       <y>15</y>
-      <width>54</width>
-      <height>12</height>
+      <width>101</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>egbis_sigma</string>
+     <string>高斯模糊sigma</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_egbis_sigma">
@@ -235,7 +235,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>egbis_c</string>
+     <string>k参数</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_egbis_c">
@@ -256,12 +256,12 @@
      <rect>
       <x>280</x>
       <y>15</y>
-      <width>96</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>egbis_min_size</string>
+     <string>最小分割区域像素数</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_egbis_min_size">
