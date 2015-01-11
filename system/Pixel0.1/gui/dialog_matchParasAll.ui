@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>572</width>
     <height>382</height>
    </rect>
   </property>
@@ -16,9 +16,9 @@
   <widget class="QGroupBox" name="MORPH_BASIC">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>170</y>
-     <width>491</width>
+     <x>5</x>
+     <y>190</y>
+     <width>551</width>
      <height>121</height>
     </rect>
    </property>
@@ -45,7 +45,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>surf_descriptor_min</string>
+     <string>最少描述子数目</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_surf_compare_1_thres">
@@ -68,7 +68,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>surf_compare_1_thres</string>
+     <string>单图去重阈值</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_surf_compare_2_thres">
@@ -91,7 +91,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>surf_compare_2_thres</string>
+     <string>超图元去重阈值</string>
     </property>
    </widget>
    <widget class="QLabel" name="surf_min_ratio">
@@ -104,13 +104,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>surf_min_ratio</string>
+     <string>最小最配次配比</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_surf_dimensions">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>420</x>
       <y>25</y>
       <width>113</width>
       <height>20</height>
@@ -127,13 +127,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>surf_dimensions</string>
+     <string>SURF描述子维度</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_surf_min_ratio">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>420</x>
       <y>50</y>
       <width>113</width>
       <height>20</height>
@@ -144,9 +144,9 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>15</y>
-     <width>491</width>
+     <x>5</x>
+     <y>35</y>
+     <width>551</width>
      <height>136</height>
     </rect>
    </property>
@@ -163,7 +163,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_sample_point_num</string>
+     <string>采样点数</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_bending_weight">
@@ -176,7 +176,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_bending_weight</string>
+     <string>弯曲能量权重</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_match_weight">
@@ -189,7 +189,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_match_weight</string>
+     <string>匹配距离权重</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_appearance_weight">
@@ -202,7 +202,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_appearance_weight</string>
+     <string>像素匹配权重</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_compare_2_thres">
@@ -215,7 +215,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_compare_2_thres</string>
+     <string>超图元去重阈值</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_use_rotation">
@@ -223,12 +223,12 @@
      <rect>
       <x>280</x>
       <y>25</y>
-      <width>101</width>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_use_rotation</string>
+     <string>是否使用旋转不变性</string>
     </property>
    </widget>
    <widget class="QLabel" name="shape_context_compare_1_thres">
@@ -241,7 +241,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shape_context_compare_1_thres</string>
+     <string>单图去重阈值</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_shape_context_sample_point_num">
@@ -287,8 +287,8 @@
    <widget class="QLineEdit" name="lineEdit_shape_context_use_rotation">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>25</y>
+      <x>420</x>
+      <y>20</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -297,8 +297,8 @@
    <widget class="QLineEdit" name="lineEdit_shape_context_compare_1_thres">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>50</y>
+      <x>420</x>
+      <y>45</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -307,8 +307,31 @@
    <widget class="QLineEdit" name="lineEdit_shape_context_compare_2_thres">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>75</y>
+      <x>420</x>
+      <y>70</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="shape_context_iterations">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>100</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>形变迭代次数</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_shape_context_iterations">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>100</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -318,27 +341,53 @@
   <widget class="QPushButton" name="CancelBtn_matchParasAll">
    <property name="geometry">
     <rect>
-     <x>415</x>
+     <x>480</x>
      <y>330</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>cancel</string>
+    <string>取消</string>
    </property>
   </widget>
   <widget class="QPushButton" name="OKbtn_matchParasAll">
    <property name="geometry">
     <rect>
-     <x>315</x>
+     <x>380</x>
      <y>330</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>ok</string>
+    <string>确定</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_top_k">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>10</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="top_k">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>10</y>
+     <width>111</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>展示最近似图元个数</string>
    </property>
   </widget>
  </widget>

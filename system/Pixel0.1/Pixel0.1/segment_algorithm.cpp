@@ -11,8 +11,8 @@ Mat & SimplePre(Mat & org, Mat & result)
 	else
 		result = org.clone();
 	result.convertTo(result, Params::grey_image_type);
-	medianBlur(result, result, 3);
-	resize(result, result, Size(3 * org.rows, 3 * org.cols));
+	medianBlur(result, result, Params::morph_smooth_ksize);
+	resize(result, result, Size(Params::morph_scale * org.rows, Params::morph_scale * org.cols));
 	return result;
 }
 
@@ -45,11 +45,11 @@ void param_adaptor(string segment_type, bool too_many)
 int CannyAndMorphing(Mat & input, Mat & result)
 {
 	Mat temp = Mat(input.size(), CV_8UC1);
-	Canny(input, temp, 50, 150);
+	Canny(input, temp, Params::morph_canny_low_thr, Params::morph_canny_up_thr);
 	dilate(temp, temp, noArray());
-	Mat element5(5, 5, CV_8U, Scalar(1));
+	Mat element5(Params::morph_size, Params::morph_size, CV_8U, Scalar(1));
 	morphologyEx(temp, temp, MORPH_CLOSE, element5);
-	resize(temp, temp, Size(input.rows / 3, input.cols / 3), .0f, .0f, INTER_LINEAR);
+	resize(temp, temp, Size(input.rows / Params::morph_scale, input.cols / Params::morph_scale), .0f, .0f, INTER_LINEAR);
 	temp = temp >= Params::morph_min;
 	//temp.convertTo(temp, CV_8UC1);
 	//
@@ -60,7 +60,7 @@ int CannyAndMorphing(Mat & input, Mat & result)
 	int index = 1;
 	for (int idx = 0; idx >= 0; idx = hierarchy[idx][0])
 		//drawContours(result, edges, idx, Scalar(index++));
-		drawContours(result, edges, idx, Scalar(index++), CV_FILLED);
+		drawContours(result, edges, idx, Scalar(index++), Params::morph_fill_all?CV_FILLED:1);
 	return index -= 1;
 }
 

@@ -22,6 +22,7 @@ static void refresh_sc_extractor_settings()
 	sc_extractor->setBendingEnergyWeight(Params::shape_context_bending_weight);
 	sc_extractor->setImageAppearanceWeight(Params::shape_context_appearance_weight);
 	sc_extractor->setRotationInvariant(Params::shape_context_use_rotation);
+	sc_extractor->setIterations(Params::shape_context_iterations);
 }
 
 //currentQuery must be gray image with 1 channel. if not , it will be converted into 1 channel
@@ -92,8 +93,6 @@ static void _compare_surf(Patch *query, const vector<Patch *>& images, vector<do
 	{
 		string feature_str;
 		generate_surf_descriptors(*query->getOriginalImagePatch(),query_feature);
-		if (query_feature.rows < Params::surf_descriptor_min)
-			query_feature = Mat();
 		mat2jsonString(query_feature, feature_str);
 		query->addFeature(make_pair(Params::SURF, feature_str));
 	}
@@ -110,14 +109,12 @@ static void _compare_surf(Patch *query, const vector<Patch *>& images, vector<do
 		{
 			string feature_str;
 			generate_surf_descriptors(*patch_ptr->getOriginalImagePatch(), image_feature);
-			if (image_feature.rows < Params::surf_descriptor_min)
-				image_feature = Mat();
 			mat2jsonString(image_feature, feature_str);
 			patch_ptr->addFeature(make_pair(Params::SURF, feature_str));
 		}
 		else
 			jsonString2Mat(image_featuremap[Params::SURF], image_feature);
-		if (image_feature.data == NULL || query_feature.data == NULL)
+		if (image_feature.data == NULL || query_feature.data == NULL || image_feature.rows < Params::surf_descriptor_min || query_feature.rows < Params::surf_descriptor_min)
 			ret.push_back(0);
 		else
 			ret.push_back(surf_match_score_with_descriptor(query_feature, image_feature));

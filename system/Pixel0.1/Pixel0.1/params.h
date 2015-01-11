@@ -35,6 +35,7 @@ public:
 
 	//params for segment
 	static double pixel_rat_min;
+	static double pixel_valid_thr;
 	static int retry_max;//if segment failed, the max times algorithm can retry.
 	static float segment_expect_upboard;
 	static float segment_expect_lowboard;
@@ -44,6 +45,13 @@ public:
 	static float patch_pixel_min;
 	static float patch_pixel_max;
 	static float morph_min;
+	static double morph_canny_low_thr;
+	static double morph_canny_up_thr;
+	static int morph_size;
+	static int morph_scale;
+	static int morph_smooth_ksize;
+	static bool morph_fill_all;
+
 	static float egbis_sigma;
 	static float egbis_c;
 	static int egbis_min_size;
@@ -54,6 +62,7 @@ public:
 	static float shape_context_match_weight;
 	static float shape_context_appearance_weight;
 	static bool shape_context_use_rotation;
+	static int shape_context_iterations;
 	static int surf_descriptor_min; //min number of surf descriptors
     
     //shape context compare

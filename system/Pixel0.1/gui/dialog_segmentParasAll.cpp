@@ -23,6 +23,7 @@ void DialogSegmentParasAll::setSegmentParas()
 	string patch_pixel_min = (ui.lineEdit_patch_pixel_min->text()).toStdString();
 	string patch_pixel_max = (ui.lineEdit_patch_pixel_max->text()).toStdString();
 	string segment_step = (ui.lineEdit_segment_step->text()).toStdString();
+	string pixel_rat_min = (ui.lineEdit_pixel_rat_min->text()).toStdString();
 	Params::set_attr("retry_max", retry_max.c_str());
 	Params::set_attr("segment_expect_upboard", segment_expect_upboard.c_str());
 	Params::set_attr("segment_expect_lowboard", segment_expect_lowboard.c_str());
@@ -30,9 +31,22 @@ void DialogSegmentParasAll::setSegmentParas()
 	Params::set_attr("patch_pixel_min", patch_pixel_min.c_str());
 	Params::set_attr("patch_pixel_max", patch_pixel_max.c_str());
 	Params::set_attr("segment_step", segment_step.c_str());
+	Params::set_attr("pixel_rat_min", pixel_rat_min.c_str());
 
 	string morph_min = (ui.lineEdit_morph_min->text()).toStdString();
+	string morph_canny_low_thr = (ui.lineEdit_morph_canny_low_thr->text()).toStdString();
+	string morph_canny_up_thr = (ui.lineEdit_morph_canny_up_thr->text()).toStdString();
+	string morph_size = (ui.lineEdit_morph_size->text()).toStdString();
+	string morph_scale = (ui.lineEdit_morph_scale->text()).toStdString();
+	string morph_smooth_ksize = (ui.lineEdit_morph_smooth_ksize->text()).toStdString();
+	string morph_fill_all = (ui.lineEdit_morph_fill_all->text()).toStdString();
 	Params::set_attr("morph_min", morph_min.c_str());
+	Params::set_attr("morph_canny_low_thr", morph_canny_low_thr.c_str());
+	Params::set_attr("morph_canny_up_thr", morph_canny_up_thr.c_str());
+	Params::set_attr("morph_size", morph_size.c_str());
+	Params::set_attr("morph_scale", morph_scale.c_str());
+	Params::set_attr("morph_smooth_ksize", morph_smooth_ksize.c_str());
+	Params::set_attr("morph_fill_all", morph_fill_all.c_str());
 
 	string egbis_sigma = (ui.lineEdit_egbis_sigma->text()).toStdString();
 	string egbis_c = (ui.lineEdit_egbis_c->text()).toStdString();
@@ -53,10 +67,18 @@ void DialogSegmentParasAll::getSegmentParas()
 	ui.lineEdit_segment_step->setText(QString::fromStdString(to_string(Params::segment_step)));
 
 	ui.lineEdit_morph_min->setText(QString::fromStdString(to_string(Params::morph_min)));
+	ui.lineEdit_morph_canny_low_thr->setText(QString::fromStdString(to_string(Params::morph_canny_low_thr)));
+	ui.lineEdit_morph_canny_up_thr->setText(QString::fromStdString(to_string(Params::morph_canny_up_thr)));
+	ui.lineEdit_morph_size->setText(QString::fromStdString(to_string(Params::morph_size)));
+	ui.lineEdit_morph_scale->setText(QString::fromStdString(to_string(Params::morph_scale)));
+	ui.lineEdit_morph_smooth_ksize->setText(QString::fromStdString(to_string(Params::morph_smooth_ksize)));
+	ui.lineEdit_morph_fill_all->setText(QString::fromStdString(to_string(Params::morph_fill_all)));
 
 	ui.lineEdit_egbis_sigma->setText(QString::fromStdString(to_string(Params::egbis_sigma)));
 	ui.lineEdit_egbis_c->setText(QString::fromStdString(to_string(Params::egbis_c)));
 	ui.lineEdit_egbis_min_size->setText(QString::fromStdString(to_string(Params::egbis_min_size)));
+
+	ui.lineEdit_pixel_rat_min->setText(QString::fromStdString(to_string(Params::pixel_rat_min)));
 }
 
 

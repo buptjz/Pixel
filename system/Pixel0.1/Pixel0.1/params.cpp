@@ -15,25 +15,34 @@ const string Params::MORPH_BASIC = "MORPH_BASIC";
 const string Params::EGBIS = "EGBIS";
 
 map<string, pair<string, void*> > Params::__attr__;
-
+//NOTE:attributes with 'non-user-set' means it should not be shown on GUI 
 //params for images
-int Params::color_image_type = CV_8UC3;
-int Params::color_image_channels = 3;
-int Params::grey_image_type = CV_8UC1;
-int Params::grey_image_channels = 1;
-int Params::connect_map_type = CV_16UC1;
+int Params::color_image_type = CV_8UC3;//non-user-set
+int Params::color_image_channels = 3;//non-user-set
+int Params::grey_image_type = CV_8UC1;//non-user-set
+int Params::grey_image_channels = 1;//non-user-set
+int Params::connect_map_type = CV_16UC1;//non-user-set
 
 //segment
-double Params::pixel_rat_min = 0.01;
+double Params::pixel_rat_min = 0.1;
+double Params::pixel_valid_thr = 0.2;//non-user-set
 int Params::retry_max = 10;
 float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
 int Params::segment_expect = 0;
-float Params::segment_step = 0.2;
+float Params::segment_step = 0.2;//non-user-set
+
 float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
 
 float Params::morph_min = 0.4;
+double Params::morph_canny_low_thr = 50;
+double Params::morph_canny_up_thr = 150;
+int Params::morph_size = 5;
+int Params::morph_scale = 3;
+int Params::morph_smooth_ksize = 3;
+bool Params::morph_fill_all = true;
+
 float Params::egbis_sigma = 0.5;
 float Params::egbis_c = 5000;
 int Params::egbis_min_size = 20;
@@ -45,6 +54,7 @@ float Params::shape_context_bending_weight = 0;
 float Params::shape_context_match_weight = 1;
 float Params::shape_context_appearance_weight = 0;
 bool Params::shape_context_use_rotation = false;
+int Params::shape_context_iterations = 2;
 int Params::surf_descriptor_min = 3;
 
 //shape context compare
@@ -84,6 +94,12 @@ void Params::push_attr()
 	__attr__["patch_pixel_min"] = make_pair("float", static_cast<void*>(&patch_pixel_min));
 	__attr__["patch_pixel_max"] = make_pair("float", static_cast<void*>(&patch_pixel_max));
 	__attr__["morph_min"] = make_pair("float", static_cast<void*>(&morph_min));
+	__attr__["morph_canny_low_thr"] = make_pair("double", static_cast<void*>(&morph_canny_low_thr));
+	__attr__["morph_canny_up_thr"] = make_pair("double", static_cast<void*>(&morph_canny_up_thr));
+	__attr__["morph_size"] = make_pair("int", static_cast<void*>(&morph_size));
+	__attr__["morph_scale"] = make_pair("int", static_cast<void*>(&morph_scale));
+	__attr__["morph_smooth_ksize"] = make_pair("int", static_cast<void*>(&morph_smooth_ksize));
+	__attr__["morph_fill_all"] = make_pair("bool", static_cast<void*>(&morph_fill_all));
 
 	__attr__["egbis_sigma"] = make_pair("float", static_cast<void*>(&egbis_sigma));
 	__attr__["egbis_c"] = make_pair("float", static_cast<void*>(&egbis_c));
@@ -94,6 +110,7 @@ void Params::push_attr()
 	__attr__["shape_context_match_weight"] = make_pair("float", static_cast<void*>(&shape_context_match_weight));
 	__attr__["shape_context_appearance_weight"] = make_pair("float", static_cast<void*>(&shape_context_appearance_weight));
 	__attr__["shape_context_use_rotation"] = make_pair("bool", static_cast<void*>(&shape_context_use_rotation));
+	__attr__["shape_context_iterations"] = make_pair("int", static_cast<void*>(&shape_context_iterations));
 	__attr__["surf_descriptor_min"] = make_pair("int", static_cast<void*>(&surf_descriptor_min));
 
 	__attr__["shape_context_compare_1_thres"] = make_pair("double", static_cast<void*>(&shape_context_compare_1_thres));
@@ -112,6 +129,7 @@ void Params::push_attr()
 	__attr__["defaultPath"] = make_pair("string", static_cast<void*>(&defaultPath));
 	__attr__["xmlFileName"] = make_pair("string", static_cast<void*>(&xmlFileName));
 	__attr__["pageSize"] = make_pair("int", static_cast<void*>(&pageSize));
+	__attr__["pixel_valid_thr"] = make_pair("double", static_cast<void*>(&pixel_valid_thr));
 }
 
 void Params::set_attr(const char *name,const char * value){
