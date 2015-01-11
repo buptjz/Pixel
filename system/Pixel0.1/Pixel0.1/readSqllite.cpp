@@ -236,7 +236,7 @@ vector<Patch*> readPartSuperImagePatches(int start, int pageSize)
 	map<string, string> features;
 	vector<string> patchIdList;
 
-	string sql = "select * from superImagePatch limit " + to_string(start) + ","+ to_string(pageSize) + ";";
+	string sql = "select * from superImagePatch limit " + to_string(start) + ","+ to_string(pageSize);
 	//执行查询
 	sqlite3_stmt *pstmt;
 	const char   *error = 0;
@@ -287,7 +287,7 @@ int updateImagePatchTable(SuperImagePatch & sip)
 	{
 		imagePatchId = patchIdList[i];
 		//更新superImagePatchId
-		string sql = "update imagePatch set superImagePatchId ='" + superImagePatchId + "' where imagePatchId = '" + imagePatchId + "';" ; 
+		string sql = "update imagePatch set superImagePatchId ='" + superImagePatchId + "' where imagePatchId = '" + imagePatchId + "'" ; 
 		int res =  SQLiteHelper::Update(sql.c_str());
 		if (res == -1){
 			logDisplay->logDisplay("Error in update imagePatch set superImagePatchId");

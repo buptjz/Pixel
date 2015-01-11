@@ -7,6 +7,7 @@
 #include "logDisplay.h"
 #include "tools.h"
 #include "xmlHelper.h"
+#include <algorithm>
 extern LogDisplay* logDisplay;
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
@@ -738,10 +739,10 @@ void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 {
 	QListWidgetItem* temp = ui.AllSuperImagePatchViewInPage->itemAt(pos);
 	if (temp != NULL){
-		int itemnum = ui.AllSuperImagePatchViewInPage->row(temp);
-		Patch *superImagePatchRightButtonClicked = superImagePatchesInPageReadFromDatabase[itemnum];
+		itemnum = ui.AllSuperImagePatchViewInPage->row(temp);
+		superImagePatchRightButtonClicked = superImagePatchesInPageReadFromDatabase[itemnum];
 		
-		logDisplay->logDisplay("position: " + to_string(itemnum));
+		logDisplay->logDisplay("Clicked item: " + to_string(itemnum));
 		if (cmenu)//保证同时只存在一个menu，及时释放内存
 		{
 			delete cmenu;
@@ -749,14 +750,38 @@ void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 		}
 		cmenu = new QMenu(ui.AllSuperImagePatchViewInPage);
 
-		QAction *addCategory = cmenu->addAction("添加类别");
-		QAction *deletePatch = cmenu->addAction("删除图元");
-
-		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_addCategory()));
-		connect(deletePatch, SIGNAL(triggered(bool)), this, SLOT(on_deletePatch()));
+		QAction *addCategory = cmenu->addAction("Add Category");
+		QAction *deletePatch = cmenu->addAction("Delete Patch");
+		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_addCategoryClicked()));
+		connect(deletePatch, SIGNAL(triggered(bool)), this, SLOT(on_deletePatchClicked()));
 
 		cmenu->exec(QCursor::pos());//在当前鼠标位置显示
 		//cmenu->exec(pos)是在viewport显示
 	}
-	
+}
+
+
+void qt_Pixel_Main::on_addCategoryClicked()
+{
+	logDisplay->logDisplay("Save category of this super image patch into database.");
+	string category;
+	//open a textEdit for user to input catagory name
+	category = "false category";
+	addCategoryThread = new AddCategoryThread(category, superImagePatchRightButtonClicked);
+	addCategoryThread->start();
+}
+void qt_Pixel_Main::on_deletePatchClicked()
+{
+	logDisplay->logDisplay("Delete superImagePatch and its imagePatches form database.");
+	deletePatchThread = new DeletePatchThread(superImagePatchRightButtonClicked);
+
+	connect(deletePatchThread, SIGNAL(sig()), this, SLOT(updateShowSuperImagePatchInPage()));
+	deletePatchThread->start();
+}
+
+void qt_Pixel_Main::updateShowSuperImagePatchInPage()
+{
+	std::vector<Patch*>::iterator it = superImagePatchesInPageReadFromDatabase.begin() + itemnum;
+	superImagePatchesInPageReadFromDatabase.erase(it);
+	setsuperImagePatchInPage();
 }

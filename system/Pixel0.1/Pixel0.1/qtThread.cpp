@@ -8,6 +8,7 @@
 #include "logDisplay.h"
 #include "qt_pixel_main.h"
 #include "readSqllite.h"
+#include "executeSqllite.h"
 extern LogDisplay* logDisplay;
 
 #include <direct.h>
@@ -258,5 +259,31 @@ void ShowAllSuperImagePatchesBtnThread::run()
 	logDisplay->logDisplay("Reading  a page of super image patches from database.");
 	*superImagePatchesInPageReadFromDatabase = readPartSuperImagePatches(startNumber, pageSize);
 	logDisplay->logDisplay("Read  a page of super image patches from database finished.");
+	emit this->sig();
+}
+
+AddCategoryThread::AddCategoryThread(const string &category, Patch* superImagePatchRightButtonClicked)
+{
+	this->category = category;
+	this->superImagePatchRightButtonClicked = superImagePatchRightButtonClicked;
+}
+
+void AddCategoryThread::run()
+{
+	logDisplay->logDisplay("Adding  category of the super image patches clicked into database.");
+	addCategoryOfSuperImagePatch(category, (SuperImagePatch *)superImagePatchRightButtonClicked);
+	logDisplay->logDisplay("Added  category of the super image patches clicked into database finished.");
+}
+
+DeletePatchThread::DeletePatchThread(Patch * superImagePatchRightButtonClicked)
+{
+	this->superImagePatchRightButtonClicked = superImagePatchRightButtonClicked;
+}
+
+void DeletePatchThread::run()
+{
+	logDisplay->logDisplay("Deleting the super image patches clicked from database.");
+	deleteAnSuperImagePatchAndItsImagePatches((SuperImagePatch*)superImagePatchRightButtonClicked);
+	logDisplay->logDisplay("Deleted the super image patches clicked from database finished.");
 	emit this->sig();
 }

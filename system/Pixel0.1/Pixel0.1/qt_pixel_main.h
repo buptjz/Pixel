@@ -32,6 +32,8 @@ public:
 	RemoveDuplicateBtnThread*  removeDuplicateBtnThread = NULL;
 	SavePatches2DataBaseBtnThread * savePatches2DataBaseBtnThread = NULL;
 	SegmentBtnThread *segmentBtnThread = NULL;
+	AddCategoryThread *addCategoryThread = NULL;
+	DeletePatchThread *deletePatchThread = NULL;
 
 	ShowAllSuperImagePatchesBtnThread* showAllSuperImagePatchesBtnThread = NULL;
 	int currentPage = 0;//显示超图元界面，当前所在页数
@@ -50,6 +52,8 @@ public:
 	vector<ImagePatch*> imagePatchList;//由超图元找到的图元
 
 	vector<Patch*>  superImagePatchesInPageReadFromDatabase; //分页显示所有超图元，一次加载的超图元
+	Patch *superImagePatchRightButtonClicked = NULL;//右键菜单的超图元
+	int itemnum;//右键点击的超图元项
 public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
@@ -109,6 +113,9 @@ public slots:
 	void setsuperImagePatchInPage();
 
 	void showContextMenuForWidget(const QPoint &);//显示的超图元上右键弹出菜单项
+	void on_addCategoryClicked();//右键超图元，在数据库中为该超图元添加类别信息（加入到数据库）
+	void on_deletePatchClicked();//通过超图元id删除该超图元以及其对应的子图元
+	void updateShowSuperImagePatchInPage();//更新超图元显示界面
 };
 
 #endif
