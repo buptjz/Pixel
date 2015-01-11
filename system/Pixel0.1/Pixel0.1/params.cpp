@@ -53,6 +53,7 @@ float Params::shape_context_bending_weight = 0;
 float Params::shape_context_match_weight = 1;
 float Params::shape_context_appearance_weight = 0;
 bool Params::shape_context_use_rotation = false;
+int Params::shape_context_iterations = 2;
 int Params::surf_descriptor_min = 3;
 
 //shape context compare
@@ -107,6 +108,7 @@ void Params::push_attr()
 	__attr__["shape_context_match_weight"] = make_pair("float", static_cast<void*>(&shape_context_match_weight));
 	__attr__["shape_context_appearance_weight"] = make_pair("float", static_cast<void*>(&shape_context_appearance_weight));
 	__attr__["shape_context_use_rotation"] = make_pair("bool", static_cast<void*>(&shape_context_use_rotation));
+	__attr__["shape_context_iterations"] = make_pair("int", static_cast<void*>(&shape_context_iterations));
 	__attr__["surf_descriptor_min"] = make_pair("int", static_cast<void*>(&surf_descriptor_min));
 
 	__attr__["shape_context_compare_1_thres"] = make_pair("double", static_cast<void*>(&shape_context_compare_1_thres));

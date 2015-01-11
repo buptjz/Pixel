@@ -62,6 +62,7 @@ public:
 	static float shape_context_match_weight;
 	static float shape_context_appearance_weight;
 	static bool shape_context_use_rotation;
+	static int shape_context_iterations;
 	static int surf_descriptor_min; //min number of surf descriptors
     
     //shape context compare

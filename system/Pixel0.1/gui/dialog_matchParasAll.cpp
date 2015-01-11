@@ -22,6 +22,7 @@ void DialogMatchParasAll::setMatchParas()
 	string shape_context_use_rotation = (ui.lineEdit_shape_context_use_rotation->text()).toStdString();
 	string shape_context_compare_1_thres = (ui.lineEdit_shape_context_compare_1_thres->text()).toStdString();
 	string shape_context_compare_2_thres = (ui.lineEdit_shape_context_compare_2_thres->text()).toStdString();
+	string shape_context_iterations = (ui.lineEdit_shape_context_iterations->text()).toStdString();
 	string top_k = (ui.lineEdit_top_k->text()).toStdString();
 	Params::set_attr("shape_context_sample_point_num", shape_context_sample_point_num.c_str());
 	Params::set_attr("shape_context_bending_weight", shape_context_bending_weight.c_str());
@@ -31,7 +32,7 @@ void DialogMatchParasAll::setMatchParas()
 	Params::set_attr("shape_context_compare_1_thres", shape_context_compare_1_thres.c_str());
 	Params::set_attr("shape_context_compare_2_thres", shape_context_compare_2_thres.c_str());
 	Params::set_attr("top_k", top_k.c_str());
-
+	Params::set_attr("shape_context_iterations", shape_context_iterations.c_str());
 	string surf_descriptor_min = (ui.lineEdit_surf_descriptor_min->text()).toStdString();
 	string surf_compare_1_thres = (ui.lineEdit_surf_compare_1_thres->text()).toStdString();
 	string surf_compare_2_thres = (ui.lineEdit_surf_compare_2_thres->text()).toStdString();
@@ -53,7 +54,7 @@ void DialogMatchParasAll::getMatchParas()
 	ui.lineEdit_shape_context_use_rotation->setText(QString::fromStdString(to_string(Params::shape_context_use_rotation)));
 	ui.lineEdit_shape_context_compare_1_thres->setText(QString::fromStdString(to_string(Params::shape_context_compare_1_thres)));
 	ui.lineEdit_shape_context_compare_2_thres->setText(QString::fromStdString(to_string(Params::shape_context_compare_2_thres)));
-
+	ui.lineEdit_shape_context_iterations->setText(QString::fromStdString(to_string(Params::shape_context_iterations)));
 	ui.lineEdit_surf_descriptor_min->setText(QString::fromStdString(to_string(Params::surf_descriptor_min)));
 	ui.lineEdit_surf_compare_1_thres->setText(QString::fromStdString(to_string(Params::surf_compare_1_thres)));
 	ui.lineEdit_surf_compare_2_thres->setText(QString::fromStdString(to_string(Params::surf_compare_2_thres)));

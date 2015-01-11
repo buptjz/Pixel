@@ -314,6 +314,29 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="shape_context_iterations">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>100</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>形变迭代次数</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_shape_context_iterations">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>100</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QPushButton" name="CancelBtn_matchParasAll">
    <property name="geometry">
