@@ -18,7 +18,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.setupUi(this);
 
 	ui.tabWidget->setStyleSheet("{background-color: rgba(215,215,215,0) }");
-	
+
 	this->image = new QImage();
 	this->originalImage = new QImage();
 	//this->superImagePatch = new QImage();
@@ -94,7 +94,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.AllSuperImagePatchViewInPage->setSpacing(10);
 	//设置connect 槽
 	//receive log messge
-	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)) );
+	connect(logDisplay, SIGNAL(sig(QString)), this, SLOT(on_logDisplay(QString)));
 	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
 	connect(ui.RemoveDuplicateBtn, SIGNAL(clicked()), this, SLOT(on_removeDuplicateBtn_clicked()));
@@ -107,7 +107,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 
 	connect(ui.AddinLibBtn, SIGNAL(clicked()), this, SLOT(on_Add2ImageLib_clicked()));
 
-	connect(ui.SegmentBtn, SIGNAL(clicked()), this, SLOT(on_segmentBtn_clicked()) );
+	connect(ui.SegmentBtn, SIGNAL(clicked()), this, SLOT(on_segmentBtn_clicked()));
 
 	connect(ui.SetMatchParasAllBtn, SIGNAL(clicked()), this, SLOT(setMatchParasAll()));
 	connect(ui.SetSegmentParasAllBtn, SIGNAL(clicked()), this, SLOT(setSegmentParasAll()));
@@ -121,7 +121,9 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.ShowAllSuperImagePatchesBtn, SIGNAL(clicked()), this, SLOT(showAllSuperImagePatchesInPage()));
 	connect(ui.PreviousPageBtn, SIGNAL(clicked()), this, SLOT(previousPage()));
 	connect(ui.NextPageBtn, SIGNAL(clicked()), this, SLOT(nextPage()));
-	
+
+	ui.AllSuperImagePatchViewInPage->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.AllSuperImagePatchViewInPage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -729,4 +731,32 @@ void qt_Pixel_Main::nextPage()
 void qt_Pixel_Main::closeEvent(QCloseEvent *event)
 {
 	save_params(Params::xmlFileName);
+}
+
+//在显示超图元的界面，右键弹出菜单，有“添加类别”和“删除图元”两个功能
+void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
+{
+	QListWidgetItem* temp = ui.AllSuperImagePatchViewInPage->itemAt(pos);
+	if (temp != NULL){
+		int itemnum = ui.AllSuperImagePatchViewInPage->row(temp);
+		Patch *superImagePatchRightButtonClicked = superImagePatchesInPageReadFromDatabase[itemnum];
+		
+		logDisplay->logDisplay("position: " + to_string(itemnum));
+		if (cmenu)//保证同时只存在一个menu，及时释放内存
+		{
+			delete cmenu;
+			cmenu = NULL;
+		}
+		cmenu = new QMenu(ui.AllSuperImagePatchViewInPage);
+
+		QAction *addCategory = cmenu->addAction("添加类别");
+		QAction *deletePatch = cmenu->addAction("删除图元");
+
+		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_addCategory()));
+		connect(deletePatch, SIGNAL(triggered(bool)), this, SLOT(on_deletePatch()));
+
+		cmenu->exec(QCursor::pos());//在当前鼠标位置显示
+		//cmenu->exec(pos)是在viewport显示
+	}
+	
 }
