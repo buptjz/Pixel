@@ -153,22 +153,20 @@ double get_pixel_rat(const Mat& input)
 	return double(cnt) / double(sum);
 }
 
-/*
-分割一幅大图像为众多小图元，大图像为类OriginalImage的私有变量
-小图元以对象指针的list形式返回
-*/
-vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
-{	
+int OriginalImage::get_connected_map(string segment_type)
+{
 	Mat preImg;
 	if (segment_type == Params::MORPH_BASIC)
 		preImg = prePareImage(preImg, SimplePre);
 	else if (segment_type == Params::EGBIS)
 		preImg = pOImage->clone();
 	else
-		return vector<ImagePatch*>();
+		return 0;
 
-	Mat t = Mat::zeros(pOImage->size(), Params::connect_map_type);
-	regImage = &t;
+	Mat *t = new Mat(Mat::zeros(pOImage->size(), Params::connect_map_type));
+	if (regImage != NULL)
+		delete regImage;
+	regImage = t;
 	int coupreImgnt = 0;
 	for (int i = 0; i < Params::retry_max; ++i)
 	{
@@ -177,7 +175,7 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 		else if (segment_type == Params::EGBIS)
 			coupreImgnt = segAlgorithm(preImg, egbis);
 		else
-			return vector<ImagePatch*>();
+			return 0;
 		if (Params::segment_expect <= 0)
 			break;
 		else if (coupreImgnt < Params::segment_expect_lowboard * Params::segment_expect)
@@ -187,30 +185,29 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 		else
 			break;
 	}
-//#ifdef __DEBUG__
-//	Mat color_ret;
-//	connected_component2color_image(*regImage, coupreImgnt, color_ret);
-//	imshow("color_ret", color_ret);
-//	waitKey(-1);
-//#endif
+	return coupreImgnt;
+}
+
+vector<ImagePatch*> OriginalImage::get_patches(int connect_num)
+{
 	vector<Rect *> rects;
-	rects = getMetaInfos(rects, coupreImgnt);
+	rects = getMetaInfos(rects, connect_num);
 
 	vector<ImagePatch*> result;
 	ImagePatch * imgPatch;
 	string name = "image patch";//window name for show
-	for (int index = 1; index <= coupreImgnt; ++index)
+	for (int index = 1; index <= connect_num; ++index)
 	{
 		Rect * rect = rects.at(index - 1);
 		int org_size = pOImage->rows * pOImage->cols, rect_size = rect->width * rect->height;
-		if( rect_size < org_size * Params::patch_pixel_min || rect_size > org_size * Params::patch_pixel_max)
+		if (rect_size < org_size * Params::patch_pixel_min || rect_size > org_size * Params::patch_pixel_max)
 			continue;
 		stringstream ss;
 		string str;
 		ss << index;
 		ss >> str;
 		string id = originalImageId + "_imagePatch_" + str;
-		Mat mask =( (*regImage)(*rect) == index);
+		Mat mask = ((*regImage)(*rect) == index);
 		Mat org = Mat(*pOImage, *rect).clone();
 		vector<Mat> masks;
 		for (size_t i = 0; i < org.channels(); ++i)
@@ -223,18 +220,39 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 			continue;
 		cv::namedWindow(name);
 		cv::imshow(name, *oip);
-		waitKey(500); 
+		waitKey(500);
 		cv::destroyAllWindows();
-		Mat *bip = new Mat(oip->rows,oip->cols,Params::grey_image_type);
-		cvtColor(*oip,*bip,CV_BGR2GRAY,Params::grey_image_channels);
+		Mat *bip = new Mat(oip->rows, oip->cols, Params::grey_image_type);
+		cvtColor(*oip, *bip, CV_BGR2GRAY, Params::grey_image_channels);
 
 		imgPatch = new ImagePatch(id, const_cast<OriginalImage *>(this), *rect, bip, oip);
 		result.push_back(imgPatch);
 	}
-
+	delete regImage;
+	regImage = NULL;
 	for (vector<Rect *>::iterator it = rects.begin(); it != rects.end(); ++it)
 		delete *it;
 	return result;
+}
+
+/*
+分割一幅大图像为众多小图元，大图像为类OriginalImage的私有变量
+小图元以对象指针的list形式返回
+*/
+vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
+{	
+	vector<ImagePatch*> ret;
+	int connect_num = get_connected_map(segment_type);
+	if (connect_num == 0)
+		return ret;
+#ifdef __DEBUG__
+	Mat color_ret;
+	connected_component2color_image(*regImage, connect_num, color_ret);
+	imshow("color_ret", color_ret);
+	waitKey(-1);
+#endif
+	return get_patches(connect_num);
+	
 }
 
 const Mat & OriginalImage::prePareImage(Mat & preImg, Mat & (*pre)(Mat &, Mat &)) const

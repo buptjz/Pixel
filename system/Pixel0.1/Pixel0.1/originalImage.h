@@ -43,6 +43,8 @@ public:
 	void setImage(Mat *pImage){ pOImage = pImage; }
 	/*分割图片，返回小图元的集合*/
 	vector<ImagePatch *> segmentImage(string segment_type);
+	int get_connected_map(string segment_type);
+	vector<ImagePatch*> get_patches(int connect_num);
 	//将图片信息存入数据库中
 	void saveOriginalImage()const;
 	/* 显示不同区域*/
