@@ -54,6 +54,7 @@ public:
 	vector<Patch*>  superImagePatchesInPageReadFromDatabase; //分页显示所有超图元，一次加载的超图元
 	Patch *superImagePatchRightButtonClicked = NULL;//右键菜单的超图元
 	int itemnum;//右键点击的超图元项
+	int itemnumPatch;//分割时右键点击的图元项
 public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
@@ -116,6 +117,9 @@ public slots:
 	void on_addCategoryClicked();//右键超图元，在数据库中为该超图元添加类别信息（加入到数据库）
 	void on_deletePatchClicked();//通过超图元id删除该超图元以及其对应的子图元
 	void updateShowSuperImagePatchInPage();//更新超图元显示界面
+	void savePatchContextMenuForWidget(const QPoint &pos);////分割界面，右键图元弹出菜单，保存图元到指定文件夹
+
+	void on_savePatchClicked();//右键分割后的图元，将图元保存至指定文件夹
 };
 
 #endif

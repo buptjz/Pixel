@@ -130,7 +130,6 @@ void SearchBtnThread::run()
 	emit sig();
 }
 
-
 SuperImagePatchItemclickedThread::SuperImagePatchItemclickedThread(SuperImagePatch *superImagePatch, vector<ImagePatch*> *imagePatchList) : QThread()
 {
 	this->superImagePatch = superImagePatch;
@@ -262,16 +261,16 @@ void ShowAllSuperImagePatchesBtnThread::run()
 	emit this->sig();
 }
 
-AddCategoryThread::AddCategoryThread(const string &category, Patch* superImagePatchRightButtonClicked)
+AddCategoryThread::AddCategoryThread(const string &category, Patch* superImagePatchRightButtonClicked2)
 {
 	this->category = category;
-	this->superImagePatchRightButtonClicked = superImagePatchRightButtonClicked;
+	this->superImagePatchRightButtonClicked2 = superImagePatchRightButtonClicked2;
 }
 
 void AddCategoryThread::run()
 {
 	logDisplay->logDisplay("Adding  category of the super image patches clicked into database.");
-	addCategoryOfSuperImagePatch(category, (SuperImagePatch *)superImagePatchRightButtonClicked);
+	addCategoryOfSuperImagePatch(category, (SuperImagePatch *)superImagePatchRightButtonClicked2);
 	logDisplay->logDisplay("Added  category of the super image patches clicked into database finished.");
 }
 

@@ -127,15 +127,15 @@ class AddCategoryThread : public QThread
 {
 	Q_OBJECT
 public:
-	AddCategoryThread(const string &category, Patch* superImagePatchRightButtonClicked);
+	AddCategoryThread(const string &category, Patch* superImagePatchRightButtonClicked2);
 	~AddCategoryThread(){};
-	string category = NULL;
-	Patch* superImagePatchRightButtonClicked = NULL;
+	string category;
+	Patch* superImagePatchRightButtonClicked2 = NULL;
 protected:
 	void run();
 };
 
-//Save category of this super image patch into database
+//Delete the super image patch  clicked from database
 class DeletePatchThread : public QThread
 {
 	Q_OBJECT

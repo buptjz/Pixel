@@ -13,7 +13,7 @@ void init()
 		vector<const char*> tables;
 		tables.push_back("originalImage(originalImageId varchar, path varchar)");
 		tables.push_back("imagePatch(imagePatchId varchar, originalImageId varchar, superImagePatchId varchar, position varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text)");
-		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text, imagePatchIdList text)");
+		tables.push_back("superImagePatch(superImagePatchId varchar, binarySuperImagePatch blob, originalSuperImagePatch blob, features text, imagePatchIdList text, category varchar)");
 		res = SQLiteHelper::CreateTables(tables);
 	}
 	else
@@ -28,6 +28,13 @@ void init()
 	{
 		mkdir(fileName.c_str());//如果不存在就用mkdir函数来创建
 	}
+
+	string fileNameStr = "SegmentPatches";
+	if (access(fileNameStr.c_str(), 0) == -1)//access函数是查看文件是不是存在
+	{
+		mkdir(fileNameStr.c_str());//如果不存在就用mkdir函数来创建
+	}
+
 
 	Params::push_attr();
 

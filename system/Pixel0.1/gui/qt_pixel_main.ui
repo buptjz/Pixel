@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
-    <height>600</height>
+    <width>848</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <x>15</x>
       <y>5</y>
       <width>766</width>
-      <height>416</height>
+      <height>451</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -51,7 +51,7 @@
         <x>10</x>
         <y>10</y>
         <width>201</width>
-        <height>381</height>
+        <height>411</height>
        </rect>
       </property>
       <property name="title">
@@ -102,7 +102,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>250</y>
+         <y>280</y>
          <width>161</width>
          <height>24</height>
         </rect>
@@ -163,7 +163,7 @@
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>285</y>
+         <y>315</y>
          <width>91</width>
          <height>21</height>
         </rect>
@@ -176,7 +176,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>350</y>
+         <y>380</y>
          <width>161</width>
          <height>24</height>
         </rect>
@@ -192,7 +192,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>320</y>
+         <y>350</y>
          <width>161</width>
          <height>23</height>
         </rect>
@@ -208,13 +208,29 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>290</y>
+         <y>320</y>
          <width>54</width>
          <height>12</height>
         </rect>
        </property>
        <property name="text">
         <string>去重方法</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="SetSegmentPatchesQuantityBtn">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>250</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>分割图元块设置</string>
        </property>
       </widget>
      </widget>
@@ -227,7 +243,7 @@
         <x>235</x>
         <y>15</y>
         <width>516</width>
-        <height>381</height>
+        <height>401</height>
        </rect>
       </property>
       <property name="title">
@@ -242,7 +258,7 @@
          <x>10</x>
          <y>25</y>
          <width>491</width>
-         <height>291</height>
+         <height>311</height>
         </rect>
        </property>
       </widget>
@@ -253,7 +269,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>320</y>
+         <y>350</y>
          <width>491</width>
          <height>51</height>
         </rect>
@@ -616,7 +632,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>435</y>
+      <y>465</y>
       <width>766</width>
       <height>121</height>
      </rect>
@@ -646,7 +662,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>791</width>
+     <width>848</width>
      <height>23</height>
     </rect>
    </property>

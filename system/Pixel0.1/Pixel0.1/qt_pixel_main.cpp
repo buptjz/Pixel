@@ -8,6 +8,7 @@
 #include "tools.h"
 #include "xmlHelper.h"
 #include <algorithm>
+#include <direct.h>
 extern LogDisplay* logDisplay;
 const int ICONSIZE_W = 60;
 const int ICONSIZE_H = 60;
@@ -118,6 +119,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.SetMatchParasInOneImageBtn, SIGNAL(clicked()), this, SLOT(setMatchParasInOneImage()));
 
 	connect(ui.ImagePatchViewInOneImage, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(on_imagePatchViewInOneImage_Itemclicked(QListWidgetItem *)));
+	ui.ImagePatchViewInOneImage->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.ImagePatchViewInOneImage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(savePatchContextMenuForWidget(const QPoint &)));
 
 	connect(ui.ShowAllSuperImagePatchesBtn, SIGNAL(clicked()), this, SLOT(showAllSuperImagePatchesInPage()));
 	connect(ui.PreviousPageBtn, SIGNAL(clicked()), this, SLOT(previousPage()));
@@ -766,7 +769,7 @@ void qt_Pixel_Main::on_addCategoryClicked()
 	logDisplay->logDisplay("Save category of this super image patch into database.");
 	string category;
 	//open a textEdit for user to input catagory name
-	category = "false category";
+	category = "fault category";
 	addCategoryThread = new AddCategoryThread(category, superImagePatchRightButtonClicked);
 	addCategoryThread->start();
 }
@@ -784,4 +787,55 @@ void qt_Pixel_Main::updateShowSuperImagePatchInPage()
 	std::vector<Patch*>::iterator it = superImagePatchesInPageReadFromDatabase.begin() + itemnum;
 	superImagePatchesInPageReadFromDatabase.erase(it);
 	setsuperImagePatchInPage();
+}
+
+
+//分割界面，右键图元弹出菜单，保存图元到指定文件夹
+void qt_Pixel_Main::savePatchContextMenuForWidget(const QPoint &pos)
+{
+	QListWidgetItem* temp = ui.ImagePatchViewInOneImage->itemAt(pos);
+	if (temp != NULL){	
+		itemnumPatch = ui.ImagePatchViewInOneImage->row(temp);
+		logDisplay->logDisplay("Clicked patch item: " + to_string(itemnumPatch));
+	
+		if (cmenu)//保证同时只存在一个menu，及时释放内存
+		{
+			delete cmenu;
+			cmenu = NULL;
+		}
+		cmenu = new QMenu(ui.ImagePatchViewInOneImage);
+
+		QAction *addCategory = cmenu->addAction("Save Patch");
+		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_savePatchClicked()));
+		cmenu->exec(QCursor::pos());//在当前鼠标位置显示
+	}
+}
+
+void qt_Pixel_Main::on_savePatchClicked()
+{
+	switch (buttonClicked)
+	{
+	case ButtonClicked::SEGMENT:
+	{
+		string folder = "./SegmentPatches";
+		mkdir(folder.c_str());
+		ImagePatch* ip = segementedImagePatches[itemnumPatch];
+		String filedir = folder + "/" + ip->getImagePatchId() + ".jpg";
+		imwrite(filedir, *ip->getOriginalImagePatch());
+		
+		break;
+	}
+	case ButtonClicked::REMOVEDUPLICATE:
+	{
+		string folder = "./SegmentPatches";
+		mkdir(folder.c_str());
+		SuperImagePatch* sip = segementedSupeImagePatches[itemnumPatch];
+		String filedir = folder + "/" + sip->getSuperImagePatchId() + ".jpg";
+		imwrite(filedir, *sip->getOriginalImagePatch());
+		
+		break;
+	}
+	default:
+		break;
+	}
 }
