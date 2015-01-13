@@ -16,7 +16,7 @@ public:
 	Ui::DialogSegmentPreview ui;
 
 	int expectedPatchesNum;
-	static int connect_num;
+	int connect_num=0;
 
 	OriginalImage *segmentImage;
 	vector<ImagePatch*> *segementedImagePatches = NULL;

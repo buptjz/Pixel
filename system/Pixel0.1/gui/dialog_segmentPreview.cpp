@@ -8,7 +8,6 @@ extern LogDisplay* logDisplay;
 
 const int SLIDER_MIN = 1;
 const int SLIDER_MAX = 200;
-int DialogSegmentPreview::connect_num = 0;
 DialogSegmentPreview::DialogSegmentPreview(QWidget *parent)
 	: QWidget(parent)
 {
