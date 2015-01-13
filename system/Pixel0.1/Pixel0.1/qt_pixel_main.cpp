@@ -128,6 +128,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 
 	ui.AllSuperImagePatchViewInPage->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.AllSuperImagePatchViewInPage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
+	connect(ui.SetSegmentPatchesQuantityBtn, SIGNAL(clicked()), this, SLOT(on_setSegmentPatchesQuantityBtn_clicked()));
+	connect(&dialogSegmentPreview, SIGNAL(sig(int)), this, SLOT(segmentPreviewImage(int)));
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -838,4 +840,38 @@ void qt_Pixel_Main::on_savePatchClicked()
 	default:
 		break;
 	}
+}
+
+/*·Ö¸î½çÃæ*/
+void qt_Pixel_Main::on_setSegmentPatchesQuantityBtn_clicked()
+{
+	logDisplay->logDisplay("Preparing the segment preview dialog.Set the expected segment patch quantity of the current image.");
+	if (originalImageSegemented == NULL)
+	{
+		logDisplay->logDisplay("No segment image exist!");
+		return;
+	}
+
+	//dialogSegmentPreview.setSegmentImagePatchListInDialog(&segementedImagePatches);
+	dialogSegmentPreview.setSegmentImage(originalImageSegemented);
+
+	dialogSegmentPreview.show();
+
+
+}
+void qt_Pixel_Main::segmentPreviewImage(int connect_num)
+{
+	logDisplay->logDisplay("Show segement image patch after previewing.");
+	if (connect_num == 0)
+		return;
+	if (segementedImagePatches.size() != 0)
+	{
+		for (int i = 0; i < segementedImagePatches.size(); i++)
+		{
+			delete segementedImagePatches[i];
+		}
+	}
+	segementedImagePatches.clear();
+	segementedImagePatches = originalImageSegemented->get_patches(connect_num);
+	setSegmentedImagePatch();
 }

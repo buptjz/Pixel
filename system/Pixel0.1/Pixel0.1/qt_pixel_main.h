@@ -11,6 +11,7 @@
 #include <qtextcodec.h>
 #include "qtThread.h"
 #include "imagePatch.h"
+#include "dialog_segmentPreview.h"
 
 
 enum ButtonClicked
@@ -59,6 +60,7 @@ public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
 	DialogSegmentParasAll dialogSegmentParasAll;
+	DialogSegmentPreview dialogSegmentPreview;
 	QMenu *cmenu = NULL;//右键菜单项，全局变量，保证同时只存在一个menu，及时释放内存
 
 
@@ -120,6 +122,9 @@ public slots:
 	void savePatchContextMenuForWidget(const QPoint &pos);////分割界面，右键图元弹出菜单，保存图元到指定文件夹
 
 	void on_savePatchClicked();//右键分割后的图元，将图元保存至指定文件夹
+
+	void on_setSegmentPatchesQuantityBtn_clicked();//分割界面设置分割图元块数，弹出滑动条预览界面
+	void segmentPreviewImage(int connect_num);
 };
 
 #endif

@@ -38,6 +38,7 @@ public:
 	const string & getOriginalImageId() const { return originalImageId; }
 	const string & getPath() const { return path; }
 	const Mat * getImage() const { return pOImage; }
+	const Mat * getRegImage() const { return regImage; }
 	void setOriginalImageId(const string & id){ originalImageId = id; }
 	void setPath(const string & s){ path = s; }
 	void setImage(Mat *pImage){ pOImage = pImage; }
