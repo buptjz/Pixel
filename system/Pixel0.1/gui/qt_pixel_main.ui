@@ -497,29 +497,6 @@
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="geometry">
-       <rect>
-        <x>35</x>
-        <y>395</y>
-        <width>711</width>
-        <height>121</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>日志打印</string>
-      </property>
-      <widget class="QTextEdit" name="LogDisplay_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>671</width>
-         <height>91</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
      <widget class="QComboBox" name="SegmentTypeAll">
       <property name="geometry">
        <rect>
