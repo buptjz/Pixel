@@ -3,6 +3,7 @@
 #include <tools.h>
 #include <params.h>
 #include "imageConvert.h"
+#include <qgraphicsview.h>
 #include "logDisplay.h"
 extern LogDisplay* logDisplay;
 
@@ -37,10 +38,6 @@ void DialogSegmentPreview::setSegmentImage( OriginalImage* ori)
 	this->segmentImage = ori;
 }
 
-//void DialogSegmentPreview::setSegmentImagePatchListInDialog(vector<ImagePatch*> *segementedImagePatches)
-//{
-//	this->segementedImagePatches = segementedImagePatches;
-//}
 
 void DialogSegmentPreview::on_previewSegmentImageBtn_clicked()
 {
@@ -66,15 +63,15 @@ void DialogSegmentPreview::segmentImageForPreview(string segment_type)
 	ui.regImageColorretView->setScene(scene);
 	ui.regImageColorretView->show();
 }
-/*void DialogSegmentPreview::on_configSegImageBtn_clicked()
+
+void DialogSegmentPreview::on_oKSegmentPreviewImageBtn_clicked()
 {
-	segmentImage.connect_num = connect_num;
+	if (segmentImage->getRegImage() != NULL)
+	{
+		emit this->sig(connect_num);
+		logDisplay->logDisplay("Emit a signal for mainWindow.");
+	}
 	
-}*/
-void DialogSegmentPreview::on_oKSegmentPreviewImageBtn_clicked(){
-	//*(this->segementedImagePatches) = segmentImage.get_patches(connect_num);
-	emit this->sig(connect_num);
-	logDisplay->logDisplay("Emit a signal for mainWindow.");
 	this->close();
 	
 }

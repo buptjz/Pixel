@@ -852,9 +852,8 @@ void qt_Pixel_Main::on_setSegmentPatchesQuantityBtn_clicked()
 		return;
 	}
 
-	//dialogSegmentPreview.setSegmentImagePatchListInDialog(&segementedImagePatches);
+	dialogSegmentPreview.ui.regImageColorretView->setScene(NULL);
 	dialogSegmentPreview.setSegmentImage(originalImageSegemented);
-
 	dialogSegmentPreview.show();
 
 
@@ -874,4 +873,6 @@ void qt_Pixel_Main::segmentPreviewImage(int connect_num)
 	segementedImagePatches.clear();
 	segementedImagePatches = originalImageSegemented->get_patches(connect_num);
 	setSegmentedImagePatch();
+	delete originalImageSegemented->getRegImage();
+	originalImageSegemented->setRegImage(NULL);
 }

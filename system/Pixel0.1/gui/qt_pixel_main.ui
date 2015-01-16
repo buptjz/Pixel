@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -241,9 +241,9 @@
       <property name="geometry">
        <rect>
         <x>235</x>
-        <y>15</y>
+        <y>10</y>
         <width>516</width>
-        <height>401</height>
+        <height>411</height>
        </rect>
       </property>
       <property name="title">
@@ -494,29 +494,6 @@
          <width>16</width>
          <height>16</height>
         </size>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="geometry">
-       <rect>
-        <x>35</x>
-        <y>395</y>
-        <width>711</width>
-        <height>121</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>日志打印</string>
-      </property>
-      <widget class="QTextEdit" name="LogDisplay_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>671</width>
-         <height>91</height>
-        </rect>
        </property>
       </widget>
      </widget>

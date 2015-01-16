@@ -42,6 +42,7 @@ public:
 	void setOriginalImageId(const string & id){ originalImageId = id; }
 	void setPath(const string & s){ path = s; }
 	void setImage(Mat *pImage){ pOImage = pImage; }
+	void setRegImage(Mat *ri){ regImage = ri; }
 	/*分割图片，返回小图元的集合*/
 	vector<ImagePatch *> segmentImage(string segment_type);
 	int get_connected_map(string segment_type);
