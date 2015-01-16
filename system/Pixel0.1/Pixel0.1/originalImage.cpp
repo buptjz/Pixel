@@ -248,8 +248,10 @@ vector<ImagePatch*> OriginalImage::segmentImage(string segment_type)
 #ifdef __DEBUG__
 	Mat color_ret;
 	connected_component2color_image(*regImage, connect_num, color_ret);
+
 //	imshow("color_ret", color_ret);
 //	waitKey(-1);
+
 #endif
 	return get_patches(connect_num);
 	
