@@ -9,6 +9,7 @@
 #include "qt_pixel_main.h"
 #include "readSqllite.h"
 #include "executeSqllite.h"
+#include "generation_algorithm.h"
 extern LogDisplay* logDisplay;
 
 #include <direct.h>
@@ -284,5 +285,22 @@ void DeletePatchThread::run()
 	logDisplay->logDisplay("Deleting the super image patches clicked from database.");
 	deleteAnSuperImagePatchAndItsImagePatches((SuperImagePatch*)superImagePatchRightButtonClicked);
 	logDisplay->logDisplay("Deleted the super image patches clicked from database finished.");
+	emit this->sig();
+}
+
+
+GenerateImageThread::GenerateImageThread(Patch * superImagePatchRightButtonClicked, Mat** generatedImage)
+{
+	this->superImagePatchRightButtonClicked = superImagePatchRightButtonClicked;
+	this->generatedImage = generatedImage;
+}
+
+void GenerateImageThread::run()
+{
+	logDisplay->logDisplay("Generating a big image form the patch.");
+	//调用生成大图像方法，有superImagePatchRightButtonClicked生成generatdImage
+	*generatedImage = generat_rot(&superImagePatchRightButtonClicked->getOriginalImagePatch()->clone());
+	//*generatedImage = new Mat(superImagePatchRightButtonClicked->getOriginalImagePatch()->clone());
+	logDisplay->logDisplay("Generated a big image form the patch finished.");
 	emit this->sig();
 }

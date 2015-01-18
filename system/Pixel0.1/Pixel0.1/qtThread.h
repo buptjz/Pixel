@@ -149,5 +149,21 @@ signals:
 	void sig();
 };
 
+
+//Generate big image form the patch.
+class GenerateImageThread : public QThread
+{
+	Q_OBJECT
+public:
+	GenerateImageThread(Patch * superImagePatchRightButtonClicked, Mat** generatedImage);
+	~GenerateImageThread(){};
+	Patch* superImagePatchRightButtonClicked = NULL;
+	Mat** generatedImage = NULL;
+protected:
+	void run();
+signals:
+	void sig();
+};
+
 #endif
 

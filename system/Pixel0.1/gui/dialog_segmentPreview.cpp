@@ -52,7 +52,6 @@ void DialogSegmentPreview::segmentImageForPreview(string segment_type)
 	connect_num = segmentImage->get_connected_map(segment_type);
 	Mat color_ret;
 	connected_component2color_image(*(segmentImage->getRegImage()), connect_num, color_ret);
-
 	QImage showImage = Mat2QImage(color_ret);
 	QGraphicsScene *scene = new QGraphicsScene;
 	//Àı∑≈Õº∆¨

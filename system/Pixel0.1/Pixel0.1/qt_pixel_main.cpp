@@ -130,6 +130,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.AllSuperImagePatchViewInPage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
 	connect(ui.SetSegmentPatchesQuantityBtn, SIGNAL(clicked()), this, SLOT(on_setSegmentPatchesQuantityBtn_clicked()));
 	connect(&dialogSegmentPreview, SIGNAL(sig(int)), this, SLOT(segmentPreviewImage(int)));
+	ui.tabWidget->setCurrentIndex(0);
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -740,6 +741,7 @@ void qt_Pixel_Main::closeEvent(QCloseEvent *event)
 }
 
 //在显示超图元的界面，右键弹出菜单，有“添加类别”和“删除图元”两个功能
+//添加菜单功能项 “生成图像”
 void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 {
 	QListWidgetItem* temp = ui.AllSuperImagePatchViewInPage->itemAt(pos);
@@ -757,8 +759,10 @@ void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 
 		QAction *addCategory = cmenu->addAction("Add Category");
 		QAction *deletePatch = cmenu->addAction("Delete Patch");
+		QAction *generateImage = cmenu->addAction("Generate Image");
 		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_addCategoryClicked()));
 		connect(deletePatch, SIGNAL(triggered(bool)), this, SLOT(on_deletePatchClicked()));
+		connect(generateImage, SIGNAL(triggered(bool)), this, SLOT(on_generateImageClicked()));
 
 		cmenu->exec(QCursor::pos());//在当前鼠标位置显示
 		//cmenu->exec(pos)是在viewport显示
@@ -768,10 +772,14 @@ void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 
 void qt_Pixel_Main::on_addCategoryClicked()
 {
-	logDisplay->logDisplay("Save category of this super image patch into database.");
-	string category;
+
+	connect(&dialogCategory, SIGNAL(sig(string)), this, SLOT(on_saveCategory(string)));
 	//open a textEdit for user to input catagory name
-	category = "fault category";
+	dialogCategory.show();
+}
+void qt_Pixel_Main::on_saveCategory(string category)
+{
+	logDisplay->logDisplay("Save category of this super image patch into database.");
 	addCategoryThread = new AddCategoryThread(category, superImagePatchRightButtonClicked);
 	addCategoryThread->start();
 }
@@ -784,6 +792,18 @@ void qt_Pixel_Main::on_deletePatchClicked()
 	deletePatchThread->start();
 }
 
+void qt_Pixel_Main::on_generateImageClicked()
+{
+	logDisplay->logDisplay("Generate big image form the patch.");
+	if (generatedImage != NULL)
+	{
+		delete generatedImage;
+	}
+	generateImageThread = new GenerateImageThread(superImagePatchRightButtonClicked, &generatedImage);
+
+	connect(generateImageThread, SIGNAL(sig()), this, SLOT(setGenerateImageView()));
+	generateImageThread->start();
+}
 void qt_Pixel_Main::updateShowSuperImagePatchInPage()
 {
 	std::vector<Patch*>::iterator it = superImagePatchesInPageReadFromDatabase.begin() + itemnum;
@@ -791,6 +811,24 @@ void qt_Pixel_Main::updateShowSuperImagePatchInPage()
 	setsuperImagePatchInPage();
 }
 
+//设置生成图像界面中的图像，并转到该页
+void qt_Pixel_Main::setGenerateImageView()
+{
+	if (generatedImage != NULL)
+	{
+		QImage showImage = Mat2QImage(*generatedImage);
+		QGraphicsScene *scene = new QGraphicsScene;
+		//缩放图片
+		QSize size = ui.GeneratedImageView->maximumViewportSize();
+		QImage scaledImg = showImage.scaled(size, Qt::KeepAspectRatio);
+		//加载显示图片
+		scene->addPixmap(QPixmap::fromImage(scaledImg));
+		ui.GeneratedImageView->setScene(scene);
+		ui.GeneratedImageView->show();
+	}
+	ui.tabWidget->setCurrentIndex(4);
+	
+}
 
 //分割界面，右键图元弹出菜单，保存图元到指定文件夹
 void qt_Pixel_Main::savePatchContextMenuForWidget(const QPoint &pos)

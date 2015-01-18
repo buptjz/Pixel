@@ -36,7 +36,7 @@ void SuperImagePatch::savePatch() const{
 		imagePatchIdList = imagePatchIdList + patchIdList[i] + ",";
 	}
 	imagePatchIdList = imagePatchIdList.substr(0, imagePatchIdList.size() - 1);
-	str_sql << "insert into superImagePatch values(";
+	str_sql << "insert into superImagePatch (superImagePatchId, binarySuperImagePatch, originalSuperImagePatch, features, imagePatchIdList) values(";
 	str_sql << "'"<<superImagePatchIdStr <<"'"<<  "," << "?" << "," << "?" << "," << "?";
 	str_sql << ","<<"?"<<");";
 	std::string str = str_sql.str();

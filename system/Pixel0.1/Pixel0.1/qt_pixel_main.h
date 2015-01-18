@@ -12,6 +12,7 @@
 #include "qtThread.h"
 #include "imagePatch.h"
 #include "dialog_segmentPreview.h"
+#include "dialog_category.h"
 
 
 enum ButtonClicked
@@ -35,6 +36,7 @@ public:
 	SegmentBtnThread *segmentBtnThread = NULL;
 	AddCategoryThread *addCategoryThread = NULL;
 	DeletePatchThread *deletePatchThread = NULL;
+	GenerateImageThread *generateImageThread = NULL;
 
 	ShowAllSuperImagePatchesBtnThread* showAllSuperImagePatchesBtnThread = NULL;
 	int currentPage = 0;//显示超图元界面，当前所在页数
@@ -54,15 +56,17 @@ public:
 
 	vector<Patch*>  superImagePatchesInPageReadFromDatabase; //分页显示所有超图元，一次加载的超图元
 	Patch *superImagePatchRightButtonClicked = NULL;//右键菜单的超图元
+	Mat* generatedImage = NULL;//由上面右键的超图元生成的大图像
 	int itemnum;//右键点击的超图元项
 	int itemnumPatch;//分割时右键点击的图元项
+
 public:
 	static Ui::MainWindow ui;
 	DialogMatchParasAll  dialogMatchParasAll;
 	DialogSegmentParasAll dialogSegmentParasAll;
 	DialogSegmentPreview dialogSegmentPreview;
+	DialogCategory  dialogCategory;
 	QMenu *cmenu = NULL;//右键菜单项，全局变量，保证同时只存在一个menu，及时释放内存
-
 
 public:
 	// 实现QWidget中的虚函数closeEvent(QCloseEvent*);  
@@ -118,6 +122,8 @@ public slots:
 	void showContextMenuForWidget(const QPoint &);//显示的超图元上右键弹出菜单项
 	void on_addCategoryClicked();//右键超图元，在数据库中为该超图元添加类别信息（加入到数据库）
 	void on_deletePatchClicked();//通过超图元id删除该超图元以及其对应的子图元
+	void on_generateImageClicked();//右键超图元，由该超图元生成新的大图像
+
 	void updateShowSuperImagePatchInPage();//更新超图元显示界面
 	void savePatchContextMenuForWidget(const QPoint &pos);////分割界面，右键图元弹出菜单，保存图元到指定文件夹
 
@@ -125,6 +131,8 @@ public slots:
 
 	void on_setSegmentPatchesQuantityBtn_clicked();//分割界面设置分割图元块数，弹出滑动条预览界面
 	void segmentPreviewImage(int connect_num);
+	void setGenerateImageView();//设置生成图像界面中的图像，并转到该页
+	void on_saveCategory(string category);
 };
 
 #endif

@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -598,6 +598,47 @@
       </property>
       <property name="text">
        <string>下一页</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>生成图像</string>
+     </attribute>
+     <widget class="QGraphicsView" name="GeneratedImageView">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>5</y>
+        <width>681</width>
+        <height>366</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ClearGeneratedImageBtn">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>395</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>清空</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="SaveGeneratedImageBtn">
+      <property name="geometry">
+       <rect>
+        <x>135</x>
+        <y>395</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>保存</string>
       </property>
      </widget>
     </widget>
