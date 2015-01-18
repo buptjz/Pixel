@@ -31,6 +31,7 @@ float Params::segment_expect_upboard = 5.0;
 float Params::segment_expect_lowboard = 0.3;
 int Params::segment_expect = 0;
 float Params::segment_step = 0.2;//non-user-set
+int Params::patch_width_min = 10;
 
 float Params::patch_pixel_min = 0.01;
 float Params::patch_pixel_max = 0.85;
@@ -91,6 +92,7 @@ void Params::push_attr()
 	__attr__["segment_expect_lowboard"] = make_pair("float", static_cast<void*>(&segment_expect_lowboard));
 	__attr__["segment_expect"] = make_pair("int", static_cast<void*>(&segment_expect));
 	__attr__["segment_step"] = make_pair("float", static_cast<void*>(&segment_step));
+	__attr__["patch_width_min"] = make_pair("int", static_cast<void*>(&patch_width_min));
 	__attr__["patch_pixel_min"] = make_pair("float", static_cast<void*>(&patch_pixel_min));
 	__attr__["patch_pixel_max"] = make_pair("float", static_cast<void*>(&patch_pixel_max));
 	__attr__["morph_min"] = make_pair("float", static_cast<void*>(&morph_min));

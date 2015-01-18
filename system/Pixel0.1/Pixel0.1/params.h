@@ -41,6 +41,7 @@ public:
 	static float segment_expect_lowboard;
 	static int segment_expect;
 	static float segment_step;
+	static int patch_width_min;
 
 	static float patch_pixel_min;
 	static float patch_pixel_max;

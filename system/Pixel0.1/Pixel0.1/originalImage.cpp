@@ -200,7 +200,7 @@ vector<ImagePatch*> OriginalImage::get_patches(int connect_num)
 	{
 		Rect * rect = rects.at(index - 1);
 		int org_size = pOImage->rows * pOImage->cols, rect_size = rect->width * rect->height;
-		if (rect_size < org_size * Params::patch_pixel_min || rect_size > org_size * Params::patch_pixel_max)
+		if (rect_size < org_size * Params::patch_pixel_min || rect_size > org_size * Params::patch_pixel_max || rect->width < Params::patch_width_min || rect->height < Params::patch_width_min)
 			continue;
 		stringstream ss;
 		string str;
