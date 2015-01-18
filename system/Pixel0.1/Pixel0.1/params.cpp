@@ -6,8 +6,9 @@
 //  Copyright (c) 2014年 WangJZ. All rights reserved.
 //
 #include "params.h"
-#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 #include <map>
+#include <math.h>
 const string Params::SIFT = "SIFT";
 const string Params::SHAPE_CONTEXT = "SHAPE_CONTEXT";
 const string Params::SURF = "SURF";
@@ -80,6 +81,16 @@ string Params::defaultPath = "ExternalImportImages";//the file in which users sa
 string Params::xmlFileName = "Params.xml";
 int Params::pageSize = 10;
 
+//generatrion
+int Params::generation_height = 15;//number of generated mat in a col
+int Params::generation_width = 18;//number of generated mat in a row
+int Params::patch_scale = 50;//height of the patches used in generation
+
+//rotate generation
+double Params::angle = 0;//rotate angle(°)
+double Params::rot_x = 0.666;//rotation center x
+double Params::rot_y = 0.5;//rotation center y
+
 void Params::push_attr()
 {
 	__attr__["color_image_type"] = make_pair("int", static_cast<void*>(&color_image_type));
@@ -132,6 +143,13 @@ void Params::push_attr()
 	__attr__["xmlFileName"] = make_pair("string", static_cast<void*>(&xmlFileName));
 	__attr__["pageSize"] = make_pair("int", static_cast<void*>(&pageSize));
 	__attr__["pixel_valid_thr"] = make_pair("double", static_cast<void*>(&pixel_valid_thr));
+
+	__attr__["generation_height"] = make_pair("int", static_cast<void*>(&generation_height));
+	__attr__["generation_width"] = make_pair("int", static_cast<void*>(&generation_width));
+	__attr__["patch_scale"] = make_pair("int", static_cast<void*>(&patch_scale));
+	__attr__["angle"] = make_pair("double", static_cast<void*>(&angle));
+	__attr__["rot_x"] = make_pair("double", static_cast<void*>(&rot_x));
+	__attr__["rot_y"] = make_pair("double", static_cast<void*>(&rot_y));
 }
 
 void Params::set_attr(const char *name,const char * value){

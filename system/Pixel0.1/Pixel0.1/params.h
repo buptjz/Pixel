@@ -88,6 +88,16 @@ public:
 	static  string defaultPath;
 	static  string xmlFileName;
 	static  int pageSize;
+
+	//params for generation
+	static int generation_height;
+	static int generation_width;
+	static int patch_scale;
+
+	//rotate generation
+	static double angle;
+	static double rot_x;
+	static double rot_y;
 };
 
 
