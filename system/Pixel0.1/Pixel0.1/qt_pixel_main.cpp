@@ -187,17 +187,21 @@ void qt_Pixel_Main::on_Add2ImageLib_clicked()
 	{
 		QMessageBox::information(NULL, tr("Error"), tr("Select a folder!"));
 	}
-	imageLibThread = new ImageLibThread(dirPath);
-	imageLibThread->start();
-	//during the imageLibThread,set all buttons disabled
-	ui.AddinLibBtn->setEnabled(false);
-	ui.OpenImageLibBtn->setEnabled(false);
-	ui.SegmentTypeAll->setEnabled(false);
-	ui.SetSegmentParasAllBtn->setEnabled(false);
-	ui.MatchTypeAll->setEnabled(false);
-	ui.SetMatchParasAllBtn->setEnabled(false);
-	//if the imageLibThread is finished,receive sig,set all buttons enabled
-	connect(imageLibThread, SIGNAL(sig()), this, SLOT(setAddinLibTabBtnEnabeled()));
+	else
+	{
+		imageLibThread = new ImageLibThread(dirPath);
+		imageLibThread->start();
+		//during the imageLibThread,set all buttons disabled
+		ui.AddinLibBtn->setEnabled(false);
+		ui.OpenImageLibBtn->setEnabled(false);
+		ui.SegmentTypeAll->setEnabled(false);
+		ui.SetSegmentParasAllBtn->setEnabled(false);
+		ui.MatchTypeAll->setEnabled(false);
+		ui.SetMatchParasAllBtn->setEnabled(false);
+		//if the imageLibThread is finished,receive sig,set all buttons enabled
+		connect(imageLibThread, SIGNAL(sig()), this, SLOT(setAddinLibTabBtnEnabeled()));
+	}
+	
 
 }
 
