@@ -165,5 +165,22 @@ signals:
 	void sig();
 };
 
+//Segment Preview Dialog OKSegmentPreviewImageBtn clicked to get patches
+class OKSegmentPreviewImageBtnThread : public QThread
+{
+	Q_OBJECT
+public:
+	OKSegmentPreviewImageBtnThread(OriginalImage* OriginalImageSegemented, int &connect_num, vector<ImagePatch*>* segementedImagePatches);
+	~OKSegmentPreviewImageBtnThread(){};
+	OriginalImage* originalImageSegemented = NULL;
+	vector<ImagePatch*> *segementedImagePatches = NULL;
+	int connect_num;
+protected:
+	void run();
+signals:
+	void sig();
+
+};
+
 #endif
 

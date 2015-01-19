@@ -79,7 +79,7 @@ int Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
 string Params::xmlFileName = "Params.xml";
-int Params::pageSize = 10;
+int Params::pageSize = 30;
 
 //generatrion
 int Params::generation_height = 15;//number of generated mat in a col
