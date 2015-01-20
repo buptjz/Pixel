@@ -46,6 +46,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.LogDisplay->setReadOnly(true);
 	ui.LogDisplay->setAlignment(Qt::AlignTop);
 
+	int index=0;
 	//MatchType style (QComboBox)
 	//ui.MatchType
 	string matchType1 = Params::SURF;
@@ -54,7 +55,19 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.MatchType->addItem(QWidget::tr(matchType1.c_str()));
 	ui.MatchType->addItem(QWidget::tr(matchType2.c_str()));
 	ui.MatchType->addItem(QWidget::tr(matchType3.c_str()));
-
+	if (Params::featureType_for_search == matchType1)
+	{
+		index = 0;
+	}
+	else if (Params::featureType_for_search == matchType2)
+	{
+		index = 1;
+	}
+	else
+	{
+		index = 2;
+	}
+	ui.MatchType->setCurrentIndex(index);
 	//SegmentType style (QComboBox)
 	//ui.SegmentType
 	string segmentType1 = Params::MORPH_BASIC;
@@ -62,24 +75,65 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.SegmentType->addItem(QWidget::tr(segmentType1.c_str()));
 	ui.SegmentType->addItem(QWidget::tr(segmentType2.c_str()));
 
+	if (Params::segment_type_for_one_image == segmentType1)
+	{
+		index = 0;
+	}
+	else
+	{
+		index = 1;
+	}
+	ui.SegmentType->setCurrentIndex(index);
 
 	//ui.RemoveDuplicateType
 	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType1.c_str()));
 	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType2.c_str()));
 	ui.RemoveDuplicateType->addItem(QWidget::tr(matchType3.c_str()));
-
+	if (Params::featureType_for_one_image == matchType1)
+	{
+		index = 0;
+	}
+	else if (Params::featureType_for_one_image == matchType2)
+	{
+		index = 1;
+	}
+	else
+	{
+		index = 2;
+	}
+	ui.RemoveDuplicateType->setCurrentIndex(index);
 
 	//MatchType All style (QComboBox)
 	//ui.MatchTypeAll
 	ui.MatchTypeAll->addItem(QWidget::tr(matchType1.c_str()));
 	ui.MatchTypeAll->addItem(QWidget::tr(matchType2.c_str()));
 	ui.MatchTypeAll->addItem(QWidget::tr(matchType3.c_str()));
-
+	if (Params::featureType_for_batch_image == matchType1)
+	{
+		index = 0;
+	}
+	else if (Params::featureType_for_batch_image == matchType2)
+	{
+		index = 1;
+	}
+	else
+	{
+		index = 2;
+	}
+	ui.MatchTypeAll->setCurrentIndex(index);
 	//SegmentType style  All(QComboBox)
 	//ui.SegmentTypeAll
 	ui.SegmentTypeAll->addItem(QWidget::tr(segmentType1.c_str()));
 	ui.SegmentTypeAll->addItem(QWidget::tr(segmentType2.c_str()));
-
+	if (Params::segment_type_for_batch_image == segmentType1)
+	{
+		index = 0;
+	}
+	else
+	{
+		index = 1;
+	}
+	ui.SegmentTypeAll->setCurrentIndex(index);
 	//设置ImagePatchViewInOneImage列表样式
 	ui.ImagePatchViewInOneImage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
 	ui.ImagePatchViewInOneImage->setResizeMode(QListView::Adjust);
@@ -100,7 +154,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
 	connect(ui.RemoveDuplicateBtn, SIGNAL(clicked()), this, SLOT(on_removeDuplicateBtn_clicked()));
-	connect(ui.SavePatches2DataBaseBtn, SIGNAL(clicked()), this, SLOT(on_SavePatches2DataBaseBtn_clicked()));
+	connect(ui.SavePatches2DataBaseBtn, SIGNAL(clicked()), this, SLOT(on_SavePatches2DataBaseBtn_clicked()), Qt::UniqueConnection);
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
 	connect(ui.SearchBtn, SIGNAL(clicked()), this, SLOT(on_searchBtn_clicked()));
@@ -221,6 +275,23 @@ void qt_Pixel_Main::on_openOriginalImageBtn_clicked()
 				delete originalImageSegemented;
 			}
 			originalImageSegemented = NULL;
+			if (!segementedImagePatches.empty())
+			{
+				for (int i = 0; i < segementedImagePatches.size(); i++)
+				{
+					delete segementedImagePatches[i];
+				}
+			}
+			segementedImagePatches.clear();
+			if (!segementedSupeImagePatches.empty())
+			{
+				for (int i = 0; i < segementedSupeImagePatches.size(); i++)
+				{
+					delete segementedSupeImagePatches[i];
+				}
+			}
+			segementedSupeImagePatches.clear();
+			ui.ImagePatchViewInOneImage->clear();
 			originalImageSegemented = new OriginalImage(originalImageId, newPath, originalImagePatch);
 		
 

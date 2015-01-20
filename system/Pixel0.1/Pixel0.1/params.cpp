@@ -70,16 +70,16 @@ double Params::surf_min_ratio = 1.0f / 1.5f;
 
 
 
-string Params::featureType_for_one_image = SHAPE_CONTEXT;//featureType used 
-string Params::featureType_for_batch_image = SHAPE_CONTEXT;
-string Params::featureType_for_search = SHAPE_CONTEXT;
-string Params::segment_type_for_one_image = Params::MORPH_BASIC;
-string Params::segment_type_for_batch_image = Params::MORPH_BASIC;
+string Params::featureType_for_one_image = SURF;//featureType used 
+string Params::featureType_for_batch_image = SURF;
+string Params::featureType_for_search = SURF;
+string Params::segment_type_for_one_image = Params::EGBIS;
+string Params::segment_type_for_batch_image = Params::EGBIS;
 int Params::top_k = 5;//return the top_k simplar superImagePatches
 
 string Params::defaultPath = "ExternalImportImages";//the file in which users save an external image
 string Params::xmlFileName = "Params.xml";
-int Params::pageSize = 10;
+int Params::pageSize = 30;
 
 //generatrion
 int Params::generation_height = 15;//number of generated mat in a col

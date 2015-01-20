@@ -212,6 +212,11 @@ void SavePatches2DataBaseBtnThread::run()
 	originalImageSegemented->setPath(newPath);
 	//creat file of newPath if not exist
 	*/
+	if (originalImageSegemented == NULL)
+	{
+		logDisplay->logDisplay("No Image input!");
+		return;
+	}
 	string newPath = originalImageSegemented->getPath();
 	imwrite(newPath, *originalImageSegemented->getImage());
 	logDisplay->logDisplay("Saved the image readed in window to " + newPath);
@@ -221,6 +226,11 @@ void SavePatches2DataBaseBtnThread::run()
 	if (segementedImagePatches->empty() || segementedImagePatches->size() == 0)
 	{
 		*segementedImagePatches = originalImageSegemented->segmentImage(Params::segment_type_for_batch_image);
+	}
+	if (segementedImagePatches->empty() || segementedImagePatches->size() == 0)
+	{
+		logDisplay->logDisplay("This image can not be segmented, please change an Image or adjust the params!");
+		return;
 	}
 	for (int i = 0; i < segementedImagePatches->size(); i++)
 	{
@@ -240,7 +250,6 @@ void SavePatches2DataBaseBtnThread::run()
 		updateImagePatchTable(*(*segementedSupeImagePatches)[i]);
 
 	}
-
 	logDisplay->logDisplay("Saved information into database successed!");
 	//*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
 	//logDisplay->logDisplay("Remove duplicate image patches finished.");
