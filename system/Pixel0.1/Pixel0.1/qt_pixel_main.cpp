@@ -100,7 +100,7 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.OpenOriginalImageBtn, SIGNAL(clicked()), this, SLOT(on_openOriginalImageBtn_clicked()));
 	connect(ui.OpenImageLibBtn, SIGNAL(clicked()), this, SLOT(on_ImageLibBtn_clicked()));
 	connect(ui.RemoveDuplicateBtn, SIGNAL(clicked()), this, SLOT(on_removeDuplicateBtn_clicked()));
-	connect(ui.SavePatches2DataBaseBtn, SIGNAL(clicked()), this, SLOT(on_SavePatches2DataBaseBtn_clicked()));
+	connect(ui.SavePatches2DataBaseBtn, SIGNAL(clicked()), this, SLOT(on_SavePatches2DataBaseBtn_clicked()), Qt::UniqueConnection);
 
 	connect(ui.OpensampleImageBtn, SIGNAL(clicked()), this, SLOT(on_openSampleImageBtn_clicked()));
 	connect(ui.SearchBtn, SIGNAL(clicked()), this, SLOT(on_searchBtn_clicked()));
@@ -129,6 +129,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.AllSuperImagePatchViewInPage->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.AllSuperImagePatchViewInPage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
 	connect(ui.SetSegmentPatchesQuantityBtn, SIGNAL(clicked()), this, SLOT(on_setSegmentPatchesQuantityBtn_clicked()));
+	connect(ui.SaveGeneratedImageBtn, SIGNAL(trigered()), this, SLOT(on_SaveGeneratedImageBtn_clicked()), Qt::UniqueConnection);
+	connect(ui.ClearGeneratedImageBtn, SIGNAL(clicked()), this, SLOT(on_ClearGeneratedImageBtn_clicked()), Qt::UniqueConnection);
 	connect(&dialogSegmentPreview, SIGNAL(sig(int)), this, SLOT(segmentPreviewImage(int)));
 	ui.tabWidget->setCurrentIndex(0);
 }
@@ -955,4 +957,27 @@ void qt_Pixel_Main::setAddinLibTabBtnEnabeled()
 	ui.SetSegmentParasAllBtn->setEnabled(true);
 	ui.MatchTypeAll->setEnabled(true);
 	ui.SetMatchParasAllBtn->setEnabled(true);
+}
+//±£´æÉú³ÉÍ¼Æ¬
+void qt_Pixel_Main::on_SaveGeneratedImageBtn_clicked()
+{
+
+	if (NULL == generatedImage)
+	{
+		QMessageBox::information(NULL, tr("Error"), tr("Generate an image first!"));
+	}
+	else
+	{
+		saveGenerateImage2File(*generatedImage);
+	}
+}
+void qt_Pixel_Main::on_ClearGeneratedImageBtn_clicked()
+{
+	if (NULL != generatedImage)
+	{
+		ui.GeneratedImageView->setScene(NULL);
+		delete generatedImage;
+		generatedImage = NULL;
+		logDisplay->logDisplay("The generated image has been deleted!");
+	}
 }

@@ -131,6 +131,8 @@ public slots:
 	void on_savePatchClicked();//右键分割后的图元，将图元保存至指定文件夹
 
 	void on_setSegmentPatchesQuantityBtn_clicked();//分割界面设置分割图元块数，弹出滑动条预览界面
+	void on_SaveGeneratedImageBtn_clicked();//保存生成图片
+	void on_ClearGeneratedImageBtn_clicked();//清空生成图片
 	void segmentPreviewImage(int connect_num);
 	void setGenerateImageView();//设置生成图像界面中的图像，并转到该页
 	void on_saveCategory(string category);
