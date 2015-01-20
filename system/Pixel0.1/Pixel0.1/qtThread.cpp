@@ -113,6 +113,7 @@ void ImageLibThread::run()
 
 	}
 	logDisplay->logDisplay("All super image patches have saved in to database.");
+	emit sig();
 }
 
 
@@ -200,23 +201,12 @@ SavePatches2DataBaseBtnThread::SavePatches2DataBaseBtnThread(OriginalImage* orig
 
 void SavePatches2DataBaseBtnThread::run()
 {
-	/*
-	string path = originalImageSegemented->getPath();
-	string pattern = "/";
-	vector<std::string>  splitstr = split(path, pattern);
-	
-	string imageName = splitstr[splitstr.size() - 1];
-	string newPath = "./" + Params::defaultPath + "/" + imageName;
-	string originalImageId = Params::defaultPath + "_" + imageName;
-	originalImageSegemented->setOriginalImageId(originalImageId);
-	originalImageSegemented->setPath(newPath);
-	//creat file of newPath if not exist
-	*/
 	if (originalImageSegemented == NULL)
 	{
 		logDisplay->logDisplay("No Image input!");
 		return;
 	}
+
 	string newPath = originalImageSegemented->getPath();
 	imwrite(newPath, *originalImageSegemented->getImage());
 	logDisplay->logDisplay("Saved the image readed in window to " + newPath);
@@ -244,15 +234,15 @@ void SavePatches2DataBaseBtnThread::run()
 		*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches,Params::featureType_for_batch_image);
 	}
 	logDisplay->logDisplay("Saved segemented super image patches");
+
 	for (int i = 0; i < segementedSupeImagePatches->size(); i++)
 	{
 		(*segementedSupeImagePatches)[i]->savePatch();
 		updateImagePatchTable(*(*segementedSupeImagePatches)[i]);
-
 	}
+
+	logDisplay->logDisplay("Saved segemented super image patches successed!");
 	logDisplay->logDisplay("Saved information into database successed!");
-	//*segementedSupeImagePatches = removeDuplicateImagePatchs(*segementedImagePatches);
-	//logDisplay->logDisplay("Remove duplicate image patches finished.");
 
 }
 
@@ -311,5 +301,19 @@ void GenerateImageThread::run()
 	*generatedImage = generat_rot(&superImagePatchRightButtonClicked->getOriginalImagePatch()->clone());
 	//*generatedImage = new Mat(superImagePatchRightButtonClicked->getOriginalImagePatch()->clone());
 	logDisplay->logDisplay("Generated a big image form the patch finished.");
+	emit this->sig();
+}
+
+OKSegmentPreviewImageBtnThread::OKSegmentPreviewImageBtnThread(OriginalImage* originalImageSegemented, int &connect_num, vector<ImagePatch*>* segementedImagePatches) : QThread()
+{
+	this->originalImageSegemented = originalImageSegemented;
+	this->segementedImagePatches = segementedImagePatches;
+	this->connect_num = connect_num;
+}
+
+void OKSegmentPreviewImageBtnThread::run()
+{
+	logDisplay->logDisplay("Begin to segment image from Preview dialog " + originalImageSegemented->getPath());
+	*segementedImagePatches = originalImageSegemented->get_patches(connect_num);
 	emit this->sig();
 }

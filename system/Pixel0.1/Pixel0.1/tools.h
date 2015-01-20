@@ -54,4 +54,7 @@ std::vector<std::string> split(std::string str, std::string pattern);
 
 //draw patch in originalImage
 void drawPatch(Mat& image, const Rect &position);
+
+//save generate image to file
+void saveGenerateImage2File(Mat& image);
 #endif /* defined(__Xcode_Pixel_Proj__tools__) */

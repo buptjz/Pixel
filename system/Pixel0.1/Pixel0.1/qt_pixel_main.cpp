@@ -183,6 +183,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	ui.AllSuperImagePatchViewInPage->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.AllSuperImagePatchViewInPage, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuForWidget(const QPoint &)));
 	connect(ui.SetSegmentPatchesQuantityBtn, SIGNAL(clicked()), this, SLOT(on_setSegmentPatchesQuantityBtn_clicked()));
+	connect(ui.SaveGeneratedImageBtn, SIGNAL(trigered()), this, SLOT(on_SaveGeneratedImageBtn_clicked()), Qt::UniqueConnection);
+	connect(ui.ClearGeneratedImageBtn, SIGNAL(clicked()), this, SLOT(on_ClearGeneratedImageBtn_clicked()), Qt::UniqueConnection);
 	connect(&dialogSegmentPreview, SIGNAL(sig(int)), this, SLOT(segmentPreviewImage(int)));
 	ui.tabWidget->setCurrentIndex(0);
 }
@@ -237,8 +239,26 @@ void qt_Pixel_Main::on_ImageLibBtn_clicked()
 void qt_Pixel_Main::on_Add2ImageLib_clicked()
 {
 	//ui.LogDisplay->setText("many images are training!");
-	imageLibThread = new ImageLibThread(dirPath);
-	imageLibThread->start();
+	if (dirPath.isEmpty())
+	{
+		QMessageBox::information(NULL, tr("Error"), tr("Select a folder!"));
+	}
+	else
+	{
+		imageLibThread = new ImageLibThread(dirPath);
+		imageLibThread->start();
+		//during the imageLibThread,set all buttons disabled
+		ui.AddinLibBtn->setEnabled(false);
+		ui.OpenImageLibBtn->setEnabled(false);
+		ui.SegmentTypeAll->setEnabled(false);
+		ui.SetSegmentParasAllBtn->setEnabled(false);
+		ui.MatchTypeAll->setEnabled(false);
+		ui.SetMatchParasAllBtn->setEnabled(false);
+		//if the imageLibThread is finished,receive sig,set all buttons enabled
+		connect(imageLibThread, SIGNAL(sig()), this, SLOT(setAddinLibTabBtnEnabeled()));
+	}
+	
+
 }
 
 /*打开待分割图像*/
@@ -405,6 +425,7 @@ void qt_Pixel_Main::on_SavePatches2DataBaseBtn_clicked()
 {
 	logDisplay->logDisplay("Saving the image and its patches into database .... ....");
 	savePatches2DataBaseBtnThread = new SavePatches2DataBaseBtnThread(originalImageSegemented, &segementedImagePatches, &segementedSupeImagePatches);
+
 	savePatches2DataBaseBtnThread->start();
 }
 /*打开样本图像*/
@@ -963,6 +984,8 @@ void qt_Pixel_Main::on_setSegmentPatchesQuantityBtn_clicked()
 
 	dialogSegmentPreview.ui.regImageColorretView->setScene(NULL);
 	dialogSegmentPreview.setSegmentImage(originalImageSegemented);
+	//Set the Preview Dialog to be Modal Dialog
+	dialogSegmentPreview.setWindowModality(Qt::ApplicationModal);
 	dialogSegmentPreview.show();
 
 
@@ -980,8 +1003,52 @@ void qt_Pixel_Main::segmentPreviewImage(int connect_num)
 		}
 	}
 	segementedImagePatches.clear();
-	segementedImagePatches = originalImageSegemented->get_patches(connect_num);
-	setSegmentedImagePatch();
-	delete originalImageSegemented->getRegImage();
-	originalImageSegemented->setRegImage(NULL);
+//	segementedImagePatches = originalImageSegemented->get_patches(connect_num);
+//	setSegmentedImagePatch();
+
+	okSegmentPreviewImageBtnThread = new OKSegmentPreviewImageBtnThread(originalImageSegemented, connect_num, &segementedImagePatches);
+	//here main thread wait for okSegmentPreviewImageBtnThread excute 
+	connect(okSegmentPreviewImageBtnThread, SIGNAL(sig()), this, SLOT(setSegmentedImagePatch()));
+	okSegmentPreviewImageBtnThread->start();
+	//if okSegmentPreviewImageBtnThread is finished, set the regImage NULL
+	if (okSegmentPreviewImageBtnThread->isFinished())
+	{
+		delete originalImageSegemented->getRegImage();
+		originalImageSegemented->setRegImage(NULL);
+	}
+	
+}
+//批量入库界面恢复btn为enable状态
+void qt_Pixel_Main::setAddinLibTabBtnEnabeled()
+{
+//	logDisplay->logDisplay("It's time to set the button enable");
+	ui.AddinLibBtn->setEnabled(true);
+	ui.OpenImageLibBtn->setEnabled(true);
+	ui.SegmentTypeAll->setEnabled(true);
+	ui.SetSegmentParasAllBtn->setEnabled(true);
+	ui.MatchTypeAll->setEnabled(true);
+	ui.SetMatchParasAllBtn->setEnabled(true);
+}
+//保存生成图片
+void qt_Pixel_Main::on_SaveGeneratedImageBtn_clicked()
+{
+
+	if (NULL == generatedImage)
+	{
+		QMessageBox::information(NULL, tr("Error"), tr("Generate an image first!"));
+	}
+	else
+	{
+		saveGenerateImage2File(*generatedImage);
+	}
+}
+void qt_Pixel_Main::on_ClearGeneratedImageBtn_clicked()
+{
+	if (NULL != generatedImage)
+	{
+		ui.GeneratedImageView->setScene(NULL);
+		delete generatedImage;
+		generatedImage = NULL;
+		logDisplay->logDisplay("The generated image has been deleted!");
+	}
 }

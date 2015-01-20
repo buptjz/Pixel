@@ -11,6 +11,8 @@
 #include "params.h"
 #include <time.h>
 #include <ctime>
+#include <qfiledialog.h>
+#include <qmessagebox.h>
 
 #ifdef __DEBUG__
 #include "logDisplay.h"
@@ -181,4 +183,23 @@ void drawPatch(Mat& image, const Rect &position)
 	imshow("image", image);
 
 	waitKey(0);
+}
+
+//save generate image to file
+void saveGenerateImage2File(Mat& image)
+{
+	QString filePath;
+	filePath = QFileDialog::getSaveFileName(
+		NULL, "save image file", QDir::currentPath(), "Document files(*.jpg);;All files(*.*)");
+	if (!filePath.isNull())
+	{
+		string filename = filePath.toStdString();
+		imwrite(filename, image);
+	}
+	else
+	{
+		QMessageBox::information(NULL, "Error", "Input a name!", QMessageBox::Ok | QMessageBox::Cancel);
+		return;
+	}
+
 }
