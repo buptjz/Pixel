@@ -82,8 +82,8 @@ string Params::xmlFileName = "Params.xml";
 int Params::pageSize = 30;
 
 //generatrion
-int Params::generation_height = 15;//number of generated mat in a col
-int Params::generation_width = 18;//number of generated mat in a row
+int Params::generation_height = 10;//number of generated mat in a col
+int Params::generation_width = 20;//number of generated mat in a row
 int Params::patch_scale = 50;//height of the patches used in generation
 
 //rotate generation
