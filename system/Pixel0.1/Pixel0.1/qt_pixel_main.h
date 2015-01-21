@@ -138,7 +138,8 @@ public slots:
 	void on_saveCategory(string category);
 
 	void setAddinLibTabBtnEnabeled();//批量入库界面恢复btn为enable状态
-
+	void setSearchTabBtnEnabeled();//检索界面恢复btn为enable状态
+	void setSegmentTabBtnEnabeled();//分割界面恢复btn为enable状态
 };
 
 #endif

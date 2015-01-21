@@ -198,7 +198,7 @@ void saveGenerateImage2File(Mat& image)
 	}
 	else
 	{
-		QMessageBox::information(NULL, "Error", "Input a name!", QMessageBox::Ok | QMessageBox::Cancel);
+	//	QMessageBox::information(NULL, "warning", "Input a name!", QMessageBox::Ok | QMessageBox::Cancel);
 		return;
 	}
 
