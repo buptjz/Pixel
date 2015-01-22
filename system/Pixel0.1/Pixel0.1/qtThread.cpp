@@ -296,6 +296,7 @@ GenerateImageThread::GenerateImageThread(Patch * superImagePatchRightButtonClick
 
 void GenerateImageThread::run()
 {
+	
 	logDisplay->logDisplay("Generating a big image form the patch.");
 	//调用生成大图像方法，有superImagePatchRightButtonClicked生成generatdImage
 	*generatedImage = generat_rot(&superImagePatchRightButtonClicked->getOriginalImagePatch()->clone());

@@ -124,6 +124,7 @@ public slots:
 	void on_addCategoryClicked();//右键超图元，在数据库中为该超图元添加类别信息（加入到数据库）
 	void on_deletePatchClicked();//通过超图元id删除该超图元以及其对应的子图元
 	void on_generateImageClicked();//右键超图元，由该超图元生成新的大图像
+	void setPatch2GenerateView();//跳转到生成图像界面，并设置超图元图像到相应位置
 
 	void updateShowSuperImagePatchInPage();//更新超图元显示界面
 	void savePatchContextMenuForWidget(const QPoint &pos);////分割界面，右键图元弹出菜单，保存图元到指定文件夹
@@ -138,7 +139,6 @@ public slots:
 	void on_saveCategory(string category);
 
 	void setAddinLibTabBtnEnabeled();//批量入库界面恢复btn为enable状态
-
 };
 
 #endif

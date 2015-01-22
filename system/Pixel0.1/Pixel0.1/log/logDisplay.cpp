@@ -7,6 +7,10 @@
 
 void LogDisplay::logDisplay(string logstr)
 {
+	if (logstr.empty() || logstr == "")
+	{
+		return;
+	}
 #ifdef __DEBUG__
 		logstr = getTime() + " " + logstr;
 		logQstr = QString::fromStdString(logstr);

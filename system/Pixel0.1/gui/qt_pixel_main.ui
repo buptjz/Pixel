@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>4</number>
     </property>
     <property name="usesScrollButtons">
      <bool>true</bool>
@@ -608,18 +608,18 @@
      <widget class="QGraphicsView" name="GeneratedImageView">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>5</y>
-        <width>681</width>
-        <height>366</height>
+        <x>225</x>
+        <y>15</y>
+        <width>516</width>
+        <height>401</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="ClearGeneratedImageBtn">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>395</y>
+        <x>20</x>
+        <y>375</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -631,14 +631,79 @@
      <widget class="QPushButton" name="SaveGeneratedImageBtn">
       <property name="geometry">
        <rect>
-        <x>135</x>
-        <y>395</y>
+        <x>110</x>
+        <y>375</y>
         <width>75</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>保存</string>
+       <string>另存为</string>
+      </property>
+     </widget>
+     <widget class="QGraphicsView" name="Patch2GenerateView">
+      <property name="geometry">
+       <rect>
+        <x>25</x>
+        <y>30</y>
+        <width>171</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>25</x>
+        <y>220</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>生成方法</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="GenerateParasSetBtn">
+      <property name="geometry">
+       <rect>
+        <x>25</x>
+        <y>250</y>
+        <width>161</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>生成参数设置</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="GenerateType">
+      <property name="geometry">
+       <rect>
+        <x>95</x>
+        <y>215</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="GenerateImageBtn">
+      <property name="geometry">
+       <rect>
+        <x>25</x>
+        <y>300</y>
+        <width>161</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>生成</string>
       </property>
      </widget>
     </widget>

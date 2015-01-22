@@ -134,6 +134,33 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 		index = 1;
 	}
 	ui.SegmentTypeAll->setCurrentIndex(index);
+
+
+	//GenerateType style (QComboBox)
+	//ui.GenerateType
+	//string generateType1 = Params::GenerateType;
+	//string generateType2 = Params::;
+	//string generateType3 = Params::;
+	string generateType = "Tiled";
+	ui.GenerateType->addItem(QWidget::tr(generateType.c_str()));
+	//ui.GenerateType->addItem(QWidget::tr(generateType1.c_str()));
+	//ui.GenerateType->addItem(QWidget::tr(generateType2.c_str()));
+	//ui.GenerateType->addItem(QWidget::tr(generateType3.c_str()));
+	/*
+	if (Params::generateType == generateType)
+	{
+		index = 0;
+	}
+	else if (Params::generateType == generateType)
+	{
+		index = 1;
+	}
+	else
+	{
+		index = 2;
+	}
+	ui.GenerateType->setCurrentIndex(index);
+	*/
 	//设置ImagePatchViewInOneImage列表样式
 	ui.ImagePatchViewInOneImage->setIconSize(QSize(ICONSIZE_W, ICONSIZE_H));
 	ui.ImagePatchViewInOneImage->setResizeMode(QListView::Adjust);
@@ -187,6 +214,8 @@ qt_Pixel_Main::qt_Pixel_Main(QWidget *parent) : QMainWindow(parent)
 	connect(ui.ClearGeneratedImageBtn, SIGNAL(clicked()), this, SLOT(on_ClearGeneratedImageBtn_clicked()), Qt::UniqueConnection);
 	connect(&dialogSegmentPreview, SIGNAL(sig(int)), this, SLOT(segmentPreviewImage(int)));
 	ui.tabWidget->setCurrentIndex(0);
+
+	connect(ui.GenerateImageBtn, SIGNAL(clicked()), this, SLOT(on_generateImageClicked()));
 }
 
 qt_Pixel_Main::~qt_Pixel_Main()
@@ -218,9 +247,16 @@ qt_Pixel_Main::~qt_Pixel_Main()
 //打印日志信息
 void qt_Pixel_Main::on_logDisplay(QString logQstr)
 {
-	qt_Pixel_Main::ui.LogDisplay->append(logQstr);
-	//qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
-	qt_Pixel_Main::ui.LogDisplay->moveCursor(QTextCursor::End);
+	if (!logQstr.isEmpty())
+	{
+		qt_Pixel_Main::ui.LogDisplay->append(logQstr);
+		//qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
+		qt_Pixel_Main::ui.LogDisplay->moveCursor(QTextCursor::End);
+	}
+	else
+	{
+		qt_Pixel_Main::ui.LogDisplay->setText(logQstr);
+	}
 }
 
 
@@ -854,7 +890,7 @@ void qt_Pixel_Main::showContextMenuForWidget(const QPoint &pos)
 		QAction *generateImage = cmenu->addAction("Generate Image");
 		connect(addCategory, SIGNAL(triggered(bool)), this, SLOT(on_addCategoryClicked()));
 		connect(deletePatch, SIGNAL(triggered(bool)), this, SLOT(on_deletePatchClicked()));
-		connect(generateImage, SIGNAL(triggered(bool)), this, SLOT(on_generateImageClicked()));
+		connect(generateImage, SIGNAL(triggered(bool)), this, SLOT(setPatch2GenerateView()));
 
 		cmenu->exec(QCursor::pos());//在当前鼠标位置显示
 		//cmenu->exec(pos)是在viewport显示
@@ -891,11 +927,13 @@ void qt_Pixel_Main::on_generateImageClicked()
 	{
 		delete generatedImage;
 	}
+	generatedImage = NULL;
 	generateImageThread = new GenerateImageThread(superImagePatchRightButtonClicked, &generatedImage);
 
 	connect(generateImageThread, SIGNAL(sig()), this, SLOT(setGenerateImageView()));
 	generateImageThread->start();
 }
+
 void qt_Pixel_Main::updateShowSuperImagePatchInPage()
 {
 	std::vector<Patch*>::iterator it = superImagePatchesInPageReadFromDatabase.begin() + itemnum;
@@ -917,6 +955,25 @@ void qt_Pixel_Main::setGenerateImageView()
 		scene->addPixmap(QPixmap::fromImage(scaledImg));
 		ui.GeneratedImageView->setScene(scene);
 		ui.GeneratedImageView->show();
+		
+	}
+	
+}
+
+void qt_Pixel_Main::setPatch2GenerateView()
+{
+	if (superImagePatchRightButtonClicked->getOriginalImagePatch() != NULL)
+	{
+		logDisplay->logDisplay("Jump to the generate page.");
+		QImage showPatch = Mat2QImage(*superImagePatchRightButtonClicked->getOriginalImagePatch());
+		QGraphicsScene *scenePatch = new QGraphicsScene;
+		//缩放图片
+		QSize sizePatch = ui.Patch2GenerateView->maximumViewportSize();
+		QImage scaledPatch = showPatch.scaled(sizePatch, Qt::KeepAspectRatio);
+		//加载显示图片
+		scenePatch->addPixmap(QPixmap::fromImage(scaledPatch));
+		ui.Patch2GenerateView->setScene(scenePatch);
+		ui.Patch2GenerateView->show();
 	}
 	ui.tabWidget->setCurrentIndex(4);
 	
@@ -1052,3 +1109,4 @@ void qt_Pixel_Main::on_ClearGeneratedImageBtn_clicked()
 		logDisplay->logDisplay("The generated image has been deleted!");
 	}
 }
+
