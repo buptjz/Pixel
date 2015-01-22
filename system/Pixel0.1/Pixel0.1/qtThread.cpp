@@ -126,6 +126,13 @@ SearchBtnThread::SearchBtnThread(vector<pair<double, Patch*> >  *similarPatches,
 void SearchBtnThread::run()
 {
 	vector<Patch*> images = readAllSuperImagePatches();
+	//判断数据库是否为空
+	if (images.size() == 0)
+	{
+		logDisplay->logDisplay("The database is empty!");
+		emit sig();
+		return;
+	}
 	const string featureType = Params::featureType_for_search;
 	size_t top_k = Params::top_k;
 	*similarPatches = patchCompared-> patchCompareWith(images, featureType, top_k);
@@ -204,6 +211,7 @@ void SavePatches2DataBaseBtnThread::run()
 	if (originalImageSegemented == NULL)
 	{
 		logDisplay->logDisplay("No Image input!");
+		emit this->sig();
 		return;
 	}
 
@@ -220,6 +228,7 @@ void SavePatches2DataBaseBtnThread::run()
 	if (segementedImagePatches->empty() || segementedImagePatches->size() == 0)
 	{
 		logDisplay->logDisplay("This image can not be segmented, please change an Image or adjust the params!");
+		emit this->sig();
 		return;
 	}
 	for (int i = 0; i < segementedImagePatches->size(); i++)
@@ -243,6 +252,7 @@ void SavePatches2DataBaseBtnThread::run()
 
 	logDisplay->logDisplay("Saved segemented super image patches successed!");
 	logDisplay->logDisplay("Saved information into database successed!");
+	emit this->sig();
 
 }
 

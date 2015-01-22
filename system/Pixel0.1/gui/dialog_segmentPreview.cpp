@@ -44,11 +44,12 @@ void DialogSegmentPreview::on_previewSegmentImageBtn_clicked()
 	expectedPatchesNum = ui.expectedPatchesNumspinBox->value();
 	Params::segment_expect = expectedPatchesNum;
 	string segmentType = Params::segment_type_for_one_image;
-	segmentImageForPreview(segmentType);
+	segmentImageForPreview(segmentType);	
 }
 
 void DialogSegmentPreview::segmentImageForPreview(string segment_type)
 {	
+	
 	connect_num = segmentImage->get_connected_map(segment_type);
 	Mat color_ret;
 	connected_component2color_image(*(segmentImage->getRegImage()), connect_num, color_ret);
@@ -60,7 +61,7 @@ void DialogSegmentPreview::segmentImageForPreview(string segment_type)
 	//¼ÓÔØÏÔÊ¾Í¼Æ¬
 	scene->addPixmap(QPixmap::fromImage(scaledImg));
 	ui.regImageColorretView->setScene(scene);
-	ui.regImageColorretView->show();
+	ui.regImageColorretView->show();	
 }
 
 void DialogSegmentPreview::on_oKSegmentPreviewImageBtn_clicked()
@@ -74,3 +75,4 @@ void DialogSegmentPreview::on_oKSegmentPreviewImageBtn_clicked()
 	this->close();
 	
 }
+

@@ -103,6 +103,8 @@ public:
 	vector<ImagePatch*> *segementedImagePatches = NULL;
 protected:
 	void run();
+signals:
+	void sig();
 };
 
 //show all super image patches  in page

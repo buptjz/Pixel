@@ -390,6 +390,20 @@ void qt_Pixel_Main::on_segmentBtn_clicked()
 	//here main thread wait for segmentBtnThread excute 
 	connect(segmentBtnThread, SIGNAL(sig()), this, SLOT(setSegmentedImagePatch()));
 	segmentBtnThread->start();
+
+	ui.SegmentBtn->setEnabled(false);
+	ui.OpenOriginalImageBtn->setEnabled(false);
+	ui.SegmentType->setEnabled(false);
+	ui.SetSegmentParasInOneImageBtn->setEnabled(false);
+	ui.SetSegmentPatchesQuantityBtn->setEnabled(false);
+	ui.SavePatches2DataBaseBtn->setEnabled(false);
+/*	ui.RemoveDuplicateType->setEnabled(false);
+	ui.SetMatchParasInOneImageBtn->setEnabled(false);
+	ui.RemoveDuplicateBtn->setEnabled(false);*/
+	
+
+	
+
 }
 
 //set segment ImagePatch	
@@ -413,6 +427,8 @@ void qt_Pixel_Main::setSegmentedImagePatch()
 		ui.ImagePatchViewInOneImage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
 	logDisplay->logDisplay("Display image patches belong to the image " + originalImageSegemented->getPath() );
+
+	setSegmentTabBtnEnabeled();
 }
 
 /*
@@ -431,6 +447,17 @@ void qt_Pixel_Main::on_removeDuplicateBtn_clicked()
 	//here main thread wait for segmentBtnThread excute 
 	connect(removeDuplicateBtnThread, SIGNAL(sig()), this, SLOT(setRemoveDuplicateSuperImagePatch()));
 	removeDuplicateBtnThread->start();
+
+	ui.SegmentBtn->setEnabled(false);
+	ui.OpenOriginalImageBtn->setEnabled(false);
+	ui.SegmentType->setEnabled(false);
+	ui.SetSegmentParasInOneImageBtn->setEnabled(false);
+	ui.SetSegmentPatchesQuantityBtn->setEnabled(false);
+	ui.SavePatches2DataBaseBtn->setEnabled(false);
+
+	ui.RemoveDuplicateType->setEnabled(false);
+	ui.SetMatchParasInOneImageBtn->setEnabled(false);
+	ui.RemoveDuplicateBtn->setEnabled(false);
 }
 
 //remove duplicate image patches segmented for one image, then set acquired super Image Patches in ui.ImagePatchViewInOneImage 
@@ -454,6 +481,7 @@ void qt_Pixel_Main::setRemoveDuplicateSuperImagePatch()
 		ui.ImagePatchViewInOneImage->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
 	logDisplay->logDisplay("Display super image patches of the input image.");
+	setSegmentTabBtnEnabeled();
 }
 
 /*存储单幅图像及其图元、超图元入数据库*/
@@ -461,8 +489,20 @@ void qt_Pixel_Main::on_SavePatches2DataBaseBtn_clicked()
 {
 	logDisplay->logDisplay("Saving the image and its patches into database .... ....");
 	savePatches2DataBaseBtnThread = new SavePatches2DataBaseBtnThread(originalImageSegemented, &segementedImagePatches, &segementedSupeImagePatches);
+	
 
+	ui.SegmentBtn->setEnabled(false);
+	ui.OpenOriginalImageBtn->setEnabled(false);
+	ui.SegmentType->setEnabled(false);
+	ui.SetSegmentParasInOneImageBtn->setEnabled(false);
+	ui.SetSegmentPatchesQuantityBtn->setEnabled(false);
+	ui.SavePatches2DataBaseBtn->setEnabled(false);
+
+	ui.RemoveDuplicateType->setEnabled(false);
+	ui.SetMatchParasInOneImageBtn->setEnabled(false);
+	ui.RemoveDuplicateBtn->setEnabled(false);
 	savePatches2DataBaseBtnThread->start();
+	connect(savePatches2DataBaseBtnThread, SIGNAL(sig()), this, SLOT(setSegmentTabBtnEnabeled()));
 }
 /*打开样本图像*/
 void qt_Pixel_Main::on_openSampleImageBtn_clicked()
@@ -514,6 +554,12 @@ void qt_Pixel_Main::on_openSampleImageBtn_clicked()
 void qt_Pixel_Main::on_searchBtn_clicked()
 {
 	Params::featureType_for_search = (ui.MatchType->currentText()).toStdString();
+	//if patchCompared is NULL,return
+	if (NULL == patchCompared)
+	{
+		logDisplay->logDisplay("The query patch does not exist!");
+		return;
+	}
 	if (similarPatches.size() != 0)
 	{
 		for (int i = 0; i < similarPatches.size(); i++)
@@ -522,21 +568,33 @@ void qt_Pixel_Main::on_searchBtn_clicked()
 		}
 	}
 	similarPatches.clear();
+	//清空相似超图元窗口
+	if (ui.SuperImagePatchView->count() != 0)
+	{
+		ui.SuperImagePatchView->clear();
+	}
+
 	searchBtnThread = new SearchBtnThread(&similarPatches, patchCompared);
 	logDisplay->logDisplay("Searching similar super image patches in database ... ...");
 	//here main thread wait for searchBtnThread excute 
 	connect(searchBtnThread, SIGNAL(sig()), this, SLOT(setsuperImagePatch()));
 	searchBtnThread->start();
 
+	//set all buttons disabled
+	ui.OpensampleImageBtn->setEnabled(false);
+	ui.SearchBtn->setEnabled(false);
+	ui.MatchType->setEnabled(false);
+	ui.SetMatchParasSearchBtn->setEnabled(false);
+
 }
 
 //setsuperImagePatch
 void qt_Pixel_Main::setsuperImagePatch()
 {
-	if (ui.SuperImagePatchView->count() != 0)
-	{
-		ui.SuperImagePatchView->clear();
-	}
+//	if (ui.SuperImagePatchView->count() != 0)
+//	{
+//		ui.SuperImagePatchView->clear();
+//	}
 
 	for (int i = 0; i < similarPatches.size(); i++)
 	{
@@ -551,6 +609,9 @@ void qt_Pixel_Main::setsuperImagePatch()
 		ui.SuperImagePatchView->addItem(new QListWidgetItem(QIcon(qp), tr(str.c_str())));
 	}
 	logDisplay->logDisplay("Search similar super image patches in database finished");
+
+	//enable all buttons
+	setSearchTabBtnEnabeled();
 }
 /*点击超图元，查看相应子图元*/
 void qt_Pixel_Main::on_superImagePatch_Itemclicked(QListWidgetItem *item)
@@ -1085,6 +1146,27 @@ void qt_Pixel_Main::setAddinLibTabBtnEnabeled()
 	ui.SetSegmentParasAllBtn->setEnabled(true);
 	ui.MatchTypeAll->setEnabled(true);
 	ui.SetMatchParasAllBtn->setEnabled(true);
+}
+//检索界面恢复btn为enable状态
+void qt_Pixel_Main::setSearchTabBtnEnabeled()
+{
+	ui.OpensampleImageBtn->setEnabled(true);
+	ui.SearchBtn->setEnabled(true);
+	ui.MatchType->setEnabled(true);
+	ui.SetMatchParasSearchBtn->setEnabled(true);
+}
+void qt_Pixel_Main::setSegmentTabBtnEnabeled()
+{
+	ui.SegmentBtn->setEnabled(true);
+	ui.OpenOriginalImageBtn->setEnabled(true);
+	ui.SegmentType->setEnabled(true);
+	ui.SetSegmentParasInOneImageBtn->setEnabled(true);
+	ui.SetSegmentPatchesQuantityBtn->setEnabled(true);
+	ui.SavePatches2DataBaseBtn->setEnabled(true);
+
+	ui.RemoveDuplicateType->setEnabled(true);
+	ui.SetMatchParasInOneImageBtn->setEnabled(true);
+	ui.RemoveDuplicateBtn->setEnabled(true);
 }
 //保存生成图片
 void qt_Pixel_Main::on_SaveGeneratedImageBtn_clicked()
