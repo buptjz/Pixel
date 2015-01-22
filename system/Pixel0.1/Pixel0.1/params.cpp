@@ -83,8 +83,8 @@ int Params::pageSize = 30;
 
 //generatrion
 int Params::generation_height = 12;//number of generated mat in a col
-int Params::generation_width = 20;//number of generated mat in a row
-int Params::patch_scale =300;//height of the patches used in generation
+int Params::generation_width = 15;//number of generated mat in a row
+int Params::patch_scale =60;//height of the patches used in generation
 
 //rotate generation
 double Params::angle = 0;//rotate angle(°)

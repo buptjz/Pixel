@@ -1011,9 +1011,9 @@ void qt_Pixel_Main::setGenerateImageView()
 		QGraphicsScene *scene = new QGraphicsScene;
 		//Ëõ·ÅÍ¼Æ¬
 		QSize size = ui.GeneratedImageView->maximumViewportSize();
-		QImage scaledImg = showImage.scaled(size, Qt::KeepAspectRatio);
+		QImage scaledImg = showImage.scaled(size*2, Qt::KeepAspectRatio);
 		//¼ÓÔØÏÔÊ¾Í¼Æ¬
-		scene->addPixmap(QPixmap::fromImage(scaledImg));
+		scene->addPixmap(QPixmap::fromImage(showImage));
 		ui.GeneratedImageView->setScene(scene);
 		ui.GeneratedImageView->show();
 		
